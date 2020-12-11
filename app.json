@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Lookout-v2",
+    "slug": "Lookout-v2",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1f2232"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1f2232"
+      },
+      "package": "com.sidzzz.Lookoutv2"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
