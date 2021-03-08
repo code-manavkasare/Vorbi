@@ -8,10 +8,25 @@ import {
   TextInput,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { firestore, auth } from '../../firebase';
+import { firestore, auth, googleAuthProvider, } from '../../firebase';
+import { GoogleSignin } from '@react-native-community/google-signin';
 
+GoogleSignin.configure({
+  webClientId: '500571869292-3tlo6fvmqcooblpj6s38f1oco4f0si43.apps.googleusercontent.com',
+});
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
+
+async function onGoogleButtonPress() {
+  // Get the users ID token
+  const { idToken } = await GoogleSignin.signIn();
+
+  // Create a Google credential with the token
+  const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+  // Sign-in the user with the credential
+  return auth().signInWithCredential(googleCredential);
+}
 
 const GoogleIcon = () => {
   return (
@@ -177,7 +192,7 @@ const Login = () => {
           borderRadius: 10,
         }}
         onPress={() => {
-          auth.signOut();
+          onGoogleButtonPress()
         }}
       >
         <View

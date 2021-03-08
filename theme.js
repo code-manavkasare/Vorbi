@@ -1,0 +1,25 @@
+
+export default {
+    "background": {
+        "dark": {
+            "primary100": "#1f2232",
+            "primary200": "#2A2E42",
+            "primary300": "#414765",
+            "primaryYellow": "#ffb30f",
+            "iconUnfocused": "#B2B5C6",
+            "iconFocused": "#ffffff",
+            "white": "#ffffff",
+            "black": "#000000"
+        }
+    },
+
+    "text": {
+        "dark": {
+            "primary100": "#ffffff",
+            "primary200": "",
+            "primary300": "",
+            "primary400": "",
+            "primary500": ""
+        }
+    }
+}

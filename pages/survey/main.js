@@ -10,7 +10,7 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import Surveypageitem from './surveypageitem';
 import { firestore, auth } from '../../firebase';
-
+import Theme from  "../../theme"
 const items = [];
 const Main = ({ navigation }) => {
   const [item, setitem] = useState([]);
@@ -20,6 +20,7 @@ const Main = ({ navigation }) => {
   }, []);
 
   const servercall = useCallback(async () => {
+    let items=[]
     await firestore
       .collection('areaCodes')
       .doc('110022')
@@ -31,6 +32,7 @@ const Main = ({ navigation }) => {
           items.push(y);
           console.log(y);
         });
+        setitem([])
         setitem(items);
       })
       .catch((error) => {
@@ -124,14 +126,14 @@ export default Main;
 
 const styles = StyleSheet.create({
   outer: {
-    backgroundColor: '#1f2232',
+    backgroundColor: Theme.background.dark.primary100,
     flex: 1,
   },
   top: {
     flex: 2,
   },
   bottom: {
-    backgroundColor: '#2A2E42',
+    backgroundColor: Theme.background.dark.primary200,
     flex: 6,
     paddingLeft: 35,
     borderTopLeftRadius: 40,

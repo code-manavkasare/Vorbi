@@ -5,9 +5,8 @@ import Svg , {Path} from 'react-native-svg';
 
 const Tab = createMaterialTopTabNavigator();
 const SortTop = () => {
- 
- 
-  const categories = ['Health', 'Science', 'Technology','General','Business', 'Sports']
+
+const categories = ['Health', 'Science', 'Technology','General','Business', 'Sports']
 
   return (
     
