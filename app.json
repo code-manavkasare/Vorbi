@@ -17,17 +17,27 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    },
+       "googleServicesFile": "./GoogleService-Info.plist", 
+      "bundleIdentifier":"com.lookout.app",      
+      "supportsTablet": true,
+
+       "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.500571869292-89jbo4i0ef22o94sk7i52v1n6ookms1f"
+        }
+    }
+  },
     "android": {
+     "package": "com.lookout.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1f2232"
       },
-      "package": "com.sidzzz.Lookoutv2"
+    "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
   }
 }
+

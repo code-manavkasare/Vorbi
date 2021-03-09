@@ -30,6 +30,13 @@
             {
               "client_id": "500571869292-3tlo6fvmqcooblpj6s38f1oco4f0si43.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "500571869292-89jbo4i0ef22o94sk7i52v1n6ookms1f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sidzzz.Lookoutv2"
+              }
             }
           ]
         }

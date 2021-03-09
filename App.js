@@ -1,8 +1,9 @@
+import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, StatusBar, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';   
 import firebase, { firestore, auth } from './firebase';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
@@ -24,6 +25,10 @@ const fetchFonts = () => {
 };
 const Tab = createBottomTabNavigator();
 const Stacks = createStackNavigator();
+
+
+
+
 
 let i = 0;
 export default function App() {
@@ -103,3 +108,4 @@ const styles = StyleSheet.create({
     padding: 50,
   },
 });
+    // "react-native-gesture-handler": "^1.9.0",

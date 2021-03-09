@@ -3,7 +3,7 @@ import { View, TouchableOpacity, TextInput, Dimensions,Text } from 'react-native
 import Svg, { Path } from 'react-native-svg';
 import { firestore } from '../../firebase';
 const screenWidth = Dimensions.get('screen').width;
-
+ 
 const Cross = () => {
   return (
     <Svg

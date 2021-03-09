@@ -5,7 +5,7 @@ import MyTabBar from './profiletababar';
 import Stats from './stats';
 import Saved from './profilesaved';
 import Create from './create';
-
+ 
 const Tab = createMaterialTopTabNavigator();
 const Profile = () => {
   return (
