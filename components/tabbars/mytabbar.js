@@ -74,6 +74,7 @@ function MyTabBar({ state, descriptors, navigation }) {
                 }}
               >
                 {route.name == 'News' && (
+                  
                   <News isFocused={isFocused} />
                 )}
                 {route.name == 'Feed' && (

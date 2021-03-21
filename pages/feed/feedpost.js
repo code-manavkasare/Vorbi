@@ -2,13 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, RefreshControl } from 'react-native';
 import Post from '../../components/feed/post';
 import { firestore } from '../../firebase';
-const data = [];
 const FeedPost = () => {
   const [posts, setposts] = useState([]);
   const [refresh, setrefresh] = useState(true);
   const servercall = useCallback(async () => {
-    let data = []
-
+    let data = [];
     await firestore
       .collection('posts')
       .orderBy('timestamp', 'desc')
@@ -33,8 +31,7 @@ const FeedPost = () => {
         refreshControl={
           <RefreshControl
             refreshing={refresh}
-            onRefresh={() => {
-              setrefresh(false);
+            onRefresh={async () => {
               servercall();
             }}
           />

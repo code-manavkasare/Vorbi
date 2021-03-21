@@ -1,15 +1,13 @@
-import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, StatusBar, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';   
-import firebase, { firestore, auth } from './firebase';
+import { NavigationContainer } from '@react-navigation/native';
+import { auth } from './firebase';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import Landing from './pages/landing/landing';
 import Login from './pages/login/login';
-import Home from './auth/home';
 import News from './pages/news/news';
 import Survey from './pages/survey/index';
 import Profile from './pages/profile/profile';
@@ -26,18 +24,10 @@ const fetchFonts = () => {
 const Tab = createBottomTabNavigator();
 const Stacks = createStackNavigator();
 
-
-
-
-
 let i = 0;
 export default function App() {
   const [dataLoaded, setDataLoaded] = useState(false);
-  // const [usera, setuser] = useState(false);
   const [user, loading, error] = useAuthState(auth);
-  useEffect(() => {
-    // window.localStorage.setItem('user', JSON.stringify(user))
-  }, [])
   const time = new Date();
   if (!dataLoaded) {
     return (

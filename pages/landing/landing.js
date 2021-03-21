@@ -69,7 +69,6 @@ export default class App extends Component {
         outputRange: [-this.itemWidth, this.itemWidth],
         extrapolate: 'clamp',
       });
-
       const thisBar = (
         <View
           key={`bar${i}`}
@@ -148,9 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2A2E42',
   },
   barContainer: {
-    position: 'absolute',
     zIndex: 2,
-    top: SCREEN_HEIGHT - 140,
     flexDirection: 'row',
   },
   track: {

@@ -24,6 +24,8 @@ export default class AuthScreen extends React.Component {
     _syncUserWithStateAsync = async () => {
         const user = await GoogleSignIn.signInSilentlyAsync();
         this.setState({ user });
+        const googleCredential = auth.GoogleAuthProvider.credential(user.idtoken);
+        return auth().signInWithCredential(googleCredential);
     };
 
     signOutAsync = async () => {

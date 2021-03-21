@@ -2,6 +2,68 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { firestore } from '../../firebase';
 import Surveyitem from '../survey/surveyitem';
+
+const data = [];
+
+
+const Post = () => {
+  const [items, setitems] = useState([]);
+  const [refresh, setrefresh] = useState(false);
+  
+  useEffect(() => {
+    servercall();
+  }, []);
+  useEffect(() => {
+    setrefresh(false)
+  }, [items]);
+  const servercall = useCallback(async () => {
+    await firestore
+      .collection('surveys')
+      .get()
+      .then((snap) => {
+        snap.forEach((x) => {
+          let y = x.data();
+          y.id = x.id;
+          data.push(y);
+        });
+        setitems(data);
+      });
+  }, []);
+  return (
+    <View style={[styles.container]}>
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={() => {
+          servercall()
+          
+            }}
+          />
+        }
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          return (
+            <Surveyitem
+              type={item.type}
+              data={item.data}
+              topic={item.topic}
+              list={item.list}
+            />
+          );
+        }}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
+export default Post;
 const posts = [
   {
     type: 'Poll',
@@ -41,73 +103,3 @@ const posts = [
     list: ['yes', 'no', 'maybe', "don't know"],
   },
 ];
-const data = [];
-const getsurvey = async (setitems) => {
-  await firestore
-    .collection('surveys')
-    .get()
-    .then((snap) => {
-      snap.forEach((x) => {
-        let y = x.data();
-        y.id = x.id;
-        data.push(y);
-      });
-      setitems(data);
-    });
-};
-
-const Post = () => {
-  const [items, setitems] = useState([]);
-  const [refresh, setrefresh] = useState(false);
-
-  useEffect(() => {
-    servercall();
-  }, []);
-  const servercall = useCallback(async () => {
-    await firestore
-      .collection('surveys')
-      .get()
-      .then((snap) => {
-        snap.forEach((x) => {
-          let y = x.data();
-          y.id = x.id;
-          data.push(y);
-        });
-        setitems(data);
-        setrefresh(false);
-      });
-  }, []);
-  return (
-    <View style={[styles.container]}>
-      <FlatList
-        refreshControl={
-          <RefreshControl
-            refreshing={refresh}
-            onRefresh={() => {
-              setrefresh(true);
-            }}
-          />
-        }
-        data={items}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return (
-            <Surveyitem
-              type={item.type}
-              data={item.data}
-              topic={item.topic}
-              list={item.list}
-            />
-          );
-        }}
-      />
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-export default Post;
