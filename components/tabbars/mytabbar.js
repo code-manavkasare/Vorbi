@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import Theme from "../../theme"
-import { Index, News, Profile, Feed, Notifications } from "../svgs"
+import Theme from '../../theme';
+import { Index, News, Profile, Feed, Notifications } from '../svgs';
 function MyTabBar({ state, descriptors, navigation }) {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
   const [bgcolor, setbgcolor] = useState('#1f2232');
@@ -17,8 +17,8 @@ function MyTabBar({ state, descriptors, navigation }) {
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
-                ? options.title
-                : route.name;
+              ? options.title
+              : route.name;
 
           const isFocused = state.index === index;
 
@@ -40,7 +40,7 @@ function MyTabBar({ state, descriptors, navigation }) {
               target: route.key,
             });
           };
-          
+
           if (route.name == 'Survey') {
             return (
               <View style={styles.survey} key={route.name}>
@@ -73,19 +73,12 @@ function MyTabBar({ state, descriptors, navigation }) {
                   alignItems: 'center',
                 }}
               >
-                {route.name == 'News' && (
-                  
-                  <News isFocused={isFocused} />
-                )}
-                {route.name == 'Feed' && (
-                  <Feed isFocused={isFocused} />
-                )}
+                {route.name == 'News' && <News isFocused={isFocused} />}
+                {route.name == 'Feed' && <Feed isFocused={isFocused} />}
                 {route.name == 'Notifications' && (
                   <Notifications isFocused={isFocused} />
                 )}
-                {route.name == 'Profile' && (
-                  <Profile isFocused={isFocused} />
-                )}
+                {route.name == 'Profile' && <Profile isFocused={isFocused} />}
 
                 {/* <Text
                   style={[
@@ -114,7 +107,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    backgroundColor: Theme.background.dark.primary300,
+    backgroundColor: Theme.background.primary300,
     height: 70,
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -124,17 +117,17 @@ const styles = StyleSheet.create({
     height: 80,
     transform: [{ translateY: -30 }],
     borderRadius: 40,
-    backgroundColor: Theme.background.dark.primaryYellow,
+    backgroundColor: Theme.background.primaryYellow,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: Theme.background.dark.primary100,
+    borderColor: Theme.background.primary100,
     borderWidth: 6,
   },
   icon: {
     flex: 1,
     height: 40,
     width: 40,
-    backgroundColor: Theme.background.dark.white,
+    backgroundColor: Theme.background.white,
     paddingBottom: 20,
   },
 });

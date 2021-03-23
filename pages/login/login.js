@@ -7,19 +7,18 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { firestore, auth, googleAuthProvider, } from '../../firebase';
+import firebase, { firestore, auth, googleAuthProvider } from '../../firebase';
 import * as GoogleSignIn from 'expo-google-sign-in';
 
 import { GoogleIcon } from '../../components/svgs';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-
 const Login = () => {
   const [usernameValue, setusernameValue] = useState('');
   const [passwordValue, setpasswordValue] = useState('');
   const [disabled, setdisabled] = useState(false);
-  const [ouruser, setuser] = useState()
+  const [ouruser, setuser] = useState();
   const inputElementRef = useRef(null);
 
   useEffect(() => {
@@ -31,30 +30,36 @@ const Login = () => {
 
   const initAsync = async () => {
     await GoogleSignIn.initAsync({
-      clientId: '500571869292-89jbo4i0ef22o94sk7i52v1n6ookms1f.apps.googleusercontent.com',
+      clientId:
+        '500571869292-89jbo4i0ef22o94sk7i52v1n6ookms1f.apps.googleusercontent.com',
     });
     _syncUserWithStateAsync();
   };
 
   const _syncUserWithStateAsync = async () => {
     const user = await GoogleSignIn.signInSilentlyAsync();
-    setuser(user);
+    const googleCredential = firebase.auth.GoogleAuthProvider.credential(
+      user.auth.idToken
+    );
+    // auth.GoogleAuthProvider.credential(
+    //   user.auth.idToken
+    // );
+    await auth().signInWithCredential(googleCredential);
+    return;
   };
 
   const signOutAsync = async () => {
     await GoogleSignIn.signOutAsync();
     setuser(null);
-    auth.signOut()
+    auth.signOut();
   };
 
   const signInAsync = async () => {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
-      const { type, user, idtoken } = await GoogleSignIn.signInAsync();
+      const { type } = await GoogleSignIn.signInAsync();
       if (type === 'success') {
         _syncUserWithStateAsync();
-        const googleCredential = auth.GoogleAuthProvider.credential(idtoken);
-        return auth().signInWithCredential(googleCredential);
       }
     } catch ({ message }) {
       alert('login: Error:' + message);
@@ -125,7 +130,6 @@ const Login = () => {
             style={styles.TextInput}
             placeholder={' password '}
             secureTextEntry
-
             placeholderTextColor="#6D7187"
             onChangeText={(text) => setpasswordValue(text)}
             value={passwordValue}
@@ -209,7 +213,7 @@ const Login = () => {
       <View>
         <Text style={{ color: '#6D7187' }}>Already have an account?</Text>
       </View>
-    </View >
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -225,7 +229,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
-  }
+  },
 });
 
 export default Login;

@@ -10,7 +10,7 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import Surveypageitem from './surveypageitem';
 import { firestore, auth } from '../../firebase';
-import Theme from "../../theme"
+import Theme from "../../theme" 
 const items = [];
 const Main = ({ navigation }) => {
   const [item, setitem] = useState([]);
@@ -126,14 +126,14 @@ export default Main;
 
 const styles = StyleSheet.create({
   outer: {
-    backgroundColor: Theme.background.dark.primary100,
+    backgroundColor: Theme.background.primary100,
     flex: 1,
   },
   top: {
     flex: 2,
   },
   bottom: {
-    backgroundColor: Theme.background.dark.primary200,
+    backgroundColor: Theme.background.primary200,
     flex: 6,
     paddingLeft: 35,
     borderTopLeftRadius: 40,
