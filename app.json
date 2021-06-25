@@ -14,30 +14,28 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*" 
+      "**/*"
     ],
     "ios": {
-       "googleServicesFile": "./GoogleService-Info.plist", 
-      "bundleIdentifier":"com.lookout.app",      
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.lookout.app",
       "supportsTablet": true,
-
-       "config": {
+      "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.500571869292-89jbo4i0ef22o94sk7i52v1n6ookms1f"
         }
-    }
-  },
+      }
+    },
     "android": {
-     "package": "com.lookout.app",
+      "package": "com.lookout.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1f2232"
       },
-    "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
   }
 }
-

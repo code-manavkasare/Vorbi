@@ -10,9 +10,11 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import Surveypageitem from './surveypageitem';
 import { firestore, auth } from '../../firebase';
-import Theme from "../../theme" 
+import Theme from "../../theme"
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
+import { TabsParamList } from '../../App';
 const items = [];
-const Main = ({ navigation }) => {
+const Main: React.FunctionComponent<BottomTabScreenProps<TabsParamList, 'Survey'>> = ({ navigation }) => {
   const [item, setitem] = useState([]);
   const [refresh, setrefresh] = useState(true);
   useEffect(() => {
@@ -20,13 +22,13 @@ const Main = ({ navigation }) => {
   }, []);
 
   const servercall = useCallback(async () => {
-    let items = []
     await firestore
       .collection('areaCodes')
       .doc('110022')
       .collection('parameters')
       .get()
       .then((snap) => {
+        let items = []
         snap.forEach((x) => {
           let y = x.data();
           items.push(y);
@@ -38,7 +40,7 @@ const Main = ({ navigation }) => {
         console.log(error);
       });
     setrefresh(false);
-  });
+  }, []);
 
   const Graph = () => {
     return (
@@ -97,12 +99,12 @@ const Main = ({ navigation }) => {
                 }}
               />
             }
+            keyExtractor={(item, index) => { return `${item.type}index` }}
             renderItem={({ item }) => {
               return (
                 <Surveypageitem
                   type={item.type}
                   done={false}
-                  key={item.type}
                   title={item.type}
                   progression={parseFloat(item.progress)}
                   navigation={navigation}
@@ -112,7 +114,9 @@ const Main = ({ navigation }) => {
           />
           <TouchableOpacity
             onPress={() => {
-              auth.signOut();
+              auth.signOut().then(() => {
+                navigation.navigate('Landing')
+              });
             }}
           >
             <Graph />
