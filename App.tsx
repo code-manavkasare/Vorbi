@@ -46,7 +46,7 @@ export default function App() {
       style={{
         flex: 1,
         backgroundColor: '#1f2232',
-        fontFamily: 'Poppins-Regular',
+        // fontFamily: 'Poppins-Regular',
       }}
     >
       <StatusBar backgroundColor={'#1f2232'} />
