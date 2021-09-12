@@ -1,7 +1,11 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import Theme from '../theme';
-const Svgs: React.FunctionComponent<{ width: number, height: number, type: any }> = (props) => {
+const Svgs: React.FunctionComponent<{
+  width: number;
+  height: number;
+  type: any;
+}> = (props) => {
   const { width = 30, height = 30 } = props;
   return (
     <Svg
@@ -156,7 +160,9 @@ export const Bookmark = ({ fillbookmark }) => {
     </Svg>
   );
 };
-export const Heart: React.FunctionComponent<{ fillheart: string }> = ({ fillheart }) => {
+export const Heart: React.FunctionComponent<{ fillheart: string }> = ({
+  fillheart,
+}) => {
   return (
     <Svg width="17" height="17" viewBox="0 0 41 36" fill="none">
       <Path
@@ -172,7 +178,9 @@ export const Heart: React.FunctionComponent<{ fillheart: string }> = ({ fillhear
     </Svg>
   );
 };
-export const Feed: React.FunctionComponent<{ isFocused: boolean }> = ({ isFocused }) => {
+export const Feed: React.FunctionComponent<{ isFocused: boolean }> = ({
+  isFocused,
+}) => {
   return (
     <Svg width="34" height="34" viewBox="0 0 83 82" fill="none">
       <Path
@@ -186,7 +194,9 @@ export const Feed: React.FunctionComponent<{ isFocused: boolean }> = ({ isFocuse
     </Svg>
   );
 };
-export const Notifications: React.FunctionComponent<{ isFocused: boolean }> = ({ isFocused }) => {
+export const Notifications: React.FunctionComponent<{ isFocused: boolean }> = ({
+  isFocused,
+}) => {
   return (
     <Svg width="34" height="34" viewBox="0 0 83 92" fill="none">
       <Path
@@ -210,12 +220,7 @@ export const Notifications: React.FunctionComponent<{ isFocused: boolean }> = ({
 };
 export const GoogleIcon = () => {
   return (
-    <Svg
-      width="30"
-      height="30"
-      viewBox="0 0 55 57"
-      fill="none"
-    >
+    <Svg width="30" height="30" viewBox="0 0 55 57" fill="none">
       <Path
         d="M26.1835 -0.000453051C27.4229 -0.0785352 28.6623 -0.000453051 29.9018 -0.000453051C32.0708 0.0776291 34.1623 0.546122 36.2539 1.0927C37.2609 1.48311 38.268 1.87352 39.275 2.18585C39.7398 2.42009 40.2046 2.65434 40.6694 2.81051C40.7468 2.88859 40.8243 2.88859 40.9792 2.96667C41.444 3.20092 41.8313 3.43516 42.2961 3.74749C43.3806 4.45023 44.4651 5.23105 45.4722 6.01188C45.937 6.40229 46.3243 6.7927 46.7891 7.18311C46.8666 7.26119 46.944 7.41735 46.7891 7.57352C45.2398 9.05708 43.6905 10.6187 42.1412 12.1804C41.599 12.6489 41.0567 13.1954 40.5919 13.6639C40.1271 14.0543 39.6623 14.5228 39.275 14.9913C39.0426 15.2256 38.8877 15.2256 38.6553 14.9913C38.3454 14.679 38.0356 14.3667 37.6482 14.1324C36.7961 13.3516 35.7891 12.805 34.7046 12.4146C33.6975 11.9461 32.768 11.5557 31.6835 11.3995C31.2187 11.2434 30.7539 11.1653 30.2891 11.1653C29.9792 11.0872 29.6694 11.0872 29.282 11.0872C28.5849 11.0091 27.8877 11.0091 27.1905 11.0872C26.6482 11.0872 26.106 11.1653 25.5637 11.2434C25.0215 11.3215 24.4792 11.3995 24.0144 11.5557C23.0074 11.79 22.0778 12.1023 21.1482 12.5708C20.606 12.805 19.9863 13.1174 19.5215 13.4297C19.444 13.4297 19.3666 13.5078 19.2891 13.5858C18.9018 13.8201 18.5919 14.0543 18.2046 14.3667C17.8173 14.6009 17.5074 14.9132 17.1201 15.2256C16.3454 15.8502 15.6482 16.553 15.106 17.4119C14.8736 17.7242 14.5637 17.9585 14.4088 18.3489C14.099 18.8174 13.7891 19.2858 13.5567 19.7543C13.2468 20.3009 12.937 20.8475 12.7046 21.3941C12.4722 21.8626 12.3173 22.3311 12.1623 22.7995H12.0849C9.06374 20.4571 6.04261 18.0365 3.02148 15.6941C3.40881 15.0694 3.71867 14.3667 4.10599 13.742C4.26092 13.5078 4.41585 13.3516 4.49332 13.1174C4.64825 12.805 4.80317 12.4927 4.9581 12.2585C5.73275 11.1653 6.5074 10.1502 7.43698 9.13516C7.43698 9.13516 7.43698 9.13516 7.43698 9.05708C7.97923 8.51051 8.44402 8.04201 8.98627 7.49544C9.99332 6.55845 11.0778 5.77763 12.0849 4.91873C12.3173 4.76256 12.4722 4.6064 12.7046 4.45023C12.937 4.29407 13.1694 4.1379 13.4792 3.98174C14.4863 3.43516 15.4159 2.96667 16.4229 2.42009C17.4299 2.02968 18.437 1.63927 19.444 1.24886C21.6905 0.624205 23.8595 0.155711 26.1835 -0.000453051Z"
         fill="#EB4536"
@@ -235,85 +240,53 @@ export const GoogleIcon = () => {
     </Svg>
   );
 };
-export const Index: React.FunctionComponent<{ isFocused: boolean }> = ({ isFocused }) => {
+export const Index: React.FunctionComponent<{ isFocused: boolean }> = ({
+  isFocused,
+}) => {
   return (
     <Svg width="35" height="35" viewBox="0 0 89 84" fill="none">
       <Path
         d="M10.6203 53.8782C4.71137 53.8782 0.136719 49.113 0.136719 43.2041C0.136719 37.4858 4.90198 32.8158 10.7156 32.8158C16.4339 32.8158 21.1992 37.5811 21.1992 43.3947C21.1992 49.2083 16.4339 53.8782 10.6203 53.8782Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M10.6203 83.4228C4.80667 83.4228 0.136719 78.7529 0.136719 72.9393C0.136719 67.1256 4.80667 62.4557 10.6203 62.4557C16.4339 62.4557 21.1992 67.2209 21.1992 72.9393C21.1992 78.6576 16.4339 83.4228 10.6203 83.4228Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M17.1968 5.46319C18.1498 4.41484 19.1982 3.36648 20.2465 2.22282C20.4371 2.03221 20.6277 1.8416 20.8183 1.65099C21.6761 0.793242 22.9151 0.793242 23.7728 1.55568C24.6306 2.31812 24.7259 3.6524 23.8681 4.51014C22.7245 5.74911 21.5808 6.98808 20.4371 8.13174C20.1512 8.51296 19.9606 8.70357 20.2465 9.1801C23.201 15.6608 19.2935 22.9993 12.2409 24.0477C6.14135 24.9054 1.18548 20.6167 0.327738 15.089C-0.530009 10.2285 2.71037 4.70075 8.61929 3.55709C11.4784 2.98526 14.0517 3.55709 16.5296 5.17728C16.7202 5.27258 16.8155 5.36789 17.0061 5.46319C17.0061 5.46319 17.1014 5.46319 17.1968 5.46319ZM4.52116 12.4205C3.75872 14.5172 4.90239 17.5669 7.0944 19.0918C9.57234 20.712 12.8127 20.5214 15.0047 18.4247C16.7202 16.8045 17.578 13.7547 16.6249 12.2299C16.4343 12.4205 16.2437 12.7064 16.0531 12.897C14.4329 14.7078 12.8127 16.4233 11.0972 18.2341C9.95356 19.3777 8.42868 19.2824 7.57093 17.8529C6.52257 16.0421 5.56952 14.2313 4.52116 12.4205ZM14.2423 8.70357C11.3831 6.41625 7.0944 7.75052 5.66483 10.1331C7.38032 9.56132 8.33337 10.4191 9.00051 11.8486C9.28642 12.3252 9.57234 12.8017 9.85825 13.3735C11.3831 11.7533 12.8127 10.2285 14.2423 8.70357Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M55.5083 11.5627C45.5012 11.5627 35.4942 11.5627 25.5824 11.5627C23.7716 11.5627 22.7233 10.2284 23.2951 8.70353C23.581 7.84579 24.2482 7.46457 25.2012 7.36926C25.4871 7.36926 25.7731 7.36926 26.059 7.36926C45.8824 7.36926 65.8012 7.36926 85.6247 7.36926C87.1496 7.36926 88.1026 8.1317 88.1026 9.46598C88.1026 10.6096 87.2449 11.4674 86.0059 11.5627C85.6247 11.5627 85.2435 11.5627 84.8623 11.5627C74.9505 11.5627 65.2294 11.5627 55.5083 11.5627Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M55.5083 41.1073C45.5012 41.1073 35.4942 41.1073 25.5824 41.1073C23.7716 41.1073 22.7233 39.7731 23.2951 38.2482C23.6763 37.2951 24.3435 36.9139 25.2965 36.8186C25.5824 36.8186 25.7731 36.8186 26.059 36.8186C45.8824 36.8186 65.7059 36.8186 85.5294 36.8186C86.8637 36.8186 87.8167 37.4857 88.0073 38.5341C88.1979 39.8684 87.3402 40.9167 85.9106 41.012C85.5294 41.012 85.2435 41.012 84.8623 41.012C75.0458 41.1073 65.2294 41.1073 55.5083 41.1073Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M55.508 66.3633C65.515 66.3633 75.5221 66.3633 85.5291 66.3633C86.8634 66.3633 87.8165 67.1257 87.9118 68.1741C88.0071 69.5084 87.1493 70.4614 85.8151 70.5567C85.4338 70.5567 85.0526 70.5567 84.6714 70.5567C64.9432 70.5567 45.215 70.5567 25.4869 70.5567C24.7244 70.5567 23.962 70.4614 23.4855 69.7943C22.5324 68.5553 23.1042 66.7445 24.6291 66.4586C24.915 66.3633 25.2963 66.3633 25.5822 66.3633C35.5892 66.3633 45.501 66.3633 55.508 66.3633Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M55.4143 79.3247C45.4073 79.3247 35.4002 79.3247 25.4885 79.3247C24.2495 79.3247 23.4871 78.7528 23.2012 77.7998C22.8199 76.6561 23.6777 75.4171 24.8214 75.2265C25.1073 75.2265 25.3932 75.1312 25.6791 75.1312C45.5979 75.1312 65.5167 75.1312 85.4354 75.1312C85.8167 75.1312 86.2932 75.1312 86.6744 75.3218C87.6275 75.7031 88.104 76.6561 87.9134 77.6092C87.7228 78.5622 86.9603 79.2293 86.0073 79.3247C85.5307 79.3247 85.0542 79.3247 84.673 79.3247C74.8566 79.3247 65.1354 79.3247 55.4143 79.3247Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M55.5084 16.1375C65.4201 16.1375 75.3319 16.1375 85.2436 16.1375C85.6248 16.1375 86.1014 16.1375 86.4826 16.2328C87.4356 16.5187 88.0075 17.4717 87.8169 18.5201C87.7215 19.4731 86.8638 20.2356 85.9108 20.3309C85.4342 20.3309 84.9577 20.3309 84.3859 20.3309C64.753 20.3309 45.1201 20.3309 25.392 20.3309C24.0577 20.3309 23.2953 19.8544 23.0093 18.806C22.6281 17.567 23.4859 16.3281 24.7248 16.2328C25.0108 16.2328 25.2967 16.2328 25.5826 16.2328C35.6849 16.1375 45.5967 16.1375 55.5084 16.1375Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
       <Path
         d="M55.5092 49.7801C45.5022 49.7801 35.4951 49.7801 25.4881 49.7801C24.2491 49.7801 23.4867 49.3036 23.2008 48.2552C22.8195 47.0162 23.6773 45.7773 24.9162 45.5867C25.2022 45.5867 25.4881 45.5867 25.774 45.5867C45.5975 45.5867 65.5163 45.5867 85.3397 45.5867C85.8162 45.5867 86.2928 45.5867 86.674 45.7773C87.627 46.0632 88.1036 47.0162 88.0083 48.0646C87.913 49.0177 87.0552 49.7801 86.0069 49.7801C85.5303 49.7801 85.0538 49.7801 84.5773 49.7801C74.8562 49.7801 65.135 49.7801 55.5092 49.7801Z"
-        fill={
-          isFocused
-            ? Theme.background.iconFocused
-            : Theme.background.iconUnfocused
-        }
+        fill={isFocused ? Theme.background.iconFocused : Theme.background.black}
       />
     </Svg>
   );
 };
-export const News: React.FunctionComponent<{ isFocused: boolean }> = ({ isFocused }) => {
+export const News: React.FunctionComponent<{ isFocused: boolean }> = ({
+  isFocused,
+}) => {
   return (
     <Svg
       width="34"
@@ -377,7 +350,9 @@ export const News: React.FunctionComponent<{ isFocused: boolean }> = ({ isFocuse
     </Svg>
   );
 };
-export const Profile: React.FunctionComponent<{ isFocused: boolean }> = ({ isFocused }) => {
+export const Profile: React.FunctionComponent<{ isFocused: boolean }> = ({
+  isFocused,
+}) => {
   return (
     <Svg width="34" height="34" viewBox="0 0 83 83" fill="none">
       <Path

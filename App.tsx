@@ -84,9 +84,10 @@ const BottomTabsNav: React.FunctionComponent<
         activeTintColor: '#aa9211',
       }}
     >
-      <Tab.Screen name="Survey" component={Survey} />
       <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen name="News" component={News} />
+      <Tab.Screen name="Survey" component={Survey} />
+      <Tab.Screen name="Notifications" component={Notifications} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
@@ -116,6 +117,7 @@ export type StackParamList = {
 };
 export type TabsParamList = {
   Survey: undefined;
+  Notifications: undefined;
   Feed: undefined;
   News: undefined;
   Profile: undefined;
