@@ -9,17 +9,19 @@ import {
 } from 'react-native';
 import firebase, { firestore, auth, googleAuthProvider } from '../../firebase';
 import * as GoogleSignIn from 'expo-google-sign-in';
-import { StackScreenProps } from "@react-navigation/stack"
+import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 import { GoogleIcon } from '../../components/svgs';
 import { useAuthState } from 'react-firebase-hooks/auth';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const Login: React.FunctionComponent<StackScreenProps<StackParamList, 'Login'>> = ({ navigation }) => {
+const Login: React.FunctionComponent<
+  StackScreenProps<StackParamList, 'Login'>
+> = ({ navigation }) => {
   const [usernameValue, setusernameValue] = useState('');
   const [passwordValue, setpasswordValue] = useState('');
   const [disabled, setdisabled] = useState(false);
-  const { } = useAuthState(auth)
+  const {} = useAuthState(auth);
   const inputElementRef = useRef(null);
 
   useEffect(() => {
@@ -61,8 +63,7 @@ const Login: React.FunctionComponent<StackScreenProps<StackParamList, 'Login'>> 
       if (type === 'success') {
         _syncUserWithStateAsync();
       }
-    } catch ({ message }) {
-    }
+    } catch ({ message }) {}
   };
   return (
     <View style={styles.container}>
@@ -73,7 +74,7 @@ const Login: React.FunctionComponent<StackScreenProps<StackParamList, 'Login'>> 
           style={{
             fontSize: 30,
             fontFamily: 'Poppins-Regular',
-            color: 'white'
+            color: 'white',
           }}
         >
           Log in or Sign Up
@@ -148,9 +149,11 @@ const Login: React.FunctionComponent<StackScreenProps<StackParamList, 'Login'>> 
         }}
         onPress={async () => {
           setdisabled(true);
-          auth.signInWithEmailAndPassword(usernameValue, passwordValue).then(() => {
-            navigation.navigate('Main')
-          });
+          auth
+            .signInWithEmailAndPassword(usernameValue, passwordValue)
+            .then(() => {
+              navigation.navigate('Main');
+            });
         }}
         disabled={disabled}
       >
@@ -208,7 +211,19 @@ const Login: React.FunctionComponent<StackScreenProps<StackParamList, 'Login'>> 
         </View>
       </TouchableOpacity>
       <View style={{ display: 'flex', flexDirection: 'row' }}>
-        <Text style={{ color: '#6D7187' }}>Don't have an account? </Text><TouchableOpacity onPress={() => { navigation.navigate('Landing') }} style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}><Text style={{ color: '#6D71A7' }}>Signup</Text></TouchableOpacity>
+        <Text style={{ color: '#6D7187' }}>Don't have an account? </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Signup');
+          }}
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+          }}
+        >
+          <Text style={{ color: '#6D71A7' }}>Signup</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
