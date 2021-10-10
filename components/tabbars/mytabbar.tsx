@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Theme from '../../theme';
 import { Index, News, Profile, Feed, Notifications } from '../svgs';
-function MyTabBar({ state, descriptors, navigation }) {
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
+  state,
+  descriptors,
+  navigation,
+}) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
   const [bgcolor, setbgcolor] = useState('#1f2232');
   if (focusedOptions.tabBarVisible === false) {
     return null;
   }
   return (
-    <View style={{ backgroundColor: { bgcolor } }}>
+    <View style={{ backgroundColor: bgcolor }}>
       <View style={styles.container}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -40,7 +45,10 @@ function MyTabBar({ state, descriptors, navigation }) {
               target: route.key,
             });
           };
-
+          {
+            /* <View style={styles.survey} key={route.name}>
+                 </View> */
+          }
           if (route.name == 'Survey') {
             return (
               <View style={styles.survey} key={route.name}>
@@ -51,7 +59,12 @@ function MyTabBar({ state, descriptors, navigation }) {
                   testID={options.tabBarTestID}
                   onPress={onPress}
                   onLongPress={onLongPress}
-                  style={styles.inner}
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  //style={styles.inner}
                 >
                   <Index isFocused={isFocused} />
                 </TouchableOpacity>
@@ -78,6 +91,7 @@ function MyTabBar({ state, descriptors, navigation }) {
                 {route.name == 'Notifications' && (
                   <Notifications isFocused={isFocused} />
                 )}
+                {route.name == 'Survey' && <Index isFocused={isFocused} />}
                 {route.name == 'Profile' && <Profile isFocused={isFocused} />}
 
                 {/* <Text
@@ -90,12 +104,13 @@ function MyTabBar({ state, descriptors, navigation }) {
                 </Text> */}
               </TouchableOpacity>
             );
+            // }
           }
         })}
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   text: {

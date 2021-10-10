@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useEffect } from 'react';
+import React, { Component, Suspense, useCallback, useEffect } from 'react';
 import {
   Animated,
   View,
@@ -7,10 +7,11 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  Text,
+  Text, ActivityIndicator
 } from 'react-native';
 import { storage } from '../../firebase';
-
+import { StackScreenProps } from "@react-navigation/stack"
+import { StackParamList } from '../../App';
 // const landing = () => {
 //   let images = [];
 //   const callback = useCallback(async () => {
@@ -41,21 +42,21 @@ const images = [
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-export default class App extends Component {
+export default class App extends Component<StackScreenProps<StackParamList, 'Landing'>>{
   constructor(props) {
     super(props);
-    this.state = {
-      navigation: this.props.navigation,
-    };
   }
+
   numItems = images.length;
   itemWidth = FIXED_BAR_WIDTH / this.numItems - (this.numItems - 1) * BAR_SPACE;
   animVal = new Animated.Value(0);
   render() {
+
     let imageArray = [];
     let barArray = [];
     images.forEach((image, i) => {
       const thisImage = (
+
         <Image
           key={`image${i}`}
           source={{ uri: image }}
@@ -95,7 +96,7 @@ export default class App extends Component {
     });
 
     return (
-      <View style={styles.container} flex={1}>
+      <View style={{ ...styles.container, flex: 1 }} >
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -120,7 +121,7 @@ export default class App extends Component {
               borderRadius: 10,
             }}
             onPress={() => {
-              this.state.navigation.navigate('Login');
+              this.props.navigation.navigate('Login');
             }}
           >
             <Text

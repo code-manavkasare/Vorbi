@@ -9,7 +9,7 @@ import {
 
 import { colorpicker } from '../../utilities';
 import Svg, { Heart } from '../svgs';
-
+import {} from "@react-navigation/bottom-tabs"
 const example = [
   {
     data:
@@ -84,7 +84,7 @@ const Post = ({ data, name, type }) => {
   );
 };
 
-const NewPost = ({ navigation }) => {
+const NewPost: React.FunctionComponent<MaterialTopTabNavigationProp> = ({ navigation }) => {
   return (
     <View style={{ backgroundColor: '#1F2232' }}>
       <TouchableOpacity
@@ -104,9 +104,9 @@ const NewPost = ({ navigation }) => {
         </Text>
         <View style={{ height: 70 }}></View>
         <View style={{ flexDirection: 'row', margin: 10 }}>
-          <Svg type="Pen" />
+          {/* <Svg type="Pen" />
           <Svg type="Clipboard" />
-          <Svg type="Polls" />
+          <Svg type="Polls" /> */}
         </View>
       </TouchableOpacity>
     </View>
@@ -195,5 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  name: {},
+  data: {}
 });
 export default CreatePost;

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, StatusBar, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackScreenProps,
+} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { auth } from './firebase';
 import * as Font from 'expo-font';
@@ -15,14 +18,15 @@ import Notifications from './pages/notification/notification';
 import Feed from './pages/feed/feed';
 import MyTabBar from './components/tabbars/mytabbar';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Signup from './pages/login/Signup';
 const fetchFonts = () => {
   return Font.loadAsync({
     'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
     'KdamThmor-Regular': require('./assets/fonts/KdamThmor-Regular.ttf'),
   });
 };
-const Tab = createBottomTabNavigator();
-const Stacks = createStackNavigator();
+const Tab = createBottomTabNavigator<TabsParamList>();
+const Stacks = createStackNavigator<StackParamList>();
 
 let i = 0;
 export default function App() {
@@ -42,46 +46,52 @@ export default function App() {
       style={{
         flex: 1,
         backgroundColor: '#1f2232',
-        fontFamily: 'Poppins-Regular',
+        // fontFamily: 'Poppins-Regular',
       }}
     >
       <StatusBar backgroundColor={'#1f2232'} />
-      {!user ? (
+      {!loading ? (
         <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
-          <NavigationContainer style={styles.tab}>
+          <NavigationContainer>
             <Stacks.Navigator
-              initialRouteName="Landing"
+              initialRouteName={user ? 'Main' : 'Landing'}
               screenOptions={{
                 headerShown: false,
               }}
             >
               <Stacks.Screen name="Landing" component={Landing} />
               <Stacks.Screen name="Login" component={Login} />
+              <Stacks.Screen name="Main" component={BottomTabsNav} />
+              <Stacks.Screen name="Signup" component={Signup} />
             </Stacks.Navigator>
           </NavigationContainer>
         </View>
       ) : (
-        <NavigationContainer style={styles.tab}>
-          <Tab.Navigator
-            tabBar={(props) => <MyTabBar {...props} />}
-            initialRouteName="Survey"
-            tabBarOptions={{
-              activeTintColor: '#aa9211',
-            }}
-            style={styles.tab}
-          >
-            <Tab.Screen name="News" component={News} />
-            <Tab.Screen name="Feed" component={Feed} />
-            <Tab.Screen name="Survey" component={Survey} />
-            <Tab.Screen name="Notifications" component={Notifications} />
-            <Tab.Screen name="Profile" component={Profile} />
-          </Tab.Navigator>
-        </NavigationContainer>
+        <></>
       )}
     </SafeAreaView>
   );
 }
 
+const BottomTabsNav: React.FunctionComponent<
+  StackScreenProps<StackParamList, 'Main'>
+> = () => {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <MyTabBar {...props} />}
+      initialRouteName="Survey"
+      tabBarOptions={{
+        activeTintColor: '#aa9211',
+      }}
+    >
+      <Tab.Screen name="Feed" component={Feed} />
+      <Tab.Screen name="News" component={News} />
+      <Tab.Screen name="Survey" component={Survey} />
+      <Tab.Screen name="Notifications" component={Notifications} />
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -98,4 +108,17 @@ const styles = StyleSheet.create({
     padding: 50,
   },
 });
-    // "react-native-gesture-handler": "^1.9.0",
+// "react-native-gesture-handler": "^1.9.0",
+export type StackParamList = {
+  Landing: undefined;
+  Login: undefined;
+  Main: undefined;
+  Signup: undefined;
+};
+export type TabsParamList = {
+  Survey: undefined;
+  Notifications: undefined;
+  Feed: undefined;
+  News: undefined;
+  Profile: undefined;
+};

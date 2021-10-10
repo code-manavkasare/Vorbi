@@ -1,12 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Linking,
+} from 'react-native';
 
 const NewsSnippet = (
-  { title, description, content, urlToImage, publishedAt, author, source },
-  props,
+  { title, description, content, urlToImage, publishedAt, author, source, url },
+  props
 ) => {
   const handleClick = () => {
-    return <Text>ABC</Text>;
+    Linking.openURL(url);
   };
   let date = new Date(publishedAt);
   let year = date.getFullYear();
@@ -90,6 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  name: {},
   nametext: {
     color: 'white',
     marginBottom: 3,

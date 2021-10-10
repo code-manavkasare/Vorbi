@@ -9,16 +9,19 @@ import {
 } from 'react-native';
 import firebase, { firestore, auth, googleAuthProvider } from '../../firebase';
 import * as GoogleSignIn from 'expo-google-sign-in';
-
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../../App';
 import { GoogleIcon } from '../../components/svgs';
+import { useAuthState } from 'react-firebase-hooks/auth';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-
-const Login = () => {
+const Login: React.FunctionComponent<
+  StackScreenProps<StackParamList, 'Login'>
+> = ({ navigation }) => {
   const [usernameValue, setusernameValue] = useState('');
   const [passwordValue, setpasswordValue] = useState('');
   const [disabled, setdisabled] = useState(false);
-  const [ouruser, setuser] = useState();
+  const {} = useAuthState(auth);
   const inputElementRef = useRef(null);
 
   useEffect(() => {
@@ -31,7 +34,7 @@ const Login = () => {
   const initAsync = async () => {
     await GoogleSignIn.initAsync({
       clientId:
-        '500571869292-89jbo4i0ef22o94sk7i52v1n6ookms1f.apps.googleusercontent.com',
+        '500571869292-3tlo6fvmqcooblpj6s38f1oco4f0si43.apps.googleusercontent.com',
     });
     _syncUserWithStateAsync();
   };
@@ -44,13 +47,12 @@ const Login = () => {
     // auth.GoogleAuthProvider.credential(
     //   user.auth.idToken
     // );
-    await auth().signInWithCredential(googleCredential);
+    await auth.signInWithCredential(googleCredential);
     return;
   };
 
   const signOutAsync = async () => {
     await GoogleSignIn.signOutAsync();
-    setuser(null);
     auth.signOut();
   };
 
@@ -61,9 +63,7 @@ const Login = () => {
       if (type === 'success') {
         _syncUserWithStateAsync();
       }
-    } catch ({ message }) {
-      alert('login: Error:' + message);
-    }
+    } catch ({ message }) {}
   };
   return (
     <View style={styles.container}>
@@ -149,7 +149,11 @@ const Login = () => {
         }}
         onPress={async () => {
           setdisabled(true);
-          auth.signInWithEmailAndPassword(usernameValue, passwordValue);
+          auth
+            .signInWithEmailAndPassword(usernameValue, passwordValue)
+            .then(() => {
+              navigation.navigate('Main');
+            });
         }}
         disabled={disabled}
       >
@@ -179,11 +183,7 @@ const Login = () => {
           borderRadius: 10,
         }}
         onPress={() => {
-          if (ouruser) {
-            signOutAsync();
-          } else {
-            signInAsync();
-          }
+          signInAsync();
         }}
       >
         <View
@@ -210,8 +210,20 @@ const Login = () => {
           </View>
         </View>
       </TouchableOpacity>
-      <View>
-        <Text style={{ color: '#6D7187' }}>Already have an account?</Text>
+      <View style={{ display: 'flex', flexDirection: 'row' }}>
+        <Text style={{ color: '#6D7187' }}>Don't have an account? </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Signup');
+          }}
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+          }}
+        >
+          <Text style={{ color: '#6D71A7' }}>Signup</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
