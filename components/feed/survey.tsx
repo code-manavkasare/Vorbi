@@ -1,59 +1,90 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { firestore } from '../../firebase';
+import LoadingContainer from '../loading/LoadingContainer';
 import Surveyitem from '../survey/surveyitem';
 
 const data = [];
 
-
-const Post = () => {
-  const [items, setitems] = useState([]);
+const Post = ({ category }) => {
+  const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [refresh, setrefresh] = useState(false);
-  
+  const [firstRender, setFirstRender] = useState(true);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     servercall();
   }, []);
+
   useEffect(() => {
-    setrefresh(false)
-  }, [items]);
+    if (!firstRender && category) handleFilterData();
+    if (!category) handleUnfilterData();
+  }, [category]);
+
+  useEffect(() => {
+    setrefresh(false);
+  }, [filteredItems]);
+
   const servercall = useCallback(async () => {
     await firestore
       .collection('surveys')
       .get()
       .then((snap) => {
+        setFirstRender(false);
         snap.forEach((x) => {
           let y = x.data();
           y.id = x.id;
           data.push(y);
         });
-        setitems(data);
+        setItems(data);
+        setFilteredItems(data);
+        setLoading(false);
       });
   }, []);
+
+  const handleFilterData = () => {
+    const filtered = items.filter(
+      ({ topic }) => topic === category.toLowerCase()
+    );
+    setFilteredItems(filtered);
+    setLoading(false);
+  };
+
+  const handleUnfilterData = () => setFilteredItems(items);
+
+  const renderItem = ({ item }) => {
+    return (
+      <Surveyitem
+        type={item.type}
+        data={item.data}
+        topic={item.topic}
+        list={item.list}
+      />
+    );
+  };
+
+  const refreshControl = (
+    <RefreshControl
+      refreshing={refresh}
+      onRefresh={() => {
+        servercall();
+      }}
+    />
+  );
+
   return (
     <View style={[styles.container]}>
-      <FlatList
-        refreshControl={
-          <RefreshControl
-            refreshing={refresh}
-            onRefresh={() => {
-          servercall()
-          
-            }}
-          />
-        }
-        data={items}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return (
-            <Surveyitem
-              type={item.type}
-              data={item.data}
-              topic={item.topic}
-              list={item.list}
-            />
-          );
-        }}
-      />
+      {loading ? (
+        <LoadingContainer />
+      ) : (
+        <FlatList
+          refreshControl={refreshControl}
+          data={filteredItems}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+        />
+      )}
     </View>
   );
 };
@@ -73,8 +104,7 @@ const posts = [
   },
   {
     type: 'Rating',
-    data:
-      'how much do you support the Governments decision to introduce the Farmers Bill',
+    data: 'how much do you support the Governments decision to introduce the Farmers Bill',
     topic: 'social',
     list: [],
   },

@@ -33,6 +33,7 @@ const NewsSnippet = (
     'November',
     'December',
   ];
+
   return (
     <TouchableOpacity onPress={handleClick}>
       <View style={[styles.outer]}>

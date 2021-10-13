@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, RefreshControl } from 'react-native';
 import Post from '../../components/feed/post';
 import { firestore } from '../../firebase';
-const FeedPost = () => {
+const FeedPost = ({ category }) => {
   const [posts, setposts] = useState([]);
   const [refresh, setrefresh] = useState(true);
   const servercall = useCallback(async () => {

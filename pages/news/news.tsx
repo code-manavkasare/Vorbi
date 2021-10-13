@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { View, Alert, FlatList } from 'react-native';
 import { getArticles } from '../../config/newsinfo';
 import NewsSnippet from '../../components/news/newsComponent';
-import SortTop from '../../components/sortingtop';
 import LoadingContainer from '../../components/loading/LoadingContainer';
+import Sort from '../../components/Sort';
+
+const categories = [
+  'None',
+  'Health',
+  'Science',
+  'Technology',
+  'General',
+  'Business',
+  'Sports',
+];
 
 const News = () => {
   const [data, setData] = useState([]);
@@ -25,7 +35,11 @@ const News = () => {
 
   return (
     <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
-      <SortTop category={category} setCategory={setCategory} />
+      <Sort
+        categories={categories}
+        category={category}
+        setCategory={setCategory}
+      />
       {loading ? (
         <LoadingContainer />
       ) : (

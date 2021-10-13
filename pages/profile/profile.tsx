@@ -1,25 +1,11 @@
-import React from 'react';
-import {  View } from 'react-native';
-import ProfileBottom from '../../components/profile/profileBottom';
-import ProfileTop from '../../components/profile/profileTop';
-import NewEle from '../../components/profile/newElement'
-import CreatePost from '../../components/profile/create';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import Home from '../../components/profile';
+import CreatePost from '../../components/profile/create';
+import NewEle from '../../components/profile/newElement';
 
 const Stack = createStackNavigator();
 
-const Home = () =>{
-  return (
-    <View style={{ backgroundColor: '#2A2E42', flex: 1 }}>
-      <View style={{ flex: 1.3 }}>
-        <ProfileTop />
-      </View>
-      <View style={{ flex: 3 }}>
-        <ProfileBottom />
-      </View>
-    </View>
-  );
-}
 const Profile = () => {
   return (
     <Stack.Navigator
