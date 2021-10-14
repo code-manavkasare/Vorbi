@@ -1,6 +1,11 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import theme from '../../theme';
 import Create from '../icons/Create';
 import Info from './Info';
@@ -11,13 +16,17 @@ const { width, height } = Dimensions.get('screen');
 
 const Tab = createMaterialTopTabNavigator();
 
-const Profile = ({ credibility }) => {
+const Profile = ({ credibility, navigation }) => {
   return (
     <View style={styles.container}>
       {parseInt(credibility) >= 500 && (
-        <View style={styles.createIcon}>
-          <Create />
-        </View>
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate('CreatePost')}
+        >
+          <View style={styles.createIcon}>
+            <Create />
+          </View>
+        </TouchableWithoutFeedback>
       )}
       <Tab.Navigator
         tabBarOptions={{

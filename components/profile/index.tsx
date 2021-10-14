@@ -9,7 +9,7 @@ export default function ({ navigation }) {
   return (
     <View style={{ backgroundColor: '#1F2232', flex: 1 }}>
       <ProfileTop credibility={credibility} navigation={navigation} />
-      <ProfileBottom credibility={credibility} />
+      <ProfileBottom credibility={credibility} navigation={navigation} />
     </View>
   );
 }
