@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import theme from '../../theme';
 
 function MyTabBar({
   state,
@@ -83,7 +84,12 @@ function MyTabBar({
         },
       ]}
     >
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: backgroundColor ? backgroundColor : '#1f2232' },
+        ]}
+      >
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const label =
@@ -129,11 +135,11 @@ function MyTabBar({
             >
               <View style={[styles.text]}>
                 {route.name === 'Stats' ? (
-                  <Stats color={isFocused ? '#ffff' : '#6D7187'} />
+                  <Stats color={isFocused ? theme.text.Yellow : '#6D7187'} />
                 ) : route.name === 'Saved' ? (
-                  <Saved color={isFocused ? '#ffff' : '#6D7187'} />
+                  <Saved color={isFocused ? theme.text.Yellow : '#6D7187'} />
                 ) : (
-                  <PostAdd color={isFocused ? '#ffff' : '#6D7187'} />
+                  <PostAdd color={isFocused ? theme.text.Yellow : '#6D7187'} />
                 )}
               </View>
             </TouchableOpacity>

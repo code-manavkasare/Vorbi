@@ -15,13 +15,13 @@ import Settings from '../icons/Settings';
 import Tick from '../icons/Tick';
 import Mood from './mood';
 
-const credibility = '200';
+const credibility = '499';
 
 const { width, height } = Dimensions.get('screen');
 
 const Profile = () => {
   const [showMore, setShowMore] = useState(false);
-  const transition = useTimingTransition(showMore, { duration: 400 });
+  const transition = useTimingTransition(showMore, { duration: 200 });
   const opacityTransition = useTimingTransition(showMore, { duration: 1000 });
   const containerHeight = mix(transition, height * 0.3, height * 0.75);
   const rotateZ = mix(transition, 0, Math.PI);
@@ -43,7 +43,7 @@ const Profile = () => {
           </View>
           <View style={styles.usernameContainer}>
             <Text style={styles.username}>Username</Text>
-            <Tick />
+            {parseInt(credibility) >= 500 && <Tick />}
           </View>
           <Text style={styles.rightText1}>SHO of NW District</Text>
           <Text style={styles.rightText2}>Delhi, 110052</Text>
@@ -80,7 +80,7 @@ const Profile = () => {
           <View style={styles.headingContainer}>
             <View style={styles.usernameContainer}>
               <Text style={styles.username}>Username</Text>
-              <Tick />
+              {parseInt(credibility) >= 500 && <Tick />}
             </View>
             <TouchableOpacity>
               <Settings />
@@ -143,10 +143,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 20,
+    marginTop: 20,
   },
   top: {
-    marginTop: 20,
+    marginTop: 10,
     paddingHorizontal: 25,
     // justifyContent: 'space-between',
     alignItems: 'flex-start',
@@ -165,7 +165,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     textAlign: 'center',
   },
-  username: { fontSize: 24, color: '#ffff', marginRight: 15 },
+  username: {
+    fontSize: 24,
+    color: '#ffff',
+    marginRight: 15,
+    fontWeight: 'bold',
+  },
   left: {
     alignItems: 'center',
   },
@@ -195,7 +200,7 @@ const styles = StyleSheet.create({
   showMoreContainer: {
     position: 'absolute',
     right: 10,
-    bottom: 5,
+    bottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
