@@ -10,11 +10,13 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import Surveypageitem from './surveypageitem';
 import { firestore, auth } from '../../firebase';
-import Theme from "../../theme"
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
+import Theme from '../../theme';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { TabsParamList } from '../../App';
 const items = [];
-const Main: React.FunctionComponent<BottomTabScreenProps<TabsParamList, 'Survey'>> = ({ navigation }) => {
+const Main: React.FunctionComponent<
+  BottomTabScreenProps<TabsParamList, 'Survey'>
+> = ({ navigation }) => {
   const [item, setitem] = useState([]);
   const [refresh, setrefresh] = useState(true);
   useEffect(() => {
@@ -28,12 +30,12 @@ const Main: React.FunctionComponent<BottomTabScreenProps<TabsParamList, 'Survey'
       .collection('parameters')
       .get()
       .then((snap) => {
-        let items = []
+        let items = [];
         snap.forEach((x) => {
           let y = x.data();
           items.push(y);
         });
-        setitem([])
+        setitem([]);
         setitem(items);
       })
       .catch((error) => {
@@ -99,7 +101,9 @@ const Main: React.FunctionComponent<BottomTabScreenProps<TabsParamList, 'Survey'
                 }}
               />
             }
-            keyExtractor={(item, index) => { return `${item.type}index` }}
+            keyExtractor={(item, index) => {
+              return `${item.type}index`;
+            }}
             renderItem={({ item }) => {
               return (
                 <Surveypageitem
@@ -112,7 +116,7 @@ const Main: React.FunctionComponent<BottomTabScreenProps<TabsParamList, 'Survey'
               );
             }}
           />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               auth.signOut().then(() => {
                 navigation.navigate('Landing')
@@ -120,7 +124,7 @@ const Main: React.FunctionComponent<BottomTabScreenProps<TabsParamList, 'Survey'
             }}
           >
             <Graph />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>
