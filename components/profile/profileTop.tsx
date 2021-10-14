@@ -7,21 +7,27 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { mix, useTimingTransition } from 'react-native-redash';
+import Animated, { SpringUtils, Value } from 'react-native-reanimated';
+import {
+  mix,
+  useSpringTransition,
+  useTimingTransition,
+} from 'react-native-redash';
 import ChevronDown from '../icons/ChevronDown';
 import Edit from '../icons/Edit';
 import Settings from '../icons/Settings';
 import Tick from '../icons/Tick';
 import Mood from './mood';
 
-const credibility = '499';
-
 const { width, height } = Dimensions.get('screen');
 
-const Profile = () => {
+const Profile = ({ navigation, credibility }) => {
   const [showMore, setShowMore] = useState(false);
-  const transition = useTimingTransition(showMore, { duration: 200 });
+  const transition = useSpringTransition(showMore, {
+    ...SpringUtils.makeDefaultConfig(),
+    overshootClamping: true,
+    damping: new Animated.Value(20),
+  });
   const opacityTransition = useTimingTransition(showMore, { duration: 1000 });
   const containerHeight = mix(transition, height * 0.3, height * 0.75);
   const rotateZ = mix(transition, 0, Math.PI);
@@ -82,7 +88,7 @@ const Profile = () => {
               <Text style={styles.username}>Username</Text>
               {parseInt(credibility) >= 500 && <Tick />}
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Settings />
             </TouchableOpacity>
           </View>

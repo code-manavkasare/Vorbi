@@ -1,16 +1,24 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import theme from '../../theme';
+import Create from '../icons/Create';
 import Info from './Info';
 import Saved from './profilesaved';
 import MyTabBar from './profiletababar';
 
+const { width, height } = Dimensions.get('screen');
+
 const Tab = createMaterialTopTabNavigator();
 
-const Profile = () => {
+const Profile = ({ credibility }) => {
   return (
     <View style={styles.container}>
+      {parseInt(credibility) >= 500 && (
+        <View style={styles.createIcon}>
+          <Create />
+        </View>
+      )}
       <Tab.Navigator
         tabBarOptions={{
           activeTintColor: theme.text.Yellow,
@@ -41,6 +49,18 @@ const styles = StyleSheet.create({
     paddingTop: 25,
     flex: 1,
     backgroundColor: '#1F2232',
+  },
+  createIcon: {
+    position: 'absolute',
+    top: -40,
+    left: width * 0.4275,
+    width: 80,
+    height: 80,
+    borderRadius: 80 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.background.primary100,
+    zIndex: 1000,
   },
 });
 export default Profile;

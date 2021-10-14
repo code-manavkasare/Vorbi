@@ -11,15 +11,13 @@ import { colorpicker } from '../../utilities';
 
 const example = [
   {
-    data:
-      "Pfizer has made a new development in fighting the pandemic, they've successfully tested a new vaccine with an efficacy of 95%.",
+    data: "Pfizer has made a new development in fighting the pandemic, they've successfully tested a new vaccine with an efficacy of 95%.",
     name: 'Manoj',
     type: 'health',
     id: '0',
   },
   {
-    data:
-      'Results of the 2020 US election are here and Joe Biden is our new president!',
+    data: 'Results of the 2020 US election are here and Joe Biden is our new president!',
     name: 'srinivas',
     type: 'social',
     id: '1',
@@ -102,7 +100,7 @@ const Post = ({ data, name, type }) => {
             </TouchableOpacity>
           </View>
           <View style={[styles.button]}>
-            <Text style={[{ fontSize: 9, fontWeight: '500' }]}>
+            <Text style={[{ fontSize: 14, fontWeight: '500' }]}>
               Submit Feedback
             </Text>
           </View>
@@ -183,8 +181,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    padding: 10,
-    borderRadius: 50,
+    padding: 8,
+    borderRadius: 10,
     backgroundColor: '#ffb30f',
     flex: 2,
     justifyContent: 'center',

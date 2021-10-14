@@ -137,7 +137,7 @@ const Post = ({ data, name, type }) => {
               setModalVisible(true);
             }}
           >
-            <Text style={[{ fontSize: 9, fontWeight: '500' }]}>
+            <Text style={[{ fontSize: 14, fontWeight: '500' }]}>
               Submit Feedback
             </Text>
           </TouchableOpacity>
@@ -201,8 +201,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    padding: 10,
-    borderRadius: 50,
+    padding: 8,
+    borderRadius: 10,
     backgroundColor: '#ffb30f',
     flex: 2,
     justifyContent: 'center',
