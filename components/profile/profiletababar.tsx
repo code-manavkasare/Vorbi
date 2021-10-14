@@ -2,7 +2,13 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-function MyTabBar({ state, descriptors, navigation, sceneContainerStyle }) {
+function MyTabBar({
+  state,
+  descriptors,
+  navigation,
+  sceneContainerStyle,
+  backgroundColor,
+}) {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
   if (focusedOptions.tabBarVisible === false) {
     return null;
@@ -69,7 +75,14 @@ function MyTabBar({ state, descriptors, navigation, sceneContainerStyle }) {
   };
 
   return (
-    <View style={[{ backgroundColor: '#1f2232', height: 70 }]}>
+    <View
+      style={[
+        {
+          backgroundColor: backgroundColor ? backgroundColor : '#1f2232',
+          height: 70,
+        },
+      ]}
+    >
       <View style={styles.container}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -119,8 +132,9 @@ function MyTabBar({ state, descriptors, navigation, sceneContainerStyle }) {
                   <Stats color={isFocused ? '#ffff' : '#6D7187'} />
                 ) : route.name === 'Saved' ? (
                   <Saved color={isFocused ? '#ffff' : '#6D7187'} />
-                ):(<PostAdd color={isFocused ? '#ffff' : '#6D7187'} />)
-                }
+                ) : (
+                  <PostAdd color={isFocused ? '#ffff' : '#6D7187'} />
+                )}
               </View>
             </TouchableOpacity>
           );

@@ -8,7 +8,6 @@ const FeedPost = ({ category }) => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [refresh, setrefresh] = useState(false);
   const [firstRender, setFirstRender] = useState(true);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     servercall();
@@ -28,7 +27,6 @@ const FeedPost = ({ category }) => {
       ({ type }) => type === category.toLowerCase()
     );
     setFilteredPosts(filtered);
-    setLoading(false);
   };
 
   const handleUnfilterData = () => setFilteredPosts(posts);
@@ -48,7 +46,6 @@ const FeedPost = ({ category }) => {
         setFirstRender(false);
         setPosts(data);
         setFilteredPosts(data);
-        console.log('posts', data);
         setrefresh(false);
       });
   }, []);

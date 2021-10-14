@@ -10,13 +10,9 @@ export default function () {
   console.log('user', user);
 
   return (
-    <View style={{ backgroundColor: '#2A2E42', flex: 1 }}>
-      <View style={{ flex: 1.3 }}>
-        <ProfileTop />
-      </View>
-      <View style={{ flex: 3 }}>
-        <ProfileBottom />
-      </View>
+    <View style={{ backgroundColor: '#1F2232', flex: 1 }}>
+      <ProfileTop />
+      <ProfileBottom />
     </View>
   );
 }
