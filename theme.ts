@@ -1,3 +1,6 @@
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('screen');
+
 export default {
   background: {
     primary100: '#1f2232',
@@ -17,4 +20,6 @@ export default {
     primary500: '',
     Yellow: '#ffb30f',
   },
+  width,
+  height,
 };
