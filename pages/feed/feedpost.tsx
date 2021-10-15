@@ -2,12 +2,23 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, RefreshControl } from 'react-native';
 import Post from '../../components/feed/post';
 import { firestore } from '../../firebase';
+import Sort from './Sort';
 
-const FeedPost = ({ category }) => {
+const categories = [
+  'None',
+  'Health',
+  'Infrastructure',
+  'Social',
+  'Technology',
+  'Environment',
+];
+
+const FeedPost = () => {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [refresh, setrefresh] = useState(false);
   const [firstRender, setFirstRender] = useState(true);
+  const [category, setCategory] = useState(null);
 
   useEffect(() => {
     servercall();
@@ -65,6 +76,7 @@ const FeedPost = ({ category }) => {
 
   return (
     <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
+      <Sort category={category} setCategory={setCategory} />
       <FlatList
         data={filteredPosts}
         refreshControl={refreshControl}
