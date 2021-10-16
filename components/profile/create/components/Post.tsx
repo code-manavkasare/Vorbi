@@ -6,31 +6,59 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
 import theme from '../../../../theme';
+import Category from '../../../icons/Category';
+import ChevronDown from '../../../icons/ChevronDown';
+import People from '../../../icons/People';
+import AvoidKeyboard from './AvoidKeyboard';
+
+const verified = true;
 
 export default function Post() {
   const [voice, setVoice] = useState('');
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.screen}>
-        <TextInput
-          style={styles.input}
-          value={voice}
-          onChangeText={(e) => setVoice(e)}
-          multiline
-          placeholder="Share your voice..."
-          placeholderTextColor="#B3B7CD"
-          textAlignVertical="top"
-        />
+    <AvoidKeyboard>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.screen}>
+          <TextInput
+            style={styles.input}
+            value={voice}
+            onChangeText={(e) => setVoice(e)}
+            multiline
+            placeholder="Share your voice..."
+            placeholderTextColor="#B3B7CD"
+            textAlignVertical="top"
+          />
 
-        <View style={styles.bottomContainer}>
-          <Text style={styles.label}>Settings</Text>
-          <View style={styles.row}></View>
+          <View style={styles.bottomContainer}>
+            <Text style={styles.label}>Settings</Text>
+            <View style={styles.row}>
+              <View style={[styles.row, styles.tile]}>
+                <People />
+                <Text style={styles.label}>
+                  {verified ? 'Custom' : 'Everyone'}
+                </Text>
+                <ChevronDown />
+              </View>
+              <View style={[styles.row, styles.tile]}>
+                <Category />
+                <Text style={styles.label}>Category</Text>
+                <ChevronDown />
+              </View>
+            </View>
+
+            <TouchableOpacity style={{ marginTop: 30 }}>
+              <Text style={[styles.label, styles.changeCustom]}>
+                Change Custom Settings
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </AvoidKeyboard>
   );
 }
 
@@ -62,5 +90,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  tile: {
+    marginTop: 25,
+    width: theme.width * 0.3,
+    justifyContent: 'space-around',
+  },
+  changeCustom: {
+    textDecorationLine: 'underline',
   },
 });

@@ -32,6 +32,7 @@
     "react-native-firebase": "^5.6.0",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-google-signin": "^2.1.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-paper": "^4.4.1",
     "react-native-reanimated": "^1.13.2",
     "react-native-redash": "12.6.1",
