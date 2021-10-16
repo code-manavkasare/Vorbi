@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { colorpicker } from '../../utilities';
 import Svg, { Bookmark, Heart } from '../svgs';
+import SubmitFeedbackModal from './SubmitFeedbackModal';
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
@@ -39,7 +40,7 @@ const Post = ({ data, name, type }) => {
 
   return (
     <View style={[styles.outer]}>
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+      {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: '#1f2232' }}
@@ -79,7 +80,11 @@ const Post = ({ data, name, type }) => {
             </TouchableHighlight>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
+      <SubmitFeedbackModal
+        visible={modalVisible}
+        setVisible={setModalVisible}
+      />
       <View style={[styles.left]}>
         <View
           style={[{ backgroundColor: colorpicker(type) }, styles.leftin]}
