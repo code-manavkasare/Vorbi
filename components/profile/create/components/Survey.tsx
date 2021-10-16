@@ -18,7 +18,7 @@ import AvoidKeyboard from './AvoidKeyboard';
 
 const verified = true;
 
-export default function Survey() {
+export default function Survey({ navigation }) {
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState([]);
   const [activeOptionText, setActiveOptionText] = useState('');
@@ -114,7 +114,12 @@ export default function Survey() {
               </View>
             </View>
 
-            <TouchableOpacity style={{ marginTop: 30 }}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('CustomSettings', { type: 'Survery' })
+              }
+              style={{ marginTop: 30 }}
+            >
               <Text style={[styles.label, styles.changeCustom]}>
                 Change Custom Settings
               </Text>

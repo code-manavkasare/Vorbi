@@ -16,7 +16,7 @@ import AvoidKeyboard from './AvoidKeyboard';
 
 const verified = true;
 
-export default function Post() {
+export default function Post({ navigation }) {
   const [voice, setVoice] = useState('');
 
   return (
@@ -50,7 +50,12 @@ export default function Post() {
               </View>
             </View>
 
-            <TouchableOpacity style={{ marginTop: 30 }}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('CustomSettings', { type: 'Post' })
+              }
+              style={{ marginTop: 30 }}
+            >
               <Text style={[styles.label, styles.changeCustom]}>
                 Change Custom Settings
               </Text>

@@ -43,7 +43,7 @@ export default function ({ navigation }) {
           <Text style={styles.text}>Logout</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.tile}>
-          <Text style={styles.text}>Appy for verified</Text>
+          <Text style={styles.text}>Apply for verified</Text>
         </TouchableOpacity>
       </View>
     </View>

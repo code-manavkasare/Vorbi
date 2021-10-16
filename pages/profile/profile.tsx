@@ -36,18 +36,7 @@ const Profile = ({ navigation, route }) => {
       <Stack.Screen
         name="CreatePost"
         component={CreatePost}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: theme.background.primary100,
-          },
-          headerTintColor: theme.text.primary100,
-          headerTitle: 'Create New',
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontSize: 24,
-          },
-        }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
