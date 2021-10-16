@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Text,
   TextInput,
-  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import firebase, { firestore, auth, googleAuthProvider } from '../../firebase';
 import * as GoogleSignIn from 'expo-google-sign-in';
@@ -14,16 +15,15 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 import { GoogleIcon } from '../../components/svgs';
 import { useAuthState } from 'react-firebase-hooks/auth';
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
+import styles from './styles';
+
 const Signup: React.FunctionComponent<
   StackScreenProps<StackParamList, 'Signup'>
 > = ({ navigation }) => {
-  const [usernameValue, setusernameValue] = useState<string>('');
-  const [passwordValue, setpasswordValue] = useState<string>('');
-  const [pincode, setPincode] = useState<string>('');
-  const [passwordAgainValue, setpasswordAgainValue] = useState<string>('');
-  const [disabled, setdisabled] = useState<boolean>(false);
+  const [usernameValue, setusernameValue] = useState('');
+  const [passwordValue, setpasswordValue] = useState('');
+  const [disabled, setdisabled] = useState(false);
+  const [phoneOrEmail, setPhoneOrEmail] = useState('');
   const {} = useAuthState(auth);
   const inputElementRef = useRef(null);
 
@@ -68,226 +68,228 @@ const Signup: React.FunctionComponent<
       }
     } catch ({ message }) {}
   };
-  return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: '#1F2232', paddingVertical: 30 }}
-    >
-      <View style={styles.container}>
-        <View style={{ alignItems: 'flex-start', marginBottom: 30 }}>
-          <Text
-            style={{
-              fontSize: 30,
-              fontFamily: 'Poppins-Regular',
-              color: 'white',
-            }}
-          >
-            Sign Up
-          </Text>
-        </View>
-        <View
-          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <View
-            style={{
-              paddingLeft: 10,
-              height: 60,
-              borderWidth: 1,
-              width: SCREEN_WIDTH * 0.8,
-              borderRadius: 10,
-              borderColor: '#363C5A',
-            }}
-          >
-            <TextInput
-              style={styles.TextInput}
-              placeholder={'Email'}
-              placeholderTextColor="#6D7187"
-              onChangeText={setusernameValue}
-              value={usernameValue}
-            />
-          </View>
-        </View>
-        <View
-          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <View
-            style={{
-              paddingLeft: 10,
-              height: 60,
-              borderWidth: 1,
-              width: SCREEN_WIDTH * 0.8,
-              borderRadius: 10,
-              borderColor: '#363C5A',
-            }}
-          >
-            <TextInput
-              style={styles.TextInput}
-              placeholder={'Pincode'}
-              placeholderTextColor="#6D7187"
-              onChangeText={setusernameValue}
-              value={usernameValue}
-            />
-          </View>
-        </View>
-        <View
-          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <View
-            style={{
-              paddingLeft: 10,
-              height: 60,
-              borderWidth: 1,
-              width: SCREEN_WIDTH * 0.8,
-              borderRadius: 10,
-              borderColor: '#363C5A',
-            }}
-          >
-            <TextInput
-              ref={inputElementRef}
-              style={styles.TextInput}
-              placeholder={'Your Password'}
-              secureTextEntry
-              placeholderTextColor="#6D7187"
-              onChangeText={setpasswordValue}
-              value={passwordValue}
-            />
-          </View>
-        </View>
-        <View
-          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <View
-            style={{
-              paddingLeft: 10,
-              height: 60,
-              borderWidth: 1,
-              width: SCREEN_WIDTH * 0.8,
-              borderRadius: 10,
-              borderColor: '#363C5A',
-            }}
-          >
-            <TextInput
-              ref={inputElementRef}
-              style={styles.TextInput}
-              placeholder={'Confirm Password '}
-              secureTextEntry
-              placeholderTextColor="#6D7187"
-              onChangeText={setpasswordAgainValue}
-              value={passwordAgainValue}
-            />
-          </View>
-        </View>
-        <TouchableOpacity
-          style={{
-            margin: 10,
-            backgroundColor: '#FFB30F',
-            width: SCREEN_WIDTH * 0.8,
-            height: 60,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 10,
-          }}
-          onPress={async () => {
-            setdisabled(true);
 
-            auth
-              .createUserWithEmailAndPassword(usernameValue, passwordValue)
-              .then(() => {
-                navigation.navigate('Main');
-              });
-          }}
-          disabled={disabled}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: 'Poppins-Regular',
-              color: 'white',
-            }}
-          >
-            Create Account
-          </Text>
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontSize: 20,
-            fontFamily: 'Poppins-Regular',
-            color: 'white',
-          }}
-        >
-          or
-        </Text>
-        <TouchableOpacity
-          style={{
-            margin: 10,
-            backgroundColor: '#363C5A',
-            width: SCREEN_WIDTH * 0.8,
-            height: 60,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 10,
-          }}
-          onPress={() => {
-            signInAsync();
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}
-          >
-            <View style={{ margin: 5 }}>
-              <GoogleIcon />
-            </View>
-            <View style={{ margin: 5 }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontFamily: 'Poppins-Regular',
-                  color: 'white',
-                }}
-              >
-                Continue with Google
-              </Text>
-            </View>
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.screen}>
+        <View style={styles.topContainer}>
+          <Text style={styles.headingText1}>Welcome To</Text>
+          <Text style={styles.headingText2}>Vorbi</Text>
+        </View>
+
+        <View style={styles.middleContainer}>
+          <View>
+            <TextInput
+              ref={inputElementRef}
+              style={styles.phoneInput}
+              placeholder={'Phone or email'}
+              placeholderTextColor="#6D7187"
+              onChangeText={(text) => setPhoneOrEmail(text)}
+              value={phoneOrEmail}
+            />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {
+                setdisabled(true);
+                auth
+                  .signInWithEmailAndPassword(usernameValue, passwordValue)
+                  .then(() => {
+                    navigation.navigate('Main');
+                  });
+              }}
+              disabled={disabled}
+            >
+              <Text style={styles.buttonLabel}>Create Account</Text>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <Text style={{ color: '#6D7187' }}>Already have an account? </Text>
+
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Login');
-            }}
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              display: 'flex',
-            }}
+            style={styles.googleContainer}
+            onPress={signInAsync}
           >
-            <Text style={{ color: '#6D71A7' }}>Login</Text>
+            <View style={styles.googleSubContainer}>
+              <View style={{ margin: 5 }}>
+                <GoogleIcon />
+              </View>
+              <View style={{ margin: 5 }}>
+                <Text style={styles.googleLabel}>Sign in with Google</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.bottomContainer}>
+          <Text style={styles.bottomHeading}>Already have an account?</Text>
+          <TouchableOpacity style={styles.bottomButton}>
+            <Text style={styles.buttonLabel}>Log in</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </TouchableWithoutFeedback>
+
+    // <View style={styles.container}>
+
+    //   <View
+    //     style={{ alignItems: 'flex-start', marginBottom: 30, marginEnd: 70 }}
+    //   >
+    // <Text
+    //   style={{
+    //     fontSize: 30,
+    //     fontFamily: 'Poppins-Regular',
+    //     color: 'white',
+    //   }}
+    // >
+    //   Welcome To
+    // </Text>
+    // <Text
+    //   style={{
+    //     fontSize: 30,
+    //     fontFamily: 'Poppins-Regular',
+    //     color: '#FFB30F',
+    //   }}
+    // >
+    //   Vorbi
+    // </Text>
+    //   </View>
+
+    //   <View
+    //     style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
+    //   >
+    //     <View
+    //       style={{
+    //         paddingLeft: 10,
+    //         height: 60,
+    //         borderWidth: 1,
+    //         width: SCREEN_WIDTH * 0.8,
+    //         borderRadius: 10,
+    //         borderColor: '#363C5A',
+    //       }}
+    //     >
+    //       <TextInput
+    //         style={styles.TextInput}
+    //         placeholder={' username '}
+    //         placeholderTextColor="#6D7187"
+    //         onChangeText={(text) => setusernameValue(text)}
+    //         value={usernameValue}
+    //       />
+    //     </View>
+    //   </View>
+    //   <View
+    //     style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
+    //   >
+    //     <View
+    //       style={{
+    //         paddingLeft: 10,
+    //         height: 60,
+    //         borderWidth: 1,
+    //         width: SCREEN_WIDTH * 0.8,
+    //         borderRadius: 10,
+    //         borderColor: '#363C5A',
+    //       }}
+    //     >
+    // <TextInput
+    //   ref={inputElementRef}
+    //   style={styles.TextInput}
+    //   placeholder={' password '}
+    //   secureTextEntry
+    //   placeholderTextColor="#6D7187"
+    //   onChangeText={(text) => setpasswordValue(text)}
+    //   value={passwordValue}
+    // />
+    //     </View>
+    //   </View>
+
+    // <TouchableOpacity
+    //   style={{
+    //     margin: 10,
+    //     backgroundColor: '#FFB30F',
+    //     width: SCREEN_WIDTH * 0.8,
+    //     height: 60,
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     borderRadius: 10,
+    //   }}
+    //   onPress={async () => {
+    //     setdisabled(true);
+    //     auth
+    //       .signInWithEmailAndPassword(usernameValue, passwordValue)
+    //       .then(() => {
+    //         navigation.navigate('Main');
+    //       });
+    //   }}
+    //   disabled={disabled}
+    // >
+    //   <Text
+    //     style={{
+    //       fontSize: 20,
+    //       fontFamily: 'Poppins-Regular',
+    //       color: 'white',
+    //     }}
+    //   >
+    //     Signup
+    //   </Text>
+    // </TouchableOpacity>
+    //   <Text
+    //     style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: 'white' }}
+    //   >
+    //     or
+    //   </Text>
+    // <TouchableOpacity
+    //   style={{
+    //     margin: 10,
+    //     backgroundColor: '#363C5A',
+    //     width: SCREEN_WIDTH * 0.8,
+    //     height: 60,
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     borderRadius: 10,
+    //   }}
+    //   onPress={() => {
+    //     signInAsync();
+    //   }}
+    // >
+    //   <View
+    //     style={{
+    //       flex: 1,
+    //       flexDirection: 'row',
+    //       justifyContent: 'space-around',
+    //       alignItems: 'center',
+    //     }}
+    //   >
+    //     <View style={{ margin: 5 }}>
+    //       <GoogleIcon />
+    //     </View>
+    //     <View style={{ margin: 5 }}>
+    //       <Text
+    //         style={{
+    //           fontSize: 20,
+    //           fontFamily: 'Poppins-Regular',
+    //           color: 'white',
+    //         }}
+    //       >
+    //         Continue with Google
+    //       </Text>
+    //     </View>
+    //   </View>
+    // </TouchableOpacity>
+    //   <View style={{ display: 'flex', flexDirection: 'row' }}>
+    //     <Text style={{ color: '#6D7187' }}>Don't have an account? </Text>
+    //     <TouchableOpacity
+    //       onPress={() => {
+    //         navigation.navigate('Signup');
+    //       }}
+    //       style={{
+    //         alignItems: 'center',
+    //         justifyContent: 'center',
+    //         display: 'flex',
+    //       }}
+    //     >
+    //       <Text style={{ color: '#6D71A7' }}>Signup</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    // </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#1F2232',
-  },
-  TextInput: {
-    height: 60,
-    // color: '#363C5A',
-    color: 'white',
-    fontSize: 15,
-    fontFamily: 'Poppins-Regular',
-  },
-});
 
 export default Signup;
 

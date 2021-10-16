@@ -10,7 +10,7 @@ import { auth } from './firebase';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import Landing from './pages/landing/landing';
-import Login from './pages/login/login';
+import Login from './pages/login/Signup';
 import News from './pages/news/news';
 import Survey from './pages/survey/index';
 import Profile from './pages/profile/profile';
@@ -18,7 +18,7 @@ import Notifications from './pages/notification/notification';
 import Feed from './pages/feed/feed';
 import MyTabBar from './components/tabbars/mytabbar';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import Signup from './pages/login/Signup';
+import Signup from './pages/login/login';
 const fetchFonts = () => {
   return Font.loadAsync({
     'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import firebase, { firestore, auth, googleAuthProvider } from '../../firebase';
 import * as GoogleSignIn from 'expo-google-sign-in';
@@ -18,9 +19,11 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const Login: React.FunctionComponent<
   StackScreenProps<StackParamList, 'Login'>
 > = ({ navigation }) => {
-  const [usernameValue, setusernameValue] = useState('');
-  const [passwordValue, setpasswordValue] = useState('');
-  const [disabled, setdisabled] = useState(false);
+  const [usernameValue, setusernameValue] = useState<string>('');
+  const [passwordValue, setpasswordValue] = useState<string>('');
+  const [pincode, setPincode] = useState<string>('');
+  const [passwordAgainValue, setpasswordAgainValue] = useState<string>('');
+  const [disabled, setdisabled] = useState<boolean>(false);
   const {} = useAuthState(auth);
   const inputElementRef = useRef(null);
 
@@ -66,97 +69,144 @@ const Login: React.FunctionComponent<
     } catch ({ message }) {}
   };
   return (
-    <View style={styles.container}>
-      <View
-        style={{ alignItems: 'flex-start', marginBottom: 30, marginEnd: 70 }}
-      >
-        <Text
-          style={{
-            fontSize: 30,
-            fontFamily: 'Poppins-Regular',
-            color: 'white',
-          }}
-        >
-          Log in or Sign Up
-        </Text>
-        <Text
-          style={{
-            fontSize: 30,
-            fontFamily: 'Poppins-Regular',
-            color: '#FFB30F',
-          }}
-        >
-          for FREE
-        </Text>
-      </View>
-
-      <View
-        style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-      >
-        <View
-          style={{
-            paddingLeft: 10,
-            height: 60,
-            borderWidth: 1,
-            width: SCREEN_WIDTH * 0.8,
-            borderRadius: 10,
-            borderColor: '#363C5A',
-          }}
-        >
-          <TextInput
-            style={styles.TextInput}
-            placeholder={' username '}
-            placeholderTextColor="#6D7187"
-            onChangeText={(text) => setusernameValue(text)}
-            value={usernameValue}
-          />
+    <ScrollView
+      style={{ flex: 1, backgroundColor: '#1F2232', paddingVertical: 30 }}
+    >
+      <View style={styles.container}>
+        <View style={{ alignItems: 'flex-start', marginBottom: 30 }}>
+          <Text
+            style={{
+              fontSize: 30,
+              fontFamily: 'Poppins-Regular',
+              color: 'white',
+            }}
+          >
+            Sign Up
+          </Text>
         </View>
-      </View>
-      <View
-        style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-      >
         <View
-          style={{
-            paddingLeft: 10,
-            height: 60,
-            borderWidth: 1,
-            width: SCREEN_WIDTH * 0.8,
-            borderRadius: 10,
-            borderColor: '#363C5A',
-          }}
+          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
         >
-          <TextInput
-            ref={inputElementRef}
-            style={styles.TextInput}
-            placeholder={' password '}
-            secureTextEntry
-            placeholderTextColor="#6D7187"
-            onChangeText={(text) => setpasswordValue(text)}
-            value={passwordValue}
-          />
+          <View
+            style={{
+              paddingLeft: 10,
+              height: 60,
+              borderWidth: 1,
+              width: SCREEN_WIDTH * 0.8,
+              borderRadius: 10,
+              borderColor: '#363C5A',
+            }}
+          >
+            <TextInput
+              style={styles.TextInput}
+              placeholder={'Email'}
+              placeholderTextColor="#6D7187"
+              onChangeText={setusernameValue}
+              value={usernameValue}
+            />
+          </View>
         </View>
-      </View>
+        <View
+          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View
+            style={{
+              paddingLeft: 10,
+              height: 60,
+              borderWidth: 1,
+              width: SCREEN_WIDTH * 0.8,
+              borderRadius: 10,
+              borderColor: '#363C5A',
+            }}
+          >
+            <TextInput
+              style={styles.TextInput}
+              placeholder={'Pincode'}
+              placeholderTextColor="#6D7187"
+              onChangeText={setusernameValue}
+              value={usernameValue}
+            />
+          </View>
+        </View>
+        <View
+          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View
+            style={{
+              paddingLeft: 10,
+              height: 60,
+              borderWidth: 1,
+              width: SCREEN_WIDTH * 0.8,
+              borderRadius: 10,
+              borderColor: '#363C5A',
+            }}
+          >
+            <TextInput
+              ref={inputElementRef}
+              style={styles.TextInput}
+              placeholder={'Your Password'}
+              secureTextEntry
+              placeholderTextColor="#6D7187"
+              onChangeText={setpasswordValue}
+              value={passwordValue}
+            />
+          </View>
+        </View>
+        <View
+          style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View
+            style={{
+              paddingLeft: 10,
+              height: 60,
+              borderWidth: 1,
+              width: SCREEN_WIDTH * 0.8,
+              borderRadius: 10,
+              borderColor: '#363C5A',
+            }}
+          >
+            <TextInput
+              ref={inputElementRef}
+              style={styles.TextInput}
+              placeholder={'Confirm Password '}
+              secureTextEntry
+              placeholderTextColor="#6D7187"
+              onChangeText={setpasswordAgainValue}
+              value={passwordAgainValue}
+            />
+          </View>
+        </View>
+        <TouchableOpacity
+          style={{
+            margin: 10,
+            backgroundColor: '#FFB30F',
+            width: SCREEN_WIDTH * 0.8,
+            height: 60,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 10,
+          }}
+          onPress={async () => {
+            setdisabled(true);
 
-      <TouchableOpacity
-        style={{
-          margin: 10,
-          backgroundColor: '#FFB30F',
-          width: SCREEN_WIDTH * 0.8,
-          height: 60,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 10,
-        }}
-        onPress={async () => {
-          setdisabled(true);
-          auth
-            .signInWithEmailAndPassword(usernameValue, passwordValue)
-            .then(() => {
-              navigation.navigate('Main');
-            });
-        }}
-        disabled={disabled}
-      >
+            auth
+              .createUserWithEmailAndPassword(usernameValue, passwordValue)
+              .then(() => {
+                navigation.navigate('Main');
+              });
+          }}
+          disabled={disabled}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: 'Poppins-Regular',
+              color: 'white',
+            }}
+          >
+            Create Account
+          </Text>
+        </TouchableOpacity>
         <Text
           style={{
             fontSize: 20,
@@ -164,68 +214,63 @@ const Login: React.FunctionComponent<
             color: 'white',
           }}
         >
-          Login
+          or
         </Text>
-      </TouchableOpacity>
-      <Text
-        style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: 'white' }}
-      >
-        or
-      </Text>
-      <TouchableOpacity
-        style={{
-          margin: 10,
-          backgroundColor: '#363C5A',
-          width: SCREEN_WIDTH * 0.8,
-          height: 60,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 10,
-        }}
-        onPress={() => {
-          signInAsync();
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-          }}
-        >
-          <View style={{ margin: 5 }}>
-            <GoogleIcon />
-          </View>
-          <View style={{ margin: 5 }}>
-            <Text
-              style={{
-                fontSize: 20,
-                fontFamily: 'Poppins-Regular',
-                color: 'white',
-              }}
-            >
-              Continue with Google
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-      <View style={{ display: 'flex', flexDirection: 'row' }}>
-        <Text style={{ color: '#6D7187' }}>Don't have an account? </Text>
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Signup');
-          }}
           style={{
+            margin: 10,
+            backgroundColor: '#363C5A',
+            width: SCREEN_WIDTH * 0.8,
+            height: 60,
             alignItems: 'center',
             justifyContent: 'center',
-            display: 'flex',
+            borderRadius: 10,
+          }}
+          onPress={() => {
+            signInAsync();
           }}
         >
-          <Text style={{ color: '#6D71A7' }}>Signup</Text>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            }}
+          >
+            <View style={{ margin: 5 }}>
+              <GoogleIcon />
+            </View>
+            <View style={{ margin: 5 }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'Poppins-Regular',
+                  color: 'white',
+                }}
+              >
+                Continue with Google
+              </Text>
+            </View>
+          </View>
         </TouchableOpacity>
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <Text style={{ color: '#6D7187' }}>Already have an account? </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Login');
+            }}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              display: 'flex',
+            }}
+          >
+            <Text style={{ color: '#6D71A7' }}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
