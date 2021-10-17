@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, StatusBar, View } from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  View,
+  LogBox,
+} from 'react-native';
+LogBox.ignoreAllLogs();
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,
@@ -19,6 +26,8 @@ import Feed from './pages/feed/feed';
 import MyTabBar from './components/tabbars/mytabbar';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Signup from './pages/login/login';
+import OtpVerification from './pages/login/OtpVerification';
+import UserInfo from './pages/login/UserInfo';
 const fetchFonts = () => {
   return Font.loadAsync({
     'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
@@ -60,9 +69,14 @@ export default function App() {
               }}
             >
               <Stacks.Screen name="Landing" component={Landing} />
+              <Stacks.Screen name="Signup" component={Signup} />
               <Stacks.Screen name="Login" component={Login} />
               <Stacks.Screen name="Main" component={BottomTabsNav} />
-              <Stacks.Screen name="Signup" component={Signup} />
+              <Stacks.Screen
+                name="OtpVerification"
+                component={OtpVerification}
+              />
+              <Stacks.Screen name="UserInfo" component={UserInfo} />
             </Stacks.Navigator>
           </NavigationContainer>
         </View>
@@ -114,6 +128,8 @@ export type StackParamList = {
   Login: undefined;
   Main: undefined;
   Signup: undefined;
+  OtpVerification: { phone: string; type: string };
+  UserInfo: undefined;
 };
 export type TabsParamList = {
   Survey: undefined;

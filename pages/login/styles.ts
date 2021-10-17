@@ -41,6 +41,7 @@ export default StyleSheet.create({
     paddingVertical: 15,
     fontSize: 20,
     color: '#6D7187',
+    marginBottom: 20,
   },
   button: {
     backgroundColor: '#FFB30F',
@@ -93,6 +94,27 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    marginTop: 30,
+  },
+  otpScreenHeading: {
+    fontSize: 30,
+    color: '#fff',
+  },
+  otpScreenDescirption: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  otpInputCell: {
+    borderWidth: 0.3,
+    borderBottomWidth: 0.3,
+    borderColor: 'rgba(54,60,90, 0.8)',
+    borderRadius: 5,
+    color: '#fff',
+  },
+  otpScreenMidBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginTop: 30,
   },
 });

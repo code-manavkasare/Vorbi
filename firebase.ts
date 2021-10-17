@@ -1,9 +1,9 @@
 import firebase from 'firebase/app';
-import "firebase/auth"
-import "firebase/firestore"
-import "firebase/storage"
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/storage';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyASFxIfzTWsSCczByYsFHvu1fZg744992k',
   authDomain: 'lookout-b4bd7.firebaseapp.com',
   databaseURL: 'https://lookout-b4bd7.firebaseio.com',

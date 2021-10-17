@@ -1,31 +1,42 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import * as GoogleSignIn from 'expo-google-sign-in';
+import React, { useEffect, useRef, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import {
-  View,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
+  Keyboard,
   Text,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard,
+  View,
 } from 'react-native';
-import firebase, { firestore, auth, googleAuthProvider } from '../../firebase';
-import * as GoogleSignIn from 'expo-google-sign-in';
-import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
-import { GoogleIcon } from '../../components/svgs';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase, { auth } from '../../firebase';
+import GoogleSignInContainer from './GoogleSignInContainer';
 import styles from './styles';
+
+const validateEmail = (email) => {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
+
+const validatePhone = (phone) => {
+  const re = /^\+?\d[\d -]{8,12}\d$/;
+  return re.test(phone);
+};
 
 const Signup: React.FunctionComponent<
   StackScreenProps<StackParamList, 'Signup'>
 > = ({ navigation }) => {
-  const [usernameValue, setusernameValue] = useState('');
-  const [passwordValue, setpasswordValue] = useState('');
   const [disabled, setdisabled] = useState(false);
   const [phoneOrEmail, setPhoneOrEmail] = useState('');
   const {} = useAuthState(auth);
   const inputElementRef = useRef(null);
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPhone, setIsPhone] = useState(false);
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     inputElementRef.current.setNativeProps({
@@ -69,6 +80,41 @@ const Signup: React.FunctionComponent<
     } catch ({ message }) {}
   };
 
+  const handleCreateAccount = async () => {
+    console.log('createAccount', isEmail, isPhone);
+    if (isEmail) handleEmailAccount();
+    else if (isPhone) handlePhone();
+  };
+
+  const handleEmailAccount = async () => {
+    setLoading(true);
+    await auth.createUserWithEmailAndPassword(phoneOrEmail, password);
+    setLoading(false);
+    navigation.navigate('Main');
+  };
+
+  const handlePhone = async () => {
+    console.log('navigating', {
+      phone: phoneOrEmail,
+      type: 'signup',
+    });
+    navigation.navigate('OtpVerification', {
+      phone: phoneOrEmail,
+      type: 'signup',
+    });
+  };
+
+  const onChangeText = (text) => {
+    setPhoneOrEmail(text);
+    console.log('validatePhone', validatePhone(text));
+    if (validateEmail(text)) setIsEmail(true);
+    else if (validatePhone(text)) setIsPhone(true);
+    else {
+      isEmail && setIsEmail(false);
+      isPhone && setIsPhone(false);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
@@ -84,43 +130,38 @@ const Signup: React.FunctionComponent<
               style={styles.phoneInput}
               placeholder={'Phone or email'}
               placeholderTextColor="#6D7187"
-              onChangeText={(text) => setPhoneOrEmail(text)}
+              onChangeText={onChangeText}
               value={phoneOrEmail}
             />
+            {isEmail && (
+              <TextInput
+                ref={inputElementRef}
+                style={styles.phoneInput}
+                placeholder={'Password'}
+                placeholderTextColor="#6D7187"
+                secureTextEntry={true}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+              />
+            )}
             <TouchableOpacity
               style={styles.button}
-              onPress={async () => {
-                setdisabled(true);
-                auth
-                  .signInWithEmailAndPassword(usernameValue, passwordValue)
-                  .then(() => {
-                    navigation.navigate('Main');
-                  });
-              }}
-              disabled={disabled}
+              onPress={handleCreateAccount}
+              disabled={(!isEmail && !isPhone) || disabled}
             >
               <Text style={styles.buttonLabel}>Create Account</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={styles.googleContainer}
-            onPress={signInAsync}
-          >
-            <View style={styles.googleSubContainer}>
-              <View style={{ margin: 5 }}>
-                <GoogleIcon />
-              </View>
-              <View style={{ margin: 5 }}>
-                <Text style={styles.googleLabel}>Sign in with Google</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+          <GoogleSignInContainer onPress={signInAsync} />
         </View>
 
         <View style={styles.bottomContainer}>
           <Text style={styles.bottomHeading}>Already have an account?</Text>
-          <TouchableOpacity style={styles.bottomButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Login')}
+            style={styles.bottomButton}
+          >
             <Text style={styles.buttonLabel}>Log in</Text>
           </TouchableOpacity>
         </View>
