@@ -9,6 +9,7 @@ import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
 import firebase from 'firebase';
 import { firebaseConfig } from '../../firebase';
+import LoadingModal from '../../components/LoadingModal';
 
 export default function OtpVerification({ route, navigation }) {
   const { phone, type } = route.params;

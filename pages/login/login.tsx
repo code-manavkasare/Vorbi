@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { StackParamList } from '../../App';
+import LoadingModal from '../../components/LoadingModal';
 import firebase, { auth } from '../../firebase';
 import GoogleSignInContainer from './GoogleSignInContainer';
 import styles from './styles';
@@ -36,7 +37,7 @@ const Login: React.FunctionComponent<
   const [isEmail, setIsEmail] = useState(false);
   const [isPhone, setIsPhone] = useState(false);
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({ visible: false, text: null });
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -80,10 +81,15 @@ const Login: React.FunctionComponent<
   };
 
   const handleEmail = async () => {
-    setLoading(true);
-    await auth.signInWithEmailAndPassword(phoneOrEmail, password);
-    setLoading(false);
-    navigation.navigate('Main');
+    try {
+      setLoading({ visible: true, text: 'Signing in...' });
+      await auth.signInWithEmailAndPassword(phoneOrEmail, password);
+      setLoading({ visible: false, text: null });
+      navigation.navigate('Main');
+    } catch (err) {
+      setLoading({ visible: false, text: null });
+      setError(err.message);
+    }
   };
 
   const handlePhone = async () => {
@@ -106,6 +112,7 @@ const Login: React.FunctionComponent<
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
+        <LoadingModal visible={loading.visible} text={loading.text} />
         <View style={styles.topContainer}>
           <Text style={styles.headingText1}>Welcome Back!</Text>
         </View>
@@ -167,220 +174,7 @@ const Login: React.FunctionComponent<
         </View>
       </View>
     </TouchableWithoutFeedback>
-    // <ScrollView
-    //   style={{ flex: 1, backgroundColor: '#1F2232', paddingVertical: 30 }}
-    // >
-    //   <View style={styles.container}>
-    //     <View style={{ alignItems: 'flex-start', marginBottom: 30 }}>
-    //       <Text
-    //         style={{
-    //           fontSize: 30,
-    //           fontFamily: 'Poppins-Regular',
-    //           color: 'white',
-    //         }}
-    //       >
-    //         Sign Up
-    //       </Text>
-    //     </View>
-    //     <View
-    //       style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-    //     >
-    //       <View
-    //         style={{
-    //           paddingLeft: 10,
-    //           height: 60,
-    //           borderWidth: 1,
-    //           width: SCREEN_WIDTH * 0.8,
-    //           borderRadius: 10,
-    //           borderColor: '#363C5A',
-    //         }}
-    //       >
-    //         <TextInput
-    //           style={styles.TextInput}
-    //           placeholder={'Email'}
-    //           placeholderTextColor="#6D7187"
-    //           onChangeText={setusernameValue}
-    //           value={usernameValue}
-    //         />
-    //       </View>
-    //     </View>
-    //     <View
-    //       style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-    //     >
-    //       <View
-    //         style={{
-    //           paddingLeft: 10,
-    //           height: 60,
-    //           borderWidth: 1,
-    //           width: SCREEN_WIDTH * 0.8,
-    //           borderRadius: 10,
-    //           borderColor: '#363C5A',
-    //         }}
-    //       >
-    //         <TextInput
-    //           style={styles.TextInput}
-    //           placeholder={'Pincode'}
-    //           placeholderTextColor="#6D7187"
-    //           onChangeText={setusernameValue}
-    //           value={usernameValue}
-    //         />
-    //       </View>
-    //     </View>
-    //     <View
-    //       style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-    //     >
-    //       <View
-    //         style={{
-    //           paddingLeft: 10,
-    //           height: 60,
-    //           borderWidth: 1,
-    //           width: SCREEN_WIDTH * 0.8,
-    //           borderRadius: 10,
-    //           borderColor: '#363C5A',
-    //         }}
-    //       >
-    //         <TextInput
-    //           ref={inputElementRef}
-    //           style={styles.TextInput}
-    //           placeholder={'Your Password'}
-    //           secureTextEntry
-    //           placeholderTextColor="#6D7187"
-    //           onChangeText={setpasswordValue}
-    //           value={passwordValue}
-    //         />
-    //       </View>
-    //     </View>
-    //     <View
-    //       style={{ margin: 10, justifyContent: 'center', alignItems: 'center' }}
-    //     >
-    //       <View
-    //         style={{
-    //           paddingLeft: 10,
-    //           height: 60,
-    //           borderWidth: 1,
-    //           width: SCREEN_WIDTH * 0.8,
-    //           borderRadius: 10,
-    //           borderColor: '#363C5A',
-    //         }}
-    //       >
-    //         <TextInput
-    //           ref={inputElementRef}
-    //           style={styles.TextInput}
-    //           placeholder={'Confirm Password '}
-    //           secureTextEntry
-    //           placeholderTextColor="#6D7187"
-    //           onChangeText={setpasswordAgainValue}
-    //           value={passwordAgainValue}
-    //         />
-    //       </View>
-    //     </View>
-    //     <TouchableOpacity
-    //       style={{
-    //         margin: 10,
-    //         backgroundColor: '#FFB30F',
-    //         width: SCREEN_WIDTH * 0.8,
-    //         height: 60,
-    //         alignItems: 'center',
-    //         justifyContent: 'center',
-    //         borderRadius: 10,
-    //       }}
-    //       onPress={async () => {
-    //         setdisabled(true);
-
-    //         auth
-    //           .createUserWithEmailAndPassword(usernameValue, passwordValue)
-    //           .then(() => {
-    //             navigation.navigate('Main');
-    //           });
-    //       }}
-    //       disabled={disabled}
-    //     >
-    //       <Text
-    //         style={{
-    //           fontSize: 20,
-    //           fontFamily: 'Poppins-Regular',
-    //           color: 'white',
-    //         }}
-    //       >
-    //         Create Account
-    //       </Text>
-    //     </TouchableOpacity>
-    //     <Text
-    //       style={{
-    //         fontSize: 20,
-    //         fontFamily: 'Poppins-Regular',
-    //         color: 'white',
-    //       }}
-    //     >
-    //       or
-    //     </Text>
-    //     <TouchableOpacity
-    //       style={{
-    //         margin: 10,
-    //         backgroundColor: '#363C5A',
-    //         width: SCREEN_WIDTH * 0.8,
-    //         height: 60,
-    //         alignItems: 'center',
-    //         justifyContent: 'center',
-    //         borderRadius: 10,
-    //       }}
-    //       onPress={() => {
-    //         signInAsync();
-    //       }}
-    //     >
-    //       <View
-    //         style={{
-    //           flex: 1,
-    //           flexDirection: 'row',
-    //           justifyContent: 'space-around',
-    //           alignItems: 'center',
-    //         }}
-    //       >
-    //         <View style={{ margin: 5 }}>
-    //           <GoogleIcon />
-    //         </View>
-    //         <View style={{ margin: 5 }}>
-    //           <Text
-    //             style={{
-    //               fontSize: 20,
-    //               fontFamily: 'Poppins-Regular',
-    //               color: 'white',
-    //             }}
-    //           >
-    //             Continue with Google
-    //           </Text>
-    //         </View>
-    //       </View>
-    //     </TouchableOpacity>
-    //     <View style={{ display: 'flex', flexDirection: 'row' }}>
-    //       <Text style={{ color: '#6D7187' }}>Already have an account? </Text>
-    //       <TouchableOpacity
-    //         onPress={() => {
-    //           navigation.navigate('Login');
-    //         }}
-    //         style={{
-    //           alignItems: 'center',
-    //           justifyContent: 'center',
-    //           display: 'flex',
-    //         }}
-    //       >
-    //         <Text style={{ color: '#6D71A7' }}>Login</Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //   </View>
-    // </ScrollView>
   );
 };
 
 export default Login;
-
-// async function onGoogleButtonPress() {
-//   // Get the users ID token
-//   const { idToken } = await GoogleSignin.signIn();
-
-//   // Create a Google credential with the token
-//   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-//   // Sign-in the user with the credential
-//   return auth().signInWithCredential(googleCredential);
-// }

@@ -22,6 +22,7 @@ import Notifications from './pages/notification/notification';
 import Profile from './pages/profile/profile';
 import Survey from './pages/survey/index';
 import ForgotPassword from './pages/login/ForgotPassword';
+import { Provider } from 'react-native-paper';
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -46,40 +47,45 @@ export default function App() {
     );
   }
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: '#1f2232',
-      }}
-    >
-      <StatusBar backgroundColor={'#1f2232'} />
-      {!loading ? (
-        <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
-          <NavigationContainer>
-            <Stacks.Navigator
-              initialRouteName={user ? 'Main' : 'Landing'}
-              screenOptions={{
-                headerShown: false,
-              }}
-            >
-              <Stacks.Screen name="Landing" component={Landing} />
-              <Stacks.Screen name="Signup" component={Signup} />
-              <Stacks.Screen name="Login" component={Login} />
-              <Stacks.Screen name="ForgotPassword" component={ForgotPassword} />
+    <Provider>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: '#1f2232',
+        }}
+      >
+        <StatusBar backgroundColor={'#1f2232'} />
+        {!loading ? (
+          <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
+            <NavigationContainer>
+              <Stacks.Navigator
+                initialRouteName={user ? 'Main' : 'Landing'}
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stacks.Screen name="Landing" component={Landing} />
+                <Stacks.Screen name="Signup" component={Signup} />
+                <Stacks.Screen name="Login" component={Login} />
+                <Stacks.Screen
+                  name="ForgotPassword"
+                  component={ForgotPassword}
+                />
 
-              <Stacks.Screen
-                name="OtpVerification"
-                component={OtpVerification}
-              />
-              <Stacks.Screen name="UserInfo" component={UserInfo} />
-              <Stacks.Screen name="Main" component={BottomTabsNav} />
-            </Stacks.Navigator>
-          </NavigationContainer>
-        </View>
-      ) : (
-        <></>
-      )}
-    </SafeAreaView>
+                <Stacks.Screen
+                  name="OtpVerification"
+                  component={OtpVerification}
+                />
+                <Stacks.Screen name="UserInfo" component={UserInfo} />
+                <Stacks.Screen name="Main" component={BottomTabsNav} />
+              </Stacks.Navigator>
+            </NavigationContainer>
+          </View>
+        ) : (
+          <></>
+        )}
+      </SafeAreaView>
+    </Provider>
   );
 }
 
