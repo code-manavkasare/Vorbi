@@ -58,16 +58,8 @@ const Signup: React.FunctionComponent<
     const googleCredential = firebase.auth.GoogleAuthProvider.credential(
       user.auth.idToken
     );
-    // auth.GoogleAuthProvider.credential(
-    //   user.auth.idToken
-    // );
     await auth.signInWithCredential(googleCredential);
     return;
-  };
-
-  const signOutAsync = async () => {
-    await GoogleSignIn.signOutAsync();
-    auth.signOut();
   };
 
   const signInAsync = async () => {
@@ -81,12 +73,11 @@ const Signup: React.FunctionComponent<
   };
 
   const handleCreateAccount = async () => {
-    console.log('createAccount', isEmail, isPhone);
-    if (isEmail) handleEmailAccount();
+    if (isEmail) handleEmail();
     else if (isPhone) handlePhone();
   };
 
-  const handleEmailAccount = async () => {
+  const handleEmail = async () => {
     setLoading(true);
     await auth.createUserWithEmailAndPassword(phoneOrEmail, password);
     setLoading(false);
@@ -94,10 +85,6 @@ const Signup: React.FunctionComponent<
   };
 
   const handlePhone = async () => {
-    console.log('navigating', {
-      phone: phoneOrEmail,
-      type: 'signup',
-    });
     navigation.navigate('OtpVerification', {
       phone: phoneOrEmail,
       type: 'signup',
@@ -106,7 +93,6 @@ const Signup: React.FunctionComponent<
 
   const onChangeText = (text) => {
     setPhoneOrEmail(text);
-    console.log('validatePhone', validatePhone(text));
     if (validateEmail(text)) setIsEmail(true);
     else if (validatePhone(text)) setIsPhone(true);
     else {

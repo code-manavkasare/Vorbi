@@ -1,33 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-  View,
-  LogBox,
-} from 'react-native';
-LogBox.ignoreAllLogs();
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   createStackNavigator,
   StackScreenProps,
 } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { auth } from './firebase';
-import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import Landing from './pages/landing/landing';
-import Login from './pages/login/Signup';
-import News from './pages/news/news';
-import Survey from './pages/survey/index';
-import Profile from './pages/profile/profile';
-import Notifications from './pages/notification/notification';
-import Feed from './pages/feed/feed';
-import MyTabBar from './components/tabbars/mytabbar';
+import * as Font from 'expo-font';
+import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import Signup from './pages/login/login';
+import { LogBox, SafeAreaView, StatusBar, View } from 'react-native';
+import MyTabBar from './components/tabbars/mytabbar';
+import { auth } from './firebase';
+import Feed from './pages/feed/feed';
+import Landing from './pages/landing/landing';
+import Signup from './pages/login/Signup';
+import Login from './pages/login/login';
 import OtpVerification from './pages/login/OtpVerification';
 import UserInfo from './pages/login/UserInfo';
+import News from './pages/news/news';
+import Notifications from './pages/notification/notification';
+import Profile from './pages/profile/profile';
+import Survey from './pages/survey/index';
+import ForgotPassword from './pages/login/ForgotPassword';
+LogBox.ignoreAllLogs();
 const fetchFonts = () => {
   return Font.loadAsync({
     'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
@@ -55,7 +50,6 @@ export default function App() {
       style={{
         flex: 1,
         backgroundColor: '#1f2232',
-        // fontFamily: 'Poppins-Regular',
       }}
     >
       <StatusBar backgroundColor={'#1f2232'} />
@@ -71,12 +65,14 @@ export default function App() {
               <Stacks.Screen name="Landing" component={Landing} />
               <Stacks.Screen name="Signup" component={Signup} />
               <Stacks.Screen name="Login" component={Login} />
-              <Stacks.Screen name="Main" component={BottomTabsNav} />
+              <Stacks.Screen name="ForgotPassword" component={ForgotPassword} />
+
               <Stacks.Screen
                 name="OtpVerification"
                 component={OtpVerification}
               />
               <Stacks.Screen name="UserInfo" component={UserInfo} />
+              <Stacks.Screen name="Main" component={BottomTabsNav} />
             </Stacks.Navigator>
           </NavigationContainer>
         </View>
@@ -106,23 +102,7 @@ const BottomTabsNav: React.FunctionComponent<
     </Tab.Navigator>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tab: {
-    backgroundColor: '#1f2232',
-  },
-  carouselcontainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 50,
-  },
-});
-// "react-native-gesture-handler": "^1.9.0",
+
 export type StackParamList = {
   Landing: undefined;
   Login: undefined;
@@ -130,6 +110,7 @@ export type StackParamList = {
   Signup: undefined;
   OtpVerification: { phone: string; type: string };
   UserInfo: undefined;
+  ForgotPassword: undefined;
 };
 export type TabsParamList = {
   Survey: undefined;

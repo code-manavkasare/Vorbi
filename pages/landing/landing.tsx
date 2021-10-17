@@ -7,10 +7,11 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  Text, ActivityIndicator
+  Text,
+  ActivityIndicator,
 } from 'react-native';
 import { storage } from '../../firebase';
-import { StackScreenProps } from "@react-navigation/stack"
+import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../App';
 // const landing = () => {
 //   let images = [];
@@ -42,7 +43,9 @@ const images = [
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-export default class App extends Component<StackScreenProps<StackParamList, 'Landing'>>{
+export default class App extends Component<
+  StackScreenProps<StackParamList, 'Landing'>
+> {
   constructor(props) {
     super(props);
   }
@@ -51,12 +54,10 @@ export default class App extends Component<StackScreenProps<StackParamList, 'Lan
   itemWidth = FIXED_BAR_WIDTH / this.numItems - (this.numItems - 1) * BAR_SPACE;
   animVal = new Animated.Value(0);
   render() {
-
     let imageArray = [];
     let barArray = [];
     images.forEach((image, i) => {
       const thisImage = (
-
         <Image
           key={`image${i}`}
           source={{ uri: image }}
@@ -96,7 +97,7 @@ export default class App extends Component<StackScreenProps<StackParamList, 'Lan
     });
 
     return (
-      <View style={{ ...styles.container, flex: 1 }} >
+      <View style={{ ...styles.container, flex: 1 }}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -121,7 +122,7 @@ export default class App extends Component<StackScreenProps<StackParamList, 'Lan
               borderRadius: 10,
             }}
             onPress={() => {
-              this.props.navigation.navigate('Login');
+              this.props.navigation.navigate('Signup');
             }}
           >
             <Text

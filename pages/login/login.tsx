@@ -2,27 +2,48 @@ import { StackScreenProps } from '@react-navigation/stack';
 import * as GoogleSignIn from 'expo-google-sign-in';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Keyboard,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { StackParamList } from '../../App';
 import firebase, { auth } from '../../firebase';
+import GoogleSignInContainer from './GoogleSignInContainer';
 import styles from './styles';
+
+const validateEmail = (email) => {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
+
+const validatePhone = (phone) => {
+  const re = /^\+?\d[\d -]{8,12}\d$/;
+  return re.test(phone);
+};
 
 const Login: React.FunctionComponent<
   StackScreenProps<StackParamList, 'Login'>
 > = ({ navigation }) => {
-  const [usernameValue, setusernameValue] = useState<string>('');
-  const [passwordValue, setpasswordValue] = useState<string>('');
-  const [pincode, setPincode] = useState<string>('');
-  const [passwordAgainValue, setpasswordAgainValue] = useState<string>('');
-  const [disabled, setdisabled] = useState<boolean>(false);
+  const [disabled, setdisabled] = useState(false);
+  const [phoneOrEmail, setPhoneOrEmail] = useState('');
   const {} = useAuthState(auth);
   const inputElementRef = useRef(null);
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPhone, setIsPhone] = useState(false);
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     inputElementRef.current.setNativeProps({
       style: { fontFamily: 'Poppins-Regular' },
     });
-    // initAsync();
+    initAsync();
   }, []);
 
   const initAsync = async () => {
@@ -38,16 +59,8 @@ const Login: React.FunctionComponent<
     const googleCredential = firebase.auth.GoogleAuthProvider.credential(
       user.auth.idToken
     );
-    // auth.GoogleAuthProvider.credential(
-    //   user.auth.idToken
-    // );
     await auth.signInWithCredential(googleCredential);
     return;
-  };
-
-  const signOutAsync = async () => {
-    await GoogleSignIn.signOutAsync();
-    auth.signOut();
   };
 
   const signInAsync = async () => {
@@ -59,15 +72,99 @@ const Login: React.FunctionComponent<
       }
     } catch ({ message }) {}
   };
+
+  const handleLogin = () => {
+    if (!isEmail && !isPhone) return setError('Invalid Input');
+    if (isEmail) handleEmail();
+    else if (isPhone) handlePhone();
+  };
+
+  const handleEmail = async () => {
+    setLoading(true);
+    await auth.signInWithEmailAndPassword(phoneOrEmail, password);
+    setLoading(false);
+    navigation.navigate('Main');
+  };
+
+  const handlePhone = async () => {
+    navigation.navigate('OtpVerification', {
+      phone: phoneOrEmail,
+      type: 'login',
+    });
+  };
+
+  const onChangeText = (text) => {
+    setPhoneOrEmail(text);
+    if (validateEmail(text)) setIsEmail(true);
+    else if (validatePhone(text)) setIsPhone(true);
+    else {
+      isEmail && setIsEmail(false);
+      isPhone && setIsPhone(false);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
         <View style={styles.topContainer}>
-          <Text style={styles.headingText1}>Welcome To</Text>
-          <Text style={styles.headingText2}>Vorbi</Text>
+          <Text style={styles.headingText1}>Welcome Back!</Text>
         </View>
 
-        <View style={styles.middleContainer}></View>
+        <View style={styles.middleContainer}>
+          <View>
+            {error && <Text style={styles.error}>{error}</Text>}
+            <TextInput
+              ref={inputElementRef}
+              style={styles.phoneInput}
+              placeholder={'Phone or email'}
+              placeholderTextColor="#6D7187"
+              onChangeText={onChangeText}
+              value={phoneOrEmail}
+            />
+            {isEmail && (
+              <>
+                <TextInput
+                  ref={inputElementRef}
+                  style={styles.phoneInput}
+                  placeholder={'Password'}
+                  placeholderTextColor="#6D7187"
+                  secureTextEntry={true}
+                  onChangeText={(text) => setPassword(text)}
+                  value={password}
+                />
+                <View style={styles.forgotPasswordButton}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('ForgotPassword')}
+                  >
+                    <Text style={styles.forgotPasswordButtonLabel}>
+                      Forgot Password
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleLogin}
+              disabled={disabled}
+            >
+              <Text style={styles.buttonLabel}>Login</Text>
+            </TouchableOpacity>
+          </View>
+
+          <GoogleSignInContainer onPress={signInAsync} />
+        </View>
+
+        <View style={styles.bottomContainer}>
+          <Text style={styles.bottomHeading}>Don’t have an account?</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Signup')}
+            style={styles.bottomButton}
+          >
+            <Text style={styles.buttonLabel}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
     // <ScrollView

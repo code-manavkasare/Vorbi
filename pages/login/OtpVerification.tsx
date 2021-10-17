@@ -22,6 +22,7 @@ export default function OtpVerification({ route, navigation }) {
   const [firstRender, setFirstRender] = useState(true);
   const [verificationId, setVerificationId] = useState(null);
   const interval = useRef(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (time === 0) {
@@ -36,7 +37,6 @@ export default function OtpVerification({ route, navigation }) {
   };
 
   const handleSendOtp = async () => {
-    console.log('sending otp', phone);
     const phoneProvider = new firebase.auth.PhoneAuthProvider();
     const _phone = phone[0] !== '+' ? '+91' + phone : phone;
     const _verificationId = await phoneProvider.verifyPhoneNumber(
@@ -58,14 +58,14 @@ export default function OtpVerification({ route, navigation }) {
       const response = await firebase.auth().signInWithCredential(credential);
       console.log('verify response', response);
     } catch (err) {
-      console.log('error occured while verifying otp', err);
+      setError(err.message);
     }
   };
 
   const handleGoogleSignIn = () => {};
 
   const handleNavigate = () => {
-    navigation.navigate(type === 'login' ? 'Signup' : 'Login');
+    type === 'login' ? navigation.push('Signup') : navigation.push('Login');
   };
 
   return (
@@ -77,7 +77,9 @@ export default function OtpVerification({ route, navigation }) {
           attemptInvisibleVerification={attemptInvisibleVerification}
         />
         <View style={styles.topContainer}>
-          <Text style={styles.otpScreenHeading}>Login via OTP</Text>
+          <Text style={styles.otpScreenHeading}>
+            {type === 'login' ? 'Login' : 'Signup'} via OTP
+          </Text>
           <Text style={styles.otpScreenDescirption}>
             Your OTP is valid for 5 minutes
           </Text>
@@ -85,6 +87,7 @@ export default function OtpVerification({ route, navigation }) {
 
         <View style={styles.middleContainer}>
           <View>
+            {error && <Text style={styles.error}>{error}</Text>}
             <OtpInput
               ref={(e) => (otpInput = e)}
               inputCount={6}
@@ -100,7 +103,7 @@ export default function OtpVerification({ route, navigation }) {
 
             <View style={styles.otpScreenMidBottom}>
               <Text style={styles.otpScreenDescirption}>
-                00.{time.toString()}
+                00.{time % 10 === 0 ? '0' + time.toString() : time.toString()}
               </Text>
               <TouchableOpacity
                 disabled={!firstRender && time !== 0}
@@ -109,7 +112,10 @@ export default function OtpVerification({ route, navigation }) {
                 <Text
                   style={[
                     styles.otpScreenDescirption,
-                    { textDecorationLine: 'underline' },
+                    {
+                      textDecorationLine: 'underline',
+                      color: !firstRender && time !== 0 ? '#363C5A' : '#fff',
+                    },
                   ]}
                 >
                   Send OTP
@@ -131,7 +137,7 @@ export default function OtpVerification({ route, navigation }) {
             style={styles.bottomButton}
           >
             <Text style={styles.buttonLabel}>
-              {type === 'login' ? 'Log in' : 'Sign up'}
+              {type === 'login' ? 'Sign up' : 'Log in'}
             </Text>
           </TouchableOpacity>
         </View>

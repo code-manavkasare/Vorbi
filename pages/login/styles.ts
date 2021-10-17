@@ -117,4 +117,17 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 30,
   },
+
+  forgotPasswordButton: {
+    width: theme.width * 0.8,
+    alignItems: 'flex-end',
+  },
+  forgotPasswordButtonLabel: {
+    color: '#B3B7CD',
+    textDecorationLine: 'underline',
+  },
+
+  error: {
+    color: 'crimson',
+  },
 });
