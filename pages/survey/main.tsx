@@ -13,6 +13,8 @@ import { firestore, auth } from '../../firebase';
 import Theme from '../../theme';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { TabsParamList } from '../../App';
+import theme from '../../theme';
+import { Line1, Line2, Line3 } from './Lines';
 const items = [];
 const Main: React.FunctionComponent<
   BottomTabScreenProps<TabsParamList, 'Survey'>
@@ -68,6 +70,17 @@ const Main: React.FunctionComponent<
   };
   return (
     <View style={styles.outer}>
+      <View style={styles.linesContainer}>
+        <View style={styles.line1}>
+          <Line1 />
+        </View>
+        <View style={styles.line2}>
+          <Line2 />
+        </View>
+        <View style={styles.line3}>
+          <Line3 />
+        </View>
+      </View>
       <View style={styles.top}>
         <View style={styles.graphcont}>
           <View style={styles.graphbutt}>
@@ -163,13 +176,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
   },
   indexval: {
-    fontSize: 37,
+    fontSize: 50,
     fontWeight: '600',
     color: 'white',
     fontFamily: 'Poppins-Regular',
   },
   indexbottom: {
-    fontSize: 10,
+    fontSize: 20,
     color: '#969AB0',
     fontFamily: 'Poppins-Regular',
   },
@@ -184,5 +197,22 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
+  },
+  linesContainer: {
+    position: 'absolute',
+    width: theme.width,
+  },
+  line1: {
+    position: 'absolute',
+    top: theme.height * 0.15,
+  },
+  line2: {
+    position: 'absolute',
+    top: 30,
+  },
+  line3: {
+    position: 'absolute',
+    top: theme.height * 0.125,
+    right: 0,
   },
 });
