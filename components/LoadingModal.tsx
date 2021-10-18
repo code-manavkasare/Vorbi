@@ -1,9 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import { Keyboard, StyleSheet, Text } from 'react-native';
 import { ActivityIndicator, Modal, Portal } from 'react-native-paper';
 import theme from '../theme';
 
 export default function LoadingModal({ visible, text }) {
+  useEffect(() => {
+    Keyboard.dismiss();
+  }, []);
+
   return (
     <Portal>
       <Modal

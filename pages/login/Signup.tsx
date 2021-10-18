@@ -84,7 +84,7 @@ const Signup: React.FunctionComponent<
       setLoading({ visible: true, text: 'Signing up...' });
       await auth.createUserWithEmailAndPassword(phoneOrEmail, password);
       setLoading({ visible: false, text: null });
-      navigation.navigate('Main');
+      navigation.navigate('UserInfo', { type: 'email' });
     } catch (err) {
       setLoading({ visible: false, text: null });
       setError(err.message);

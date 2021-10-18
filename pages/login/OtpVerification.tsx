@@ -24,6 +24,7 @@ export default function OtpVerification({ route, navigation }) {
   const [verificationId, setVerificationId] = useState(null);
   const interval = useRef(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState({ visible: false, text: null });
 
   useEffect(() => {
     if (time === 0) {
@@ -38,16 +39,26 @@ export default function OtpVerification({ route, navigation }) {
   };
 
   const handleSendOtp = async () => {
-    const phoneProvider = new firebase.auth.PhoneAuthProvider();
-    const _phone = phone[0] !== '+' ? '+91' + phone : phone;
-    const _verificationId = await phoneProvider.verifyPhoneNumber(
-      _phone,
-      recaptchaVerifier.current
-    );
-    setVerificationId(_verificationId);
-    setFirstRender(false);
-    time !== 45 && setTime(45);
-    handleStartTimer();
+    try {
+      setLoading({ visible: true, text: 'Sending Otp...' });
+      const phoneProvider = new firebase.auth.PhoneAuthProvider();
+      const _phone = phone[0] !== '+' ? '+91' + phone : phone;
+      const _verificationId = await phoneProvider.verifyPhoneNumber(
+        _phone,
+        recaptchaVerifier.current
+      );
+      setLoading({ visible: true, text: 'Otp Sent!' });
+      setTimeout(() => {
+        setLoading({ visible: false, text: null });
+      }, 500);
+      setVerificationId(_verificationId);
+      setFirstRender(false);
+      time !== 45 && setTime(45);
+      handleStartTimer();
+    } catch (err) {
+      setLoading({ visible: false, text: null });
+      setError(err.message);
+    }
   };
 
   const handleVerify = async () => {
@@ -57,10 +68,23 @@ export default function OtpVerification({ route, navigation }) {
         code
       );
       const response = await firebase.auth().signInWithCredential(credential);
+      if (type === 'login') {
+        handleLogin();
+      } else {
+        handleSignup();
+      }
       console.log('verify response', response);
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const handleLogin = () => {
+    navigation.navigate('Main');
+  };
+
+  const handleSignup = () => {
+    navigation.navigate('UserInfo', { type: 'phone' });
   };
 
   const handleGoogleSignIn = () => {};
@@ -72,6 +96,7 @@ export default function OtpVerification({ route, navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
+        <LoadingModal visible={loading.visible} text={loading.text} />
         <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={firebaseConfig}
@@ -104,7 +129,7 @@ export default function OtpVerification({ route, navigation }) {
 
             <View style={styles.otpScreenMidBottom}>
               <Text style={styles.otpScreenDescirption}>
-                00.{time % 10 === 0 ? '0' + time.toString() : time.toString()}
+                00.{time % 10 < 1 ? '0' + time.toString() : time.toString()}
               </Text>
               <TouchableOpacity
                 disabled={!firstRender && time !== 0}

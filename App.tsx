@@ -115,7 +115,7 @@ export type StackParamList = {
   Main: undefined;
   Signup: undefined;
   OtpVerification: { phone: string; type: string };
-  UserInfo: undefined;
+  UserInfo: { type: string };
   ForgotPassword: undefined;
 };
 export type TabsParamList = {
