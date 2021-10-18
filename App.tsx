@@ -23,6 +23,7 @@ import Profile from './pages/profile/profile';
 import Survey from './pages/survey/index';
 import ForgotPassword from './pages/login/ForgotPassword';
 import { Provider } from 'react-native-paper';
+import theme from './theme';
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -70,6 +71,17 @@ export default function App() {
                 <Stacks.Screen
                   name="ForgotPassword"
                   component={ForgotPassword}
+                  options={{
+                    headerShown: true,
+                    headerTitle: '',
+                    headerTintColor: '#fff',
+
+                    headerStyle: {
+                      backgroundColor: theme.background.primary100,
+                      elevation: 0,
+                      shadowOpacity: 0,
+                    },
+                  }}
                 />
 
                 <Stacks.Screen

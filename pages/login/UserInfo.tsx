@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Keyboard,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -10,10 +9,9 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Checkmark from '../../components/icons/Checkmark';
+import ChevronDown from '../../components/icons/ChevronDown';
 import AvoidKeyboard from '../../components/profile/create/components/AvoidKeyboard';
 import theme from '../../theme';
-
-const mandatory = ['name', 'designation', 'pincode', 'state', 'country'];
 
 export default function UserInfo({ route }) {
   const { type } = route.params;
@@ -113,13 +111,24 @@ export default function UserInfo({ route }) {
             {errors.includes('pincode') && (
               <Text style={styles.helperText}>This field is mandatory</Text>
             )}
-            <TextInput
+            {/* <TextInput
               style={styles.input(errors.includes('state'))}
               value={state}
               placeholder="State"
               placeholderTextColor="#B3B7CD"
               onChangeText={(e) => setState(e)}
-            />
+            /> */}
+            <View
+              style={[
+                styles.input(errors.includes('state')),
+                styles.dropdownContainer,
+              ]}
+            >
+              <Text style={styles.dropdownText}>
+                {state.length ? state : 'State'}
+              </Text>
+              <ChevronDown />
+            </View>
             {errors.includes('state') && (
               <Text style={styles.helperText}>This field is mandatory</Text>
             )}
@@ -230,5 +239,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Poppins-Regular',
     color: '#ffff',
+  },
+  dropdownContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  dropdownText: {
+    fontSize: 18,
+    color: '#B3B7CD',
   },
 });
