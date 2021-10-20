@@ -13,9 +13,8 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "userInterfaceStyle": "light",
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.lookout.app",

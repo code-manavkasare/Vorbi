@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Keyboard,
   StyleSheet,
@@ -12,6 +12,46 @@ import Checkmark from '../../components/icons/Checkmark';
 import ChevronDown from '../../components/icons/ChevronDown';
 import AvoidKeyboard from '../../components/profile/create/components/AvoidKeyboard';
 import theme from '../../theme';
+import ChoosingModal from './ChoosingModal';
+
+const states = [
+  'Andhra Pradesh',
+  'Arunachal Pradesh',
+  'Assam',
+  'Bihar',
+  'Chhattisgarh',
+  'Goa',
+  'Gujarat',
+  'Haryana',
+  'Himachal Pradesh',
+  'Jammu and Kashmir',
+  'Jharkhand',
+  'Karnataka',
+  'Kerala',
+  'Madhya Pradesh',
+  'Maharashtra',
+  'Manipur',
+  'Meghalaya',
+  'Mizoram',
+  'Nagaland',
+  'Odisha',
+  'Punjab',
+  'Rajasthan',
+  'Sikkim',
+  'Tamil Nadu',
+  'Telangana',
+  'Tripura',
+  'Uttarakhand',
+  'Uttar Pradesh',
+  'West Bengal',
+  'Andaman and Nicobar Islands',
+  'Chandigarh',
+  'Dadra and Nagar Haveli',
+  'Daman and Diu',
+  'Delhi',
+  'Lakshadweep',
+  'Puducherry',
+];
 
 export default function UserInfo({ route }) {
   const { type } = route.params;
@@ -27,6 +67,8 @@ export default function UserInfo({ route }) {
   const [category, setCategory] = useState('');
   const [checked, setChecked] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState(null);
   const [errors, setErrors] = useState([]);
 
   const handleErrors = () => {
@@ -45,9 +87,29 @@ export default function UserInfo({ route }) {
     if (response.length) return setErrors(response);
   };
 
+  const handleSetStateModalVisible = () => {
+    setModalType('state');
+    setShowModal(true);
+  };
+
+  const getSelected = () => {
+    if (modalType === 'state') return state;
+  };
+
+  const handleOnSelect = (item) => {
+    if (modalType === 'state') return setState(item);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
+        <ChoosingModal
+          onSelect={handleOnSelect}
+          visible={showModal}
+          setVisible={setShowModal}
+          selected={getSelected()}
+          data={states}
+        />
         <Text style={styles.heading}>Just a</Text>
         <Text style={styles.heading}>few seconds...</Text>
         <View style={styles.middleContainer}>
@@ -111,24 +173,19 @@ export default function UserInfo({ route }) {
             {errors.includes('pincode') && (
               <Text style={styles.helperText}>This field is mandatory</Text>
             )}
-            {/* <TextInput
-              style={styles.input(errors.includes('state'))}
-              value={state}
-              placeholder="State"
-              placeholderTextColor="#B3B7CD"
-              onChangeText={(e) => setState(e)}
-            /> */}
-            <View
-              style={[
-                styles.input(errors.includes('state')),
-                styles.dropdownContainer,
-              ]}
-            >
-              <Text style={styles.dropdownText}>
-                {state.length ? state : 'State'}
-              </Text>
-              <ChevronDown />
-            </View>
+            <TouchableWithoutFeedback onPress={handleSetStateModalVisible}>
+              <View
+                style={[
+                  styles.input(errors.includes('state')),
+                  styles.dropdownContainer,
+                ]}
+              >
+                <Text style={styles.dropdownText}>
+                  {state.length ? state : 'State'}
+                </Text>
+                <ChevronDown color={null} />
+              </View>
+            </TouchableWithoutFeedback>
             {errors.includes('state') && (
               <Text style={styles.helperText}>This field is mandatory</Text>
             )}

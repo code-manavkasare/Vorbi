@@ -130,4 +130,32 @@ export default StyleSheet.create({
   error: {
     color: 'crimson',
   },
+  modal: {
+    flex: 1,
+    backgroundColor: theme.background.primary100,
+  },
+  listItem: {
+    marginVertical: 20,
+    width: theme.width * 0.8,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  listItemLabel: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  listHeadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: theme.width * 0.75,
+    alignSelf: 'center',
+    marginVertical: theme.height * 0.05,
+  },
+  listHeading: {
+    fontSize: 30,
+    color: '#fff',
+  },
 });
