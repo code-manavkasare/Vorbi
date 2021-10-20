@@ -55,7 +55,10 @@ const Profile = ({ navigation, credibility }) => {
           <Text style={styles.rightText2}>Delhi, 110052</Text>
           <Text style={[styles.credibility]}>{credibility}</Text>
           <Text style={[styles.credibilitylower]}>Credibility</Text>
-          <TouchableOpacity style={styles.editProfileButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EditProfile')}
+            style={styles.editProfileButton}
+          >
             <Text style={styles.editProfileText}>Edit Profile</Text>
           </TouchableOpacity>
           <View style={styles.tiles}>
@@ -106,10 +109,11 @@ const Profile = ({ navigation, credibility }) => {
             <Animated.View style={[styles.right]}>
               <Text style={styles.rightText1}>SHO of NW District</Text>
               <Text style={styles.rightText2}>Delhi, 110052</Text>
-              <TouchableWithoutFeedback>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('EditProfile')}
+              >
                 <View style={styles.editContainer}>
                   <Text style={styles.rightText3}>Edit Profile</Text>
-
                   <Edit />
                 </View>
               </TouchableWithoutFeedback>

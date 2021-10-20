@@ -7,7 +7,9 @@ import { colorpicker } from '../../utilities';
 const Surveyitem = ({ type, data, topic, list }) => {
   const [buttoncolor, setbuttoncolor] = useState('#6D7187');
 
-  return (
+  return type === 'Rating' ? (
+    <></>
+  ) : (
     <View style={[styles.outer]}>
       <View style={[styles.left]}>
         <View
