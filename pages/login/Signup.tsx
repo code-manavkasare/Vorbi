@@ -81,10 +81,12 @@ const Signup: React.FunctionComponent<
 
   const handleEmail = async () => {
     try {
-      setLoading({ visible: true, text: 'Signing up...' });
-      await auth.createUserWithEmailAndPassword(phoneOrEmail, password);
-      setLoading({ visible: false, text: null });
-      navigation.navigate('UserInfo', { type: 'email' });
+      // await auth.createUserWithEmailAndPassword(phoneOrEmail, password);
+      navigation.navigate('UserInfo', {
+        type: 'email',
+        emailParam: phoneOrEmail,
+        passwordParam: password,
+      });
     } catch (err) {
       setLoading({ visible: false, text: null });
       setError(err.message);

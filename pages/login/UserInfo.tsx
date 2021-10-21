@@ -10,7 +10,9 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Checkmark from '../../components/icons/Checkmark';
 import ChevronDown from '../../components/icons/ChevronDown';
+import LoadingModal from '../../components/LoadingModal';
 import AvoidKeyboard from '../../components/profile/create/components/AvoidKeyboard';
+import { auth } from '../../firebase';
 import theme from '../../theme';
 import ChoosingModal from './ChoosingModal';
 
@@ -53,8 +55,12 @@ const states = [
   'Puducherry',
 ];
 
+const genders = ['Male', 'Female', 'Other'];
+
+const categories = [];
+
 export default function UserInfo({ route }) {
-  const { type } = route.params;
+  const { type, emailParam, passwordParam, credentailParam } = route.params;
   const [name, setName] = useState('');
   const [designation, setDesignation] = useState('');
   const [pinCode, setPinCode] = useState('');
@@ -71,6 +77,8 @@ export default function UserInfo({ route }) {
   const [modalType, setModalType] = useState(null);
   const [errors, setErrors] = useState([]);
 
+  const [loading, setLoading] = useState({ visible: false, text: null });
+
   const handleErrors = () => {
     let _errors = [];
     if (!name) _errors.push('name');
@@ -85,30 +93,76 @@ export default function UserInfo({ route }) {
   const handleProceed = () => {
     const response = handleErrors();
     if (response.length) return setErrors(response);
+    if (!checked) return;
+    if (type === 'email') return handleEmail();
+    else if (type === 'phone') return handlePhone();
   };
 
-  const handleSetStateModalVisible = () => {
+  const handleEmail = async () => {
+    try {
+      setLoading({ visible: true, text: 'Signing up...' });
+      await auth.createUserWithEmailAndPassword(emailParam, passwordParam);
+      setLoading({ visible: false, text: null });
+    } catch (err) {
+      console.log('handleEmail', err);
+      setLoading({ visible: false, text: null });
+    }
+  };
+
+  const handlePhone = async () => {
+    try {
+      setLoading({ visible: true, text: 'Signing up...' });
+      await auth.signInWithCredential(credentailParam);
+      setLoading({ visible: false, text: null });
+    } catch (err) {
+      console.log('handlePhone', err);
+      setLoading({ visible: false, text: null });
+    }
+  };
+
+  const handleStateModal = () => {
     setModalType('state');
+    setShowModal(true);
+  };
+
+  const handleGenderModal = () => {
+    setModalType('gender');
+    setShowModal(true);
+  };
+
+  const handleCategoryModal = () => {
+    setModalType('category');
     setShowModal(true);
   };
 
   const getSelected = () => {
     if (modalType === 'state') return state;
+    else if (modalType === 'gender') return gender;
+    else if (modalType === 'category') return category;
   };
 
-  const handleOnSelect = (item) => {
+  const getData = () => {
+    if (modalType === 'state') return states;
+    else if (modalType === 'gender') return genders;
+    else if (modalType === 'category') return categories;
+  };
+
+  const handleOnSelect = (item: React.SetStateAction<string>) => {
     if (modalType === 'state') return setState(item);
+    else if (modalType === 'gender') return setGender(item);
+    else if (modalType === 'category') return setCategory(item);
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
+        <LoadingModal visible={loading.visible} text={loading.visible} />
         <ChoosingModal
           onSelect={handleOnSelect}
           visible={showModal}
           setVisible={setShowModal}
           selected={getSelected()}
-          data={states}
+          data={getData()}
         />
         <Text style={styles.heading}>Just a</Text>
         <Text style={styles.heading}>few seconds...</Text>
@@ -132,6 +186,7 @@ export default function UserInfo({ route }) {
                   autoCapitalize="none"
                   autoCompleteType="email"
                   placeholder="Email"
+                  keyboardType="email-address"
                   placeholderTextColor="#B3B7CD"
                   onChangeText={(e) => setEmail(e)}
                 />
@@ -145,6 +200,7 @@ export default function UserInfo({ route }) {
                   style={styles.input(errors.includes('phone'))}
                   value={phone}
                   placeholder="Phone"
+                  keyboardType="phone-pad"
                   placeholderTextColor="#B3B7CD"
                   onChangeText={(e) => setPhone(e)}
                 />
@@ -164,16 +220,25 @@ export default function UserInfo({ route }) {
               <Text style={styles.helperText}>This field is mandatory</Text>
             )}
             <TextInput
-              style={styles.input(errors.includes('pincode'))}
-              value={pinCode}
-              placeholder="Pincode"
+              style={styles.input(errors.includes('age'))}
+              value={age}
+              keyboardType="number-pad"
+              placeholder="Age"
               placeholderTextColor="#B3B7CD"
-              onChangeText={(e) => setPinCode(e)}
+              onChangeText={(e) => setAge(e)}
             />
             {errors.includes('pincode') && (
               <Text style={styles.helperText}>This field is mandatory</Text>
             )}
-            <TouchableWithoutFeedback onPress={handleSetStateModalVisible}>
+            <TextInput
+              style={styles.input(errors.includes('pincode'))}
+              value={pinCode}
+              keyboardType="number-pad"
+              placeholder="Pincode"
+              placeholderTextColor="#B3B7CD"
+              onChangeText={(e) => setPinCode(e)}
+            />
+            <TouchableWithoutFeedback onPress={handleStateModal}>
               <View
                 style={[
                   styles.input(errors.includes('state')),
@@ -198,14 +263,34 @@ export default function UserInfo({ route }) {
               onChangeText={(e) => setCountry(e)}
             />
             <Text style={styles.helperText}>We currently serve here</Text>
-            <TextInput
-              style={styles.input(false)}
-              value={age}
-              editable={false}
-              placeholder="Age"
-              placeholderTextColor="#363C5A"
-              onChangeText={(e) => setAge(e)}
-            />
+
+            <TouchableWithoutFeedback onPress={handleGenderModal}>
+              <View
+                style={[
+                  styles.input(errors.includes('gender')),
+                  styles.dropdownContainer,
+                ]}
+              >
+                <Text style={styles.dropdownText}>
+                  {gender.length ? gender : 'Gender'}
+                </Text>
+                <ChevronDown color={null} />
+              </View>
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback onPress={handleCategoryModal}>
+              <View
+                style={[
+                  styles.input(errors.includes('category')),
+                  styles.dropdownContainer,
+                ]}
+              >
+                <Text style={styles.dropdownText}>
+                  {category.length ? category : 'Category'}
+                </Text>
+                <ChevronDown color={null} />
+              </View>
+            </TouchableWithoutFeedback>
           </AvoidKeyboard>
         </View>
         <View style={styles.bottomContainer}>
@@ -213,7 +298,9 @@ export default function UserInfo({ route }) {
             <TouchableWithoutFeedback
               onPress={() => setChecked((prev) => !prev)}
             >
-              <View style={styles.checkbox}>{checked && <Checkmark />}</View>
+              <View style={styles.checkbox}>
+                {checked && <Checkmark color={null} />}
+              </View>
             </TouchableWithoutFeedback>
             <View style={{ marginLeft: 20 }}>
               <Text style={[styles.helperText, { fontSize: 18 }]}>
@@ -247,11 +334,12 @@ const styles = StyleSheet.create({
   },
   middleContainer: {
     height: theme.height * 0.5,
-    width: theme.width * 0.8,
-    alignSelf: 'center',
+    width: theme.width,
     marginVertical: 20,
+    alignItems: 'center',
   },
   input: (isError: any) => ({
+    width: theme.width * 0.8,
     paddingVertical: 15,
     color: '#B3B7CD',
     paddingHorizontal: 20,

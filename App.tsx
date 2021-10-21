@@ -127,7 +127,12 @@ export type StackParamList = {
   Main: undefined;
   Signup: undefined;
   OtpVerification: { phone: string; type: string };
-  UserInfo: { type: string };
+  UserInfo: {
+    type: string;
+    emailParam?: string;
+    passwordParam?: string;
+    credentialParam?: any;
+  };
   ForgotPassword: undefined;
 };
 export type TabsParamList = {

@@ -67,24 +67,30 @@ export default function OtpVerification({ route, navigation }) {
         verificationId,
         code
       );
-      const response = await firebase.auth().signInWithCredential(credential);
       if (type === 'login') {
-        handleLogin();
+        handleLogin(credential);
       } else {
-        handleSignup();
+        handleSignup(credential);
       }
-      console.log('verify response', response);
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const handleLogin = () => {
-    navigation.navigate('Main');
+  const handleLogin = async (credential) => {
+    try {
+      await firebase.auth().signInWithCredential(credential);
+      navigation.navigate('Main');
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  const handleSignup = () => {
-    navigation.navigate('UserInfo', { type: 'phone' });
+  const handleSignup = (credential) => {
+    navigation.navigate('UserInfo', {
+      type: 'phone',
+      credentialParam: credential,
+    });
   };
 
   const handleGoogleSignIn = () => {};
