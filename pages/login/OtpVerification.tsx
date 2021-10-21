@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import styles from './styles';
 import OtpInput from 'react-native-otp-textinput';
@@ -8,8 +8,10 @@ import GoogleSignInContainer from './GoogleSignInContainer';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
 import firebase from 'firebase';
-import { firebaseConfig } from '../../firebase';
+import { auth, firebaseConfig } from '../../firebase';
 import LoadingModal from '../../components/LoadingModal';
+import { getUser } from '../../utils/db';
+import { UserContext } from '../../utils/context';
 
 export default function OtpVerification({ route, navigation }) {
   const { phone, type } = route.params;
@@ -25,6 +27,8 @@ export default function OtpVerification({ route, navigation }) {
   const interval = useRef(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState({ visible: false, text: null });
+
+  const { setUser } = useContext(UserContext);
 
   useEffect(() => {
     if (time === 0) {
@@ -80,6 +84,8 @@ export default function OtpVerification({ route, navigation }) {
   const handleLogin = async (credential) => {
     try {
       await firebase.auth().signInWithCredential(credential);
+      const _user = await getUser(auth.currentUser.uid);
+      setUser(_user);
       navigation.navigate('Main');
     } catch (err) {
       setError(err.message);

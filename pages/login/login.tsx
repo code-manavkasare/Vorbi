@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import * as GoogleSignIn from 'expo-google-sign-in';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import {
   Keyboard,
@@ -13,6 +13,8 @@ import {
 import { StackParamList } from '../../App';
 import LoadingModal from '../../components/LoadingModal';
 import firebase, { auth } from '../../firebase';
+import { UserContext } from '../../utils/context';
+import { getUser } from '../../utils/db';
 import GoogleSignInContainer from './GoogleSignInContainer';
 import styles from './styles';
 
@@ -39,6 +41,8 @@ const Login: React.FunctionComponent<
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState({ visible: false, text: null });
   const [error, setError] = useState(null);
+
+  const { setUser } = useContext(UserContext);
 
   useEffect(() => {
     inputElementRef.current.setNativeProps({
@@ -84,6 +88,8 @@ const Login: React.FunctionComponent<
     try {
       setLoading({ visible: true, text: 'Signing in...' });
       await auth.signInWithEmailAndPassword(phoneOrEmail, password);
+      const _user = await getUser(auth.currentUser.uid);
+      setUser(_user);
       setLoading({ visible: false, text: null });
       navigation.navigate('Main');
     } catch (err) {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,13 @@ import theme from '../../theme';
 import CrossCircle from '../icons/CrossCircle';
 import { auth } from '../../firebase';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { UserContext } from '../../utils/context';
 
 const { width, height } = Dimensions.get('screen');
 
 export default function ({ navigation }) {
+  const { setUser } = useContext(UserContext);
+
   useEffect(() => {
     navigation.setOptions({
       tabBarVisible: false,
@@ -24,6 +27,7 @@ export default function ({ navigation }) {
 
   const handleLogout = () => {
     auth.signOut().then(() => {
+      setUser(null);
       navigation.navigate('Landing');
     });
   };

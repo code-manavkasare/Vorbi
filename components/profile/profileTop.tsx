@@ -53,12 +53,12 @@ const Profile = ({ navigation, credibility }) => {
             <Mood mood="happy" size="125" />
           </View>
           <View style={styles.usernameContainer}>
-            <Text style={styles.username}>{user.name}</Text>
+            <Text style={styles.username}>{user && user.name}</Text>
             {parseInt(credibility) >= 500 && <Tick />}
           </View>
-          <Text style={styles.rightText1}>{user.designation}</Text>
+          <Text style={styles.rightText1}>{user && user.designation}</Text>
           <Text style={styles.rightText2}>
-            {user.state}, {user.pinCode}
+            {user && user.state}, {user && user.pinCode}
           </Text>
           <Text style={[styles.credibility]}>{credibility}</Text>
           <Text style={[styles.credibilitylower]}>Credibility</Text>
@@ -95,7 +95,7 @@ const Profile = ({ navigation, credibility }) => {
         <>
           <View style={styles.headingContainer}>
             <View style={styles.usernameContainer}>
-              <Text style={styles.username}>{user.name}</Text>
+              <Text style={styles.username}>{user && user.name}</Text>
               {parseInt(credibility) >= 500 && <Tick />}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
@@ -114,9 +114,9 @@ const Profile = ({ navigation, credibility }) => {
             </View>
 
             <Animated.View style={[styles.right]}>
-              <Text style={styles.rightText1}>{user.designation}</Text>
+              <Text style={styles.rightText1}>{user && user.designation}</Text>
               <Text style={styles.rightText2}>
-                {user.state}, {user.pinCode}
+                {user && user.state}, {user && user.pinCode}
               </Text>
               <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('EditProfile')}
