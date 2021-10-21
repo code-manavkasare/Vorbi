@@ -14,6 +14,7 @@ import LoadingModal from '../../components/LoadingModal';
 import AvoidKeyboard from '../../components/profile/create/components/AvoidKeyboard';
 import { auth } from '../../firebase';
 import theme from '../../theme';
+import { storeUser } from '../../utils/db';
 import ChoosingModal from './ChoosingModal';
 
 const states = [
@@ -57,17 +58,20 @@ const states = [
 
 const genders = ['Male', 'Female', 'Other'];
 
-const categories = [];
+const categories = ['General', 'SC', 'ST', 'OBC'];
 
-export default function UserInfo({ route }) {
-  const { type, emailParam, passwordParam, credentailParam } = route.params;
+export default function UserInfo({ route, navigation }) {
+  const { type, emailParam, passwordParam, credentailParam, phoneParam } =
+    route.params;
   const [name, setName] = useState('');
   const [designation, setDesignation] = useState('');
   const [pinCode, setPinCode] = useState('');
   const [state, setState] = useState('');
   const [country, setCountry] = useState('India');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState(type === 'phone' ? phoneParam : '');
+  const [email, setEmail] = useState(
+    type === 'email' || type === 'google' ? emailParam : ''
+  );
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
   const [category, setCategory] = useState('');
@@ -84,6 +88,7 @@ export default function UserInfo({ route }) {
     if (!name) _errors.push('name');
     if (!designation) _errors.push('designation');
     if (type === 'email' && !phone) _errors.push('phone');
+    if (type === 'google' && !phone) _errors.push('phone');
     if (type === 'phone' && !email) _errors.push('email');
     if (!pinCode) _errors.push('pincode');
     if (!state) _errors.push('state');
@@ -96,12 +101,26 @@ export default function UserInfo({ route }) {
     if (!checked) return;
     if (type === 'email') return handleEmail();
     else if (type === 'phone') return handlePhone();
+    else if (type === 'google') return handleGoogle();
+  };
+
+  const handleGoogle = async () => {
+    try {
+      setLoading({ visible: true, text: 'Signing up...' });
+      await auth.signInWithCredential(credentailParam);
+      await handleStoreUser();
+      setLoading({ visible: false, text: null });
+    } catch (err) {
+      console.log('handleEmail', err);
+      setLoading({ visible: false, text: null });
+    }
   };
 
   const handleEmail = async () => {
     try {
       setLoading({ visible: true, text: 'Signing up...' });
       await auth.createUserWithEmailAndPassword(emailParam, passwordParam);
+      await handleStoreUser();
       setLoading({ visible: false, text: null });
     } catch (err) {
       console.log('handleEmail', err);
@@ -113,10 +132,35 @@ export default function UserInfo({ route }) {
     try {
       setLoading({ visible: true, text: 'Signing up...' });
       await auth.signInWithCredential(credentailParam);
+      await handleStoreUser();
       setLoading({ visible: false, text: null });
     } catch (err) {
       console.log('handlePhone', err);
       setLoading({ visible: false, text: null });
+    }
+  };
+
+  const handleStoreUser = async () => {
+    const user = auth.currentUser;
+    const payload = {
+      uid: user.uid,
+      name,
+      email,
+      phone,
+      designation,
+      pinCode,
+      state,
+      country,
+      age,
+      gender,
+      category,
+    };
+    try {
+      const response = await storeUser(payload);
+      navigation.navigate('Main');
+      console.log('storeUser response', response);
+    } catch (err) {
+      console.log('error storing user', err);
     }
   };
 
@@ -156,7 +200,7 @@ export default function UserInfo({ route }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
-        <LoadingModal visible={loading.visible} text={loading.visible} />
+        <LoadingModal visible={loading.visible} text={loading.text} />
         <ChoosingModal
           onSelect={handleOnSelect}
           visible={showModal}

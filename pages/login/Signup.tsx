@@ -52,7 +52,6 @@ const Signup: React.FunctionComponent<
       clientId:
         '500571869292-3tlo6fvmqcooblpj6s38f1oco4f0si43.apps.googleusercontent.com',
     });
-    _syncUserWithStateAsync();
   };
 
   const _syncUserWithStateAsync = async () => {
@@ -69,7 +68,16 @@ const Signup: React.FunctionComponent<
       await GoogleSignIn.askForPlayServicesAsync();
       const { type } = await GoogleSignIn.signInAsync();
       if (type === 'success') {
-        _syncUserWithStateAsync();
+        const user = await GoogleSignIn.signInSilentlyAsync();
+        const googleCredential = firebase.auth.GoogleAuthProvider.credential(
+          user.auth.idToken
+        );
+
+        navigation.navigate('UserInfo', {
+          type: 'gogle',
+          credentialParam: googleCredential,
+          emailParam: user.email,
+        });
       }
     } catch ({ message }) {}
   };

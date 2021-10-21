@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/stack';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { LogBox, SafeAreaView, StatusBar, View } from 'react-native';
 import MyTabBar from './components/tabbars/mytabbar';
@@ -24,6 +24,8 @@ import Survey from './pages/survey/index';
 import ForgotPassword from './pages/login/ForgotPassword';
 import { Provider } from 'react-native-paper';
 import theme from './theme';
+import { UserContext } from './utils/context';
+import { getUser } from './utils/db';
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -37,7 +39,18 @@ const Stacks = createStackNavigator<StackParamList>();
 let i = 0;
 export default function App() {
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [user, loading, error] = useAuthState(auth);
+  const [currentUser, loading, error] = useAuthState(auth);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (currentUser) handleGetFirestoreUser();
+  }, [currentUser]);
+
+  const handleGetFirestoreUser = async () => {
+    const _user = await getUser(auth.currentUser.uid);
+    setUser(_user);
+  };
+
   const time = new Date();
   if (!dataLoaded) {
     return (
@@ -48,56 +61,58 @@ export default function App() {
     );
   }
   return (
-    <Provider>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: '#1f2232',
-        }}
-      >
-        <StatusBar backgroundColor={'#1f2232'} />
-        {!loading ? (
-          <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
-            <NavigationContainer>
-              <Stacks.Navigator
-                initialRouteName={user ? 'Main' : 'Landing'}
-                screenOptions={{
-                  headerShown: false,
-                }}
-              >
-                <Stacks.Screen name="Landing" component={Landing} />
-                <Stacks.Screen name="Signup" component={Signup} />
-                <Stacks.Screen name="Login" component={Login} />
-                <Stacks.Screen
-                  name="ForgotPassword"
-                  component={ForgotPassword}
-                  options={{
-                    headerShown: true,
-                    headerTitle: '',
-                    headerTintColor: '#fff',
-
-                    headerStyle: {
-                      backgroundColor: theme.background.primary100,
-                      elevation: 0,
-                      shadowOpacity: 0,
-                    },
+    <UserContext.Provider value={{ user, setUser }}>
+      <Provider>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: '#1f2232',
+          }}
+        >
+          <StatusBar backgroundColor={'#1f2232'} />
+          {!loading ? (
+            <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
+              <NavigationContainer>
+                <Stacks.Navigator
+                  initialRouteName={currentUser ? 'Main' : 'Landing'}
+                  screenOptions={{
+                    headerShown: false,
                   }}
-                />
+                >
+                  <Stacks.Screen name="Landing" component={Landing} />
+                  <Stacks.Screen name="Signup" component={Signup} />
+                  <Stacks.Screen name="Login" component={Login} />
+                  <Stacks.Screen
+                    name="ForgotPassword"
+                    component={ForgotPassword}
+                    options={{
+                      headerShown: true,
+                      headerTitle: '',
+                      headerTintColor: '#fff',
 
-                <Stacks.Screen
-                  name="OtpVerification"
-                  component={OtpVerification}
-                />
-                <Stacks.Screen name="UserInfo" component={UserInfo} />
-                <Stacks.Screen name="Main" component={BottomTabsNav} />
-              </Stacks.Navigator>
-            </NavigationContainer>
-          </View>
-        ) : (
-          <></>
-        )}
-      </SafeAreaView>
-    </Provider>
+                      headerStyle: {
+                        backgroundColor: theme.background.primary100,
+                        elevation: 0,
+                        shadowOpacity: 0,
+                      },
+                    }}
+                  />
+
+                  <Stacks.Screen
+                    name="OtpVerification"
+                    component={OtpVerification}
+                  />
+                  <Stacks.Screen name="UserInfo" component={UserInfo} />
+                  <Stacks.Screen name="Main" component={BottomTabsNav} />
+                </Stacks.Navigator>
+              </NavigationContainer>
+            </View>
+          ) : (
+            <></>
+          )}
+        </SafeAreaView>
+      </Provider>
+    </UserContext.Provider>
   );
 }
 
@@ -132,6 +147,7 @@ export type StackParamList = {
     emailParam?: string;
     passwordParam?: string;
     credentialParam?: any;
+    phoneParam?: string;
   };
   ForgotPassword: undefined;
 };

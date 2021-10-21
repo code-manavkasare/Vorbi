@@ -90,6 +90,7 @@ export default function OtpVerification({ route, navigation }) {
     navigation.navigate('UserInfo', {
       type: 'phone',
       credentialParam: credential,
+      phoneParam: phone,
     });
   };
 

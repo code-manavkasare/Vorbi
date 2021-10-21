@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -13,6 +13,7 @@ import {
   useSpringTransition,
   useTimingTransition,
 } from 'react-native-redash';
+import { UserContext } from '../../utils/context';
 import ChevronDown from '../icons/ChevronDown';
 import Edit from '../icons/Edit';
 import Settings from '../icons/Settings';
@@ -23,6 +24,10 @@ const { width, height } = Dimensions.get('screen');
 
 const Profile = ({ navigation, credibility }) => {
   const [showMore, setShowMore] = useState(false);
+  const { user } = useContext(UserContext);
+
+  console.log('user from conext', user);
+
   const transition = useSpringTransition(showMore, {
     ...SpringUtils.makeDefaultConfig(),
     overshootClamping: true,
@@ -48,11 +53,13 @@ const Profile = ({ navigation, credibility }) => {
             <Mood mood="happy" size="125" />
           </View>
           <View style={styles.usernameContainer}>
-            <Text style={styles.username}>Username</Text>
+            <Text style={styles.username}>{user.name}</Text>
             {parseInt(credibility) >= 500 && <Tick />}
           </View>
-          <Text style={styles.rightText1}>SHO of NW District</Text>
-          <Text style={styles.rightText2}>Delhi, 110052</Text>
+          <Text style={styles.rightText1}>{user.designation}</Text>
+          <Text style={styles.rightText2}>
+            {user.state}, {user.pinCode}
+          </Text>
           <Text style={[styles.credibility]}>{credibility}</Text>
           <Text style={[styles.credibilitylower]}>Credibility</Text>
           <TouchableOpacity
@@ -88,7 +95,7 @@ const Profile = ({ navigation, credibility }) => {
         <>
           <View style={styles.headingContainer}>
             <View style={styles.usernameContainer}>
-              <Text style={styles.username}>Username</Text>
+              <Text style={styles.username}>{user.name}</Text>
               {parseInt(credibility) >= 500 && <Tick />}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
@@ -107,8 +114,10 @@ const Profile = ({ navigation, credibility }) => {
             </View>
 
             <Animated.View style={[styles.right]}>
-              <Text style={styles.rightText1}>SHO of NW District</Text>
-              <Text style={styles.rightText2}>Delhi, 110052</Text>
+              <Text style={styles.rightText1}>{user.designation}</Text>
+              <Text style={styles.rightText2}>
+                {user.state}, {user.pinCode}
+              </Text>
               <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('EditProfile')}
               >
@@ -126,7 +135,7 @@ const Profile = ({ navigation, credibility }) => {
         <View style={styles.showMoreContainer}>
           <Text style={styles.showMore}>Show more</Text>
           <Animated.View style={{ transform: [{ rotateZ }], marginTop: 5 }}>
-            <ChevronDown />
+            <ChevronDown color={undefined} />
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>

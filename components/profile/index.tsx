@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View } from 'react-native';
+import { auth } from '../../firebase';
+import { UserContext } from '../../utils/context';
+import { getUser } from '../../utils/db';
 import ProfileBottom from './profileBottom';
 import ProfileTop from './profileTop';
 
