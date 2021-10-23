@@ -50,3 +50,30 @@ export const unlikePost = async (postId: string, userId: string) => {
     .doc(postId)
     .update({ likedBy: firebase.firestore.FieldValue.arrayRemove(userId) });
 };
+
+export const createSurvey = async (post: object) => {
+  const response = await firestore.collection('surveys').add(post);
+  return response;
+};
+
+export const getSurvey = async (postId: string) => {
+  return (await firestore.collection('surveys').doc(postId).get()).data();
+};
+
+export const getAllSurveys = async () => {
+  let data = [];
+  return await firestore
+    .collection('surveys')
+    .orderBy('timeStamp', 'desc')
+    .get()
+    .then((snap) => {
+      console.log('snap', snap.docs);
+      snap.forEach((x) => {
+        console.log('x', x.data());
+        let y = x.data();
+        y.id = x.id;
+        data.push(y);
+      });
+      return data;
+    });
+};

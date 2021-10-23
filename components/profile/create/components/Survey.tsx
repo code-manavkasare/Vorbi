@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import firebase from 'firebase';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +10,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import theme from '../../../../theme';
+import { UserContext } from '../../../../utils/context';
+import { createSurvey } from '../../../../utils/db';
 import Category from '../../../icons/Category';
 import ChevronDown from '../../../icons/ChevronDown';
 import People from '../../../icons/People';
@@ -23,14 +27,18 @@ export default function Survey({ navigation }) {
   const [options, setOptions] = useState([]);
   const [activeOptionText, setActiveOptionText] = useState('');
   const [activeOptionIndex, setActiveOptionIndex] = useState(null);
+  const [category, setCategory] = useState(null);
+  const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   const handleAddOption = () => {
     setOptions((prev) => prev.concat({ text: '' }));
   };
 
-  const handleOnFocus = (e) => setActiveOptionIndex(e);
+  const handleOnFocus = (e: any) => setActiveOptionIndex(e);
 
-  const handleOnBlur = (e) => {
+  const handleOnBlur = (e: string | number) => {
     const clone = [...options];
     clone[e].text = activeOptionText;
     setOptions(options);
@@ -38,12 +46,44 @@ export default function Survey({ navigation }) {
     setActiveOptionText('');
   };
 
-  const handleRemoveOption = (e) => {
-    // const clone = [...options];
-    // const spliced = clone.splice(e, 1);
-    // setOptions(spliced);
+  const handleRemoveOption = (e: number) => {
     const filtered = options.filter((item, index) => index !== e);
     setOptions(filtered);
+  };
+
+  const handleCreateSurvey = async () => {
+    if (!question.length) return;
+    else if (!category)
+      return Toast.show({
+        text1: 'Error',
+        text2: 'Please choose a category',
+        type: 'error',
+      });
+    setLoading(true);
+    try {
+      const payload = {
+        data: question,
+        userId: user.uid,
+        options,
+        topic: category.toLowerCase(),
+        timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+      await createSurvey(payload);
+      Toast.show({
+        type: 'success',
+        text1: 'Created post successfully!',
+      });
+      setLoading(false);
+      setQuestion('');
+      setOptions([]);
+    } catch (err) {
+      setLoading(false);
+      Toast.show({
+        text1: 'Could not crete post',
+        type: 'error',
+        text2: err.message,
+      });
+    }
   };
 
   const renderItem = ({ item, index }) => (
@@ -127,7 +167,10 @@ export default function Survey({ navigation }) {
           </View>
 
           <View style={styles.bottom}>
-            <TouchableOpacity style={styles.bottomButton}>
+            <TouchableOpacity
+              onPress={handleCreateSurvey}
+              style={styles.bottomButton}
+            >
               <Text style={styles.buttonLabel}>Submit</Text>
             </TouchableOpacity>
           </View>
