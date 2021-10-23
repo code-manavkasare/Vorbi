@@ -26,6 +26,8 @@ import { Provider } from 'react-native-paper';
 import theme from './theme';
 import { UserContext } from './utils/context';
 import { getUser } from './utils/db';
+import Toast from 'react-native-toast-message';
+
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -112,6 +114,7 @@ export default function App() {
           )}
         </SafeAreaView>
       </Provider>
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </UserContext.Provider>
   );
 }

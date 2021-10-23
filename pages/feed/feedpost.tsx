@@ -2,16 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, RefreshControl } from 'react-native';
 import Post from '../../components/feed/post';
 import { firestore } from '../../firebase';
+import { getAllPosts } from '../../utils/db';
 import Sort from './Sort';
-
-const categories = [
-  'None',
-  'Health',
-  'Infrastructure',
-  'Social',
-  'Technology',
-  'Environment',
-];
 
 const FeedPost = () => {
   const [posts, setPosts] = useState([]);
@@ -42,24 +34,13 @@ const FeedPost = () => {
 
   const handleUnfilterData = () => setFilteredPosts(posts);
 
-  const servercall = useCallback(async () => {
-    let data = [];
-    await firestore
-      .collection('posts')
-      .orderBy('timestamp', 'desc')
-      .get()
-      .then((snap) => {
-        snap.forEach((x) => {
-          let y = x.data();
-          y.id = x.id;
-          data.push(y);
-        });
-        setFirstRender(false);
-        setPosts(data);
-        setFilteredPosts(data);
-        setrefresh(false);
-      });
-  }, []);
+  const servercall = async () => {
+    const data = await getAllPosts();
+    setFirstRender(false);
+    setPosts(data);
+    setFilteredPosts(data);
+    setrefresh(false);
+  };
 
   const refreshControl = (
     <RefreshControl
@@ -71,7 +52,7 @@ const FeedPost = () => {
   );
 
   const renderItem = ({ item }) => {
-    return <Post name={item.name} data={item.data} type={item.type} />;
+    return <Post {...item} />;
   };
 
   return (

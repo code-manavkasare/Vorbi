@@ -105,12 +105,12 @@ export default function Survey({ navigation }) {
                 <Text style={styles.label}>
                   {verified ? 'Custom' : 'Everyone'}
                 </Text>
-                <ChevronDown />
+                <ChevronDown color={undefined} />
               </View>
               <View style={[styles.row, styles.tile]}>
                 <Category />
                 <Text style={styles.label}>Category</Text>
-                <ChevronDown />
+                <ChevronDown color={undefined} />
               </View>
             </View>
 
@@ -123,6 +123,12 @@ export default function Survey({ navigation }) {
               <Text style={[styles.label, styles.changeCustom]}>
                 Change Custom Settings
               </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.bottom}>
+            <TouchableOpacity style={styles.bottomButton}>
+              <Text style={styles.buttonLabel}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -197,5 +203,24 @@ const styles = StyleSheet.create({
   },
   changeCustom: {
     textDecorationLine: 'underline',
+  },
+  bottom: {
+    height: theme.height * 0.05,
+    width: theme.width * 0.9,
+    alignItems: 'flex-end',
+  },
+  bottomButton: {
+    backgroundColor: '#FFB30F',
+    width: theme.width * 0.3,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    marginTop: 30,
+  },
+  buttonLabel: {
+    fontSize: 14,
+    fontFamily: 'Poppins-Regular',
+    color: theme.background.primary100,
   },
 });

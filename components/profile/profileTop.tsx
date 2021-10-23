@@ -26,8 +26,6 @@ const Profile = ({ navigation, credibility }) => {
   const [showMore, setShowMore] = useState(false);
   const { user } = useContext(UserContext);
 
-  console.log('user from conext', user);
-
   const transition = useSpringTransition(showMore, {
     ...SpringUtils.makeDefaultConfig(),
     overshootClamping: true,

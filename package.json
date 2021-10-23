@@ -42,6 +42,7 @@
     "react-native-screens": "~2.10.1",
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
+    "react-native-toast-message": "^1.6.0",
     "react-native-web": "^0.15.0",
     "react-native-webview": "10.7.0",
     "styled-components": "^5.2.1",
