@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { firestore } from '../../firebase';
+import { getAllSurveys } from '../../utils/db';
 import LoadingContainer from '../loading/LoadingContainer';
 import Surveyitem from '../survey/surveyitem';
 
@@ -26,22 +27,14 @@ const Post = ({ category }) => {
     setrefresh(false);
   }, [filteredItems]);
 
-  const servercall = useCallback(async () => {
-    await firestore
-      .collection('surveys')
-      .get()
-      .then((snap) => {
-        setFirstRender(false);
-        snap.forEach((x) => {
-          let y = x.data();
-          y.id = x.id;
-          data.push(y);
-        });
-        setItems(data);
-        setFilteredItems(data);
-        setLoading(false);
-      });
-  }, []);
+  const servercall = async () => {
+    const data = await getAllSurveys();
+    setLoading(false);
+    setFirstRender(false);
+    setItems(data);
+    setFilteredItems(data);
+    setrefresh(false);
+  };
 
   const handleFilterData = () => {
     const filtered = items.filter(
@@ -59,7 +52,7 @@ const Post = ({ category }) => {
         type={item.type}
         data={item.data}
         topic={item.topic}
-        list={item.list}
+        options={item.options}
       />
     );
   };

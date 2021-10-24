@@ -11,9 +11,11 @@ import {
   Keyboard,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
+import ChoosingModal from '../../../../pages/login/ChoosingModal';
 import theme from '../../../../theme';
 import { UserContext } from '../../../../utils/context';
 import { createSurvey } from '../../../../utils/db';
+import SubmitFeedbackModal from '../../../feed/SubmitFeedbackModal';
 import Category from '../../../icons/Category';
 import ChevronDown from '../../../icons/ChevronDown';
 import People from '../../../icons/People';
@@ -21,6 +23,14 @@ import YellowCross from '../../../icons/YellowCross';
 import AvoidKeyboard from './AvoidKeyboard';
 
 const verified = true;
+
+const categories = [
+  'Health',
+  'Infrastructure',
+  'Social',
+  'Technology',
+  'Environment',
+];
 
 export default function Survey({ navigation }) {
   const [question, setQuestion] = useState('');
@@ -86,6 +96,10 @@ export default function Survey({ navigation }) {
     }
   };
 
+  const handleOnSelect = (item: any) => {
+    setCategory(item);
+  };
+
   const renderItem = ({ item, index }) => (
     <View style={styles.optionTile}>
       <TouchableOpacity onPress={() => handleRemoveOption(index)}>
@@ -109,6 +123,13 @@ export default function Survey({ navigation }) {
     <AvoidKeyboard>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.screen}>
+          <ChoosingModal
+            selected={category}
+            data={categories}
+            visible={showCategoryModal}
+            onSelect={handleOnSelect}
+            setVisible={setShowCategoryModal}
+          />
           <TextInput
             style={styles.input}
             value={question}
@@ -147,11 +168,15 @@ export default function Survey({ navigation }) {
                 </Text>
                 <ChevronDown color={undefined} />
               </View>
-              <View style={[styles.row, styles.tile]}>
-                <Category />
-                <Text style={styles.label}>Category</Text>
-                <ChevronDown color={undefined} />
-              </View>
+              <TouchableWithoutFeedback
+                onPress={() => setShowCategoryModal(true)}
+              >
+                <View style={[styles.row, styles.tile]}>
+                  <Category />
+                  <Text style={styles.label}>Category</Text>
+                  <ChevronDown color={undefined} />
+                </View>
+              </TouchableWithoutFeedback>
             </View>
 
             <TouchableOpacity

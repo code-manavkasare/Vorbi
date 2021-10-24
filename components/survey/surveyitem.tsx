@@ -4,12 +4,10 @@ import Svg, { Path } from 'react-native-svg';
 import Rating from './ratingComponent';
 import Poll from '../feed/pollComponent';
 import { colorpicker } from '../../utilities';
-const Surveyitem = ({ type, data, topic, list }) => {
+const Surveyitem = ({ type, data, topic, options }) => {
   const [buttoncolor, setbuttoncolor] = useState('#6D7187');
 
-  return type === 'Rating' ? (
-    <></>
-  ) : (
+  return (
     <View style={[styles.outer]}>
       <View style={[styles.left]}>
         <View
@@ -21,10 +19,7 @@ const Surveyitem = ({ type, data, topic, list }) => {
           <Text style={styles.datatext}>{data}</Text>
         </View>
         <View style={styles.lower}>
-          {type == 'Poll' && (
-            <Poll setbuttoncolor={setbuttoncolor} list={list} />
-          )}
-          {type == 'Rating' && <Rating setbuttoncolor={setbuttoncolor} />}
+          <Poll setbuttoncolor={setbuttoncolor} list={options} />
         </View>
       </View>
       <View style={styles.right}>

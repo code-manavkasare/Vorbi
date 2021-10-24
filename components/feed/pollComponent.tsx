@@ -6,19 +6,17 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-let i= true;
+let i = true;
 let count = 0;
-const PollComponent = ({setbuttoncolor,list}) => {
-  const [selectedValue, setSelectedValue] = useState([0, 0, 0, 0, 0]); 
-  if(count != 0 && i  )
-    {
-        i=false;
-        setbuttoncolor('white');
-    }
+const PollComponent = ({ setbuttoncolor, list }) => {
+  const [selectedValue, setSelectedValue] = useState([0, 0, 0, 0, 0]);
+  if (count != 0 && i) {
+    i = false;
+    setbuttoncolor('white');
+  }
   const CustomOption = () => {
     return (
       <View style={styles.buttoncont}>
-        
         {list.map((item, key) => {
           return (
             <TouchableOpacity
@@ -30,7 +28,7 @@ const PollComponent = ({setbuttoncolor,list}) => {
               onPress={() => {
                 let x = [];
                 let j = 0;
-                count ++;
+                count++;
                 selectedValue.forEach(() => {
                   if (j != key) {
                     j++;
@@ -43,8 +41,12 @@ const PollComponent = ({setbuttoncolor,list}) => {
                 setSelectedValue(x);
               }}
             >
-              <Text style={selectedValue[key] == 1 ? styles.selected:styles.unselected}>
-                {item}
+              <Text
+                style={
+                  selectedValue[key] == 1 ? styles.selected : styles.unselected
+                }
+              >
+                {item.text}
               </Text>
             </TouchableOpacity>
           );

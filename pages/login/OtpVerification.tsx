@@ -142,7 +142,10 @@ export default function OtpVerification({ route, navigation }) {
 
             <View style={styles.otpScreenMidBottom}>
               <Text style={styles.otpScreenDescirption}>
-                00.{time % 10 < 1 ? '0' + time.toString() : time.toString()}
+                00.
+                {time.toString().length === 1
+                  ? '0' + time.toString()
+                  : time.toString()}
               </Text>
               <TouchableOpacity
                 disabled={!firstRender && time !== 0}

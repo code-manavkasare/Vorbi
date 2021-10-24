@@ -22,7 +22,7 @@ import Mood from './mood';
 
 const { width, height } = Dimensions.get('screen');
 
-const Profile = ({ navigation, credibility }) => {
+const Profile = ({ navigation }) => {
   const [showMore, setShowMore] = useState(false);
   const { user } = useContext(UserContext);
 
@@ -52,13 +52,13 @@ const Profile = ({ navigation, credibility }) => {
           </View>
           <View style={styles.usernameContainer}>
             <Text style={styles.username}>{user && user.name}</Text>
-            {parseInt(credibility) >= 500 && <Tick />}
+            {user.credibility >= 500 && <Tick />}
           </View>
           <Text style={styles.rightText1}>{user && user.designation}</Text>
           <Text style={styles.rightText2}>
             {user && user.state}, {user && user.pinCode}
           </Text>
-          <Text style={[styles.credibility]}>{credibility}</Text>
+          <Text style={[styles.credibility]}>{user.credibility}</Text>
           <Text style={[styles.credibilitylower]}>Credibility</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('EditProfile')}
@@ -94,7 +94,7 @@ const Profile = ({ navigation, credibility }) => {
           <View style={styles.headingContainer}>
             <View style={styles.usernameContainer}>
               <Text style={styles.username}>{user && user.name}</Text>
-              {parseInt(credibility) >= 500 && <Tick />}
+              {user.credibility >= 500 && <Tick />}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Settings />
@@ -104,7 +104,7 @@ const Profile = ({ navigation, credibility }) => {
             <View style={styles.left}>
               <Mood mood="happy" size="90" />
               <View>
-                <Text style={[styles.credibility]}>{credibility}</Text>
+                <Text style={[styles.credibility]}>{user.credibility}</Text>
               </View>
               <View>
                 <Text style={[styles.credibilitylower]}>Credibility</Text>

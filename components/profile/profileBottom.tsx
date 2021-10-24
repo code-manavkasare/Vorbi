@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import theme from '../../theme';
+import { UserContext } from '../../utils/context';
 import Create from '../icons/Create';
 import Info from './Info';
 import Saved from './profilesaved';
@@ -16,10 +17,12 @@ const { width, height } = Dimensions.get('screen');
 
 const Tab = createMaterialTopTabNavigator();
 
-const Profile = ({ credibility, navigation }) => {
+const Profile = ({ navigation }) => {
+  const { user } = useContext(UserContext);
+
   return (
     <View style={styles.container}>
-      {parseInt(credibility) >= 500 && (
+      {user.credibility >= 500 && (
         <TouchableWithoutFeedback
           onPress={() => navigation.navigate('CreatePost')}
         >

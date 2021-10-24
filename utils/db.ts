@@ -37,18 +37,32 @@ export const getAllPosts = async () => {
     });
 };
 
-export const likePost = async (postId: string, userId: string) => {
+export const likePost = async (
+  postId: string,
+  userId: string,
+  likes: number
+) => {
   return await firestore
     .collection('posts')
     .doc(postId)
-    .update({ likedBy: firebase.firestore.FieldValue.arrayUnion(userId) });
+    .update({
+      likes,
+      likedBy: firebase.firestore.FieldValue.arrayUnion(userId),
+    });
 };
 
-export const unlikePost = async (postId: string, userId: string) => {
+export const unlikePost = async (
+  postId: string,
+  userId: string,
+  likes: number
+) => {
   return await firestore
     .collection('posts')
     .doc(postId)
-    .update({ likedBy: firebase.firestore.FieldValue.arrayRemove(userId) });
+    .update({
+      likes,
+      likedBy: firebase.firestore.FieldValue.arrayRemove(userId),
+    });
 };
 
 export const createSurvey = async (post: object) => {

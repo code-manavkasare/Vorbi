@@ -61,7 +61,7 @@ export default function Sort({ category, setCategory }) {
         <View style={styles.row}>
           <Text style={styles.label}>sort by</Text>
           <Animated.View style={{ transform: [{ rotateZ }], marginTop: 5 }}>
-            <ChevronDown />
+            <ChevronDown color={undefined} />
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>

@@ -27,8 +27,8 @@ export default function ({ navigation }) {
 
   const handleLogout = () => {
     auth.signOut().then(() => {
-      setUser(null);
       navigation.navigate('Landing');
+      setUser({});
     });
   };
 

@@ -154,6 +154,8 @@ export default function UserInfo({ route, navigation }) {
       age,
       gender,
       category,
+      credibility: 5,
+      type: 0,
     };
     try {
       const response = await storeUser(payload);
@@ -356,8 +358,12 @@ export default function UserInfo({ route, navigation }) {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleProceed}>
-            <Text style={styles.buttonLabel}>Procced</Text>
+          <TouchableOpacity
+            disabled={!checked}
+            style={styles.button}
+            onPress={handleProceed}
+          >
+            <Text style={styles.buttonLabel}>Proceed</Text>
           </TouchableOpacity>
         </View>
       </View>

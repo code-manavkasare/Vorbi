@@ -13,6 +13,8 @@ interface User {
   country: string;
   pinCode: string;
   gender?: string;
+  credibility?: number;
+  type?: number;
 }
 
 interface UserContextProps {

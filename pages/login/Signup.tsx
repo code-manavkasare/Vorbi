@@ -74,7 +74,7 @@ const Signup: React.FunctionComponent<
         );
 
         navigation.navigate('UserInfo', {
-          type: 'gogle',
+          type: 'google',
           credentialParam: googleCredential,
           emailParam: user.email,
         });
