@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -9,25 +9,65 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import theme from '../../theme';
+import { UserContext } from '../../utils/context';
+import { createFeedback, getUser, storeUser, updateUser } from '../../utils/db';
+import LoadingModal from '../LoadingModal';
 import AvoidKeyboard from '../profile/create/components/AvoidKeyboard';
 
-export default function SubmitFeedbackModal({ visible, setVisible }) {
+export default function SubmitFeedbackModal({
+  visible,
+  setVisible,
+  data,
+  postId,
+  username,
+  designation,
+}) {
   const [feedback, setFeedback] = useState('');
+  const { user, setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const paylod = {
+        userId: user.uid,
+        postId,
+        feedback,
+      };
+      await createFeedback(paylod);
+      await updateUser({ credibility: user.credibility + 5 }, user.uid);
+      const _user = await getUser(user.uid);
+      setUser(_user);
+      setVisible(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Thank you for your feedback!',
+        text2: 'You received 5 credits',
+      });
+    } catch (err) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: err && err.message ? err.message : 'Something went wrong!',
+      });
+    }
+  };
 
   return (
     <Modal visible={visible} animationType="slide">
       <AvoidKeyboard>
         <TouchableWithoutFeedback>
           <View style={styles.modal}>
+            <LoadingModal visible={loading} text="Posting the feedback..." />
             <Text style={styles.heading}>Feedback to</Text>
-            <Text style={styles.heading}>Rajiinder Kumar | SHO</Text>
+            <Text style={styles.heading}>
+              {username} | {designation}
+            </Text>
             <View style={styles.desciptionContainer}>
-              <Text style={styles.desciption}>
-                Recent clashes between the protesters and the police are
-                saddening, designated areas should be specified by the
-                government for peaceful protests to avoid the same.
-              </Text>
+              <Text style={styles.desciption}>{data}</Text>
             </View>
 
             <TextInput
@@ -40,7 +80,11 @@ export default function SubmitFeedbackModal({ visible, setVisible }) {
               multiline
             />
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              disabled={loading}
+              onPress={handleSubmit}
+              style={styles.button}
+            >
               <Text style={styles.buttonLabel}>Submit</Text>
             </TouchableOpacity>
 

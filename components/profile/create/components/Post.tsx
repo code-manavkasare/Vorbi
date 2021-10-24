@@ -52,6 +52,7 @@ export default function Post({ navigation }) {
       const payload = {
         name: user.name,
         userId: user.uid,
+        designation: user.designation,
         data: voice,
         type: category.toLowerCase(),
         timeStamp: firebase.firestore.FieldValue.serverTimestamp(),

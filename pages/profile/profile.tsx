@@ -5,6 +5,7 @@ import Home from '../../components/profile';
 import CreatePost from '../../components/profile/create/index';
 import EditProfile from '../../components/profile/EditProfile';
 import NewEle from '../../components/profile/newElement';
+import Feedbacks from '../../components/profile/screens/Feedbacks';
 import theme from '../../theme';
 import Settings from '../settings';
 
@@ -46,6 +47,24 @@ const Profile = ({ navigation, route }) => {
           headerShown: true,
           headerTintColor: '#fff',
           headerTitle: 'Edit Profile',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 24,
+          },
+          headerStyle: {
+            backgroundColor: theme.background.primary100,
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Feedbacks"
+        component={Feedbacks}
+        options={{
+          headerShown: true,
+          headerTintColor: '#fff',
+          headerTitle: 'Feedbacks',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontSize: 24,

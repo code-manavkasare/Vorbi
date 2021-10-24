@@ -19,15 +19,11 @@ import {
 import { Bookmark, Heart } from '../svgs';
 import SubmitFeedbackModal from './SubmitFeedbackModal';
 
-const Post = ({ id, data, name, type, likes, likedBy }) => {
+const Post = ({ id, data, name, type, designation, likes, likedBy }) => {
   const { user, setUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(likedBy.indexOf(user.uid) !== -1);
   const [_likes, _setLikes] = useState(likes);
-  console.log(
-    'index',
-    user.savedPosts.findIndex((item) => item.id === id)
-  );
   const [isSaved, setIsSaved] = useState(
     user.savedPosts.findIndex((item) => item.id === id) !== -1
   );
@@ -41,7 +37,6 @@ const Post = ({ id, data, name, type, likes, likedBy }) => {
     } else {
       _setLikes((prev) => prev + 1);
       setIsLiked(true);
-      console.log('liking');
       await likePost(id, user.uid, __likes + 1);
     }
   };
@@ -57,7 +52,6 @@ const Post = ({ id, data, name, type, likes, likedBy }) => {
     };
     if (isSaved) {
       setIsSaved(false);
-
       await unsavePost(payload, user.uid);
       const _user = await getUser(user.uid);
       setUser(_user);
@@ -71,10 +65,16 @@ const Post = ({ id, data, name, type, likes, likedBy }) => {
 
   return (
     <>
-      <SubmitFeedbackModal
-        visible={modalVisible}
-        setVisible={setModalVisible}
-      />
+      {modalVisible && (
+        <SubmitFeedbackModal
+          designation={designation}
+          postId={id}
+          data={data}
+          username={name}
+          visible={modalVisible}
+          setVisible={setModalVisible}
+        />
+      )}
       <View style={[styles.outer]}>
         <View style={styles.left}>
           <View
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2A2E42',
     width: theme.width,
     marginVertical: 10,
-    paddingVertical: 25,
+    paddingVertical: 20,
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
   },
   leftin: {
     width: 15,
-    minHeight: theme.height * 0.075,
+    height: '100%',
     borderRadius: 10,
   },
   icon: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 30,
   },
   nametext: {
     color: 'white',

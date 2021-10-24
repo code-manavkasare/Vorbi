@@ -30,7 +30,6 @@ export const getAllPosts = async () => {
     .orderBy('timeStamp', 'desc')
     .get()
     .then((snap) => {
-      console.log('snap', snap.docs);
       snap.forEach((x) => {
         console.log('x', x.data());
         let y = x.data();
@@ -85,7 +84,6 @@ export const getAllSurveys = async () => {
     .orderBy('timeStamp', 'desc')
     .get()
     .then((snap) => {
-      console.log('snap', snap.docs);
       snap.forEach((x) => {
         console.log('x', x.data());
         let y = x.data();
@@ -111,5 +109,31 @@ export const unsavePost = async (post: object, userId: string) => {
     .doc(userId)
     .update({
       savedPosts: firebase.firestore.FieldValue.arrayRemove(post),
+    });
+};
+
+export const createFeedback = async (feedback: object) => {
+  const response = await firestore.collection('feedbacks').add(feedback);
+  return response;
+};
+
+export const getFeedback = async (feedbackId: string) => {
+  return (await firestore.collection('feedbacks').doc(feedbackId).get()).data();
+};
+
+export const getFeedbacksForUser = async (userId: string) => {
+  let data = [];
+  return await firestore
+    .collection('feedbacks')
+    .where('userId', '==', userId)
+    .get()
+    .then((snap) => {
+      snap.forEach((x) => {
+        console.log('x', x.data());
+        let y = x.data();
+        y.id = x.id;
+        data.push(y);
+      });
+      return data;
     });
 };

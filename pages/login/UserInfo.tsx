@@ -154,7 +154,7 @@ export default function UserInfo({ route, navigation }) {
       age,
       gender,
       category,
-      credibility: 5,
+      credibility: 10,
       type: 0,
       savedPosts: [],
     };
