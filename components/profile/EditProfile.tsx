@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -9,58 +9,111 @@ import {
   Linking,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 import theme from '../../theme';
+import { UserContext } from '../../utils/context';
+import { getUser, updateUser } from '../../utils/db';
+import LoadingModal from '../LoadingModal';
 import AvoidKeyboard from './create/components/AvoidKeyboard';
 
 export default function EditProfile() {
-  const [name, setName] = useState('');
-  const [designation, setDesignation] = useState('');
-  const [pinCode, setPinCode] = useState('');
-  const [state, setState] = useState('');
-  const [country, setCountry] = useState('India');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState('');
-  const [category, setCategory] = useState('');
+  const { user, setUser } = useContext(UserContext);
+  const [designation, setDesignation] = useState(user.designation);
+  const [loading, setLoading] = useState(false);
 
   const handleRequestChanges = async () => {
     await Linking.openURL('mailto:info@teamlookout.in');
   };
 
+  const handleUpdate = async () => {
+    setLoading(true);
+    try {
+      await updateUser({ designation }, user.uid);
+      const _user = await getUser(user.uid);
+      setUser(_user);
+      setLoading(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Udpated profile successfully!',
+      });
+    } catch (err) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'error',
+        text2: err.message ? err.message : 'Someting went wrong!',
+      });
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
+        <LoadingModal visible={loading} text="Updaing profile..." />
         <View style={styles.list}>
           <AvoidKeyboard>
             <TextInput
+              editable={false}
               style={styles.input}
-              value={name}
+              value={user.name}
               placeholder="Name"
               placeholderTextColor="#B3B7CD"
-              onChangeText={(e) => setName(e)}
             />
             <TextInput
+              editable={false}
               style={styles.input}
-              value={email}
+              value={user.email}
               placeholder="Email"
               placeholderTextColor="#B3B7CD"
-              onChangeText={(e) => setEmail(e)}
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: '#B3B7CD' }]}
               value={designation}
               placeholder="Designation"
               placeholderTextColor="#B3B7CD"
               onChangeText={(e) => setDesignation(e)}
             />
             <TextInput
+              editable={false}
               style={styles.input}
-              value={pinCode}
-              placeholder="Pincode"
+              value={user.state}
+              placeholder="State"
               placeholderTextColor="#B3B7CD"
-              onChangeText={(e) => setPinCode(e)}
             />
+            <TextInput
+              editable={false}
+              style={styles.input}
+              value={user.country}
+              placeholder="Country"
+              placeholderTextColor="#B3B7CD"
+            />
+            {user.category && (
+              <TextInput
+                editable={false}
+                style={styles.input}
+                value={user.category}
+                placeholder="Category"
+                placeholderTextColor="#B3B7CD"
+              />
+            )}
+            {user.gender && (
+              <TextInput
+                editable={false}
+                style={styles.input}
+                value={user.gender}
+                placeholder="Pincode"
+                placeholderTextColor="#B3B7CD"
+              />
+            )}
+            {user.age && (
+              <TextInput
+                editable={false}
+                style={styles.input}
+                value={user.age}
+                placeholder="Age"
+                placeholderTextColor="#B3B7CD"
+              />
+            )}
           </AvoidKeyboard>
         </View>
         <TouchableWithoutFeedback onPress={handleRequestChanges}>
@@ -69,7 +122,11 @@ export default function EditProfile() {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          disabled={user.designation === designation || !designation.length}
+          style={styles.button}
+          onPress={handleUpdate}
+        >
           <Text style={styles.buttonLabel}>Proceed</Text>
         </TouchableOpacity>
       </View>
@@ -84,7 +141,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: 15,
-    color: '#B3B7CD',
+    color: '#363C5A',
     paddingHorizontal: 20,
     marginVertical: 15,
     borderWidth: 2,

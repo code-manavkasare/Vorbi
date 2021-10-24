@@ -10,6 +10,10 @@ export const getUser = async (userId: string) => {
   return (await firestore.collection('users').doc(userId).get()).data();
 };
 
+export const updateUser = async (user: object, userId: string) => {
+  return await firestore.collection('users').doc(userId).update(user);
+};
+
 export const createPost = async (post: object) => {
   const response = await firestore.collection('posts').add(post);
   return response;
