@@ -9,18 +9,28 @@ import {
 import theme from '../../theme';
 import { colorpicker } from '../../utilities';
 import { UserContext } from '../../utils/context';
-import { likePost, unlikePost } from '../../utils/db';
+import {
+  getUser,
+  likePost,
+  savePost,
+  unlikePost,
+  unsavePost,
+} from '../../utils/db';
 import { Bookmark, Heart } from '../svgs';
 import SubmitFeedbackModal from './SubmitFeedbackModal';
-const screenWidth = Dimensions.get('screen').width;
-const screenHeight = Dimensions.get('screen').height;
 
 const Post = ({ id, data, name, type, likes, likedBy }) => {
-  const { user } = useContext(UserContext);
-  const [fillbookmark, setfillbookmark] = useState('#6D7187');
+  const { user, setUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(likedBy.indexOf(user.uid) !== -1);
   const [_likes, _setLikes] = useState(likes);
+  console.log(
+    'index',
+    user.savedPosts.findIndex((item) => item.id === id)
+  );
+  const [isSaved, setIsSaved] = useState(
+    user.savedPosts.findIndex((item) => item.id === id) !== -1
+  );
 
   const handleLike = async () => {
     let __likes = _likes;
@@ -33,6 +43,29 @@ const Post = ({ id, data, name, type, likes, likedBy }) => {
       setIsLiked(true);
       console.log('liking');
       await likePost(id, user.uid, __likes + 1);
+    }
+  };
+
+  const handleSavePost = async () => {
+    const payload = {
+      id,
+      data,
+      name,
+      type,
+      likes,
+      likedBy,
+    };
+    if (isSaved) {
+      setIsSaved(false);
+
+      await unsavePost(payload, user.uid);
+      const _user = await getUser(user.uid);
+      setUser(_user);
+    } else {
+      setIsSaved(true);
+      await savePost(payload, user.uid);
+      const _user = await getUser(user.uid);
+      setUser(_user);
     }
   };
 
@@ -60,22 +93,14 @@ const Post = ({ id, data, name, type, likes, likedBy }) => {
                     color: '#6D7187',
                     paddingHorizontal: 4,
                     fontSize: 10,
-                    paddingTop: 3,
+                    marginRight: 10,
                   },
                 ]}
               >
                 {_likes}
               </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  if (fillbookmark == '#6D7187') {
-                    setfillbookmark('#5762D5');
-                  } else {
-                    setfillbookmark('#6D7187');
-                  }
-                }}
-              >
-                <Bookmark fillbookmark={fillbookmark} />
+              <TouchableOpacity onPress={handleSavePost}>
+                <Bookmark fillbookmark={isSaved ? '#5762D5' : '#6D7187'} />
               </TouchableOpacity>
             </View>
           </View>
@@ -115,7 +140,7 @@ const styles = StyleSheet.create({
   },
   leftin: {
     width: 15,
-    height: theme.height * 0.075,
+    minHeight: theme.height * 0.075,
     borderRadius: 10,
   },
   icon: {

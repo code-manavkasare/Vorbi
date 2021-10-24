@@ -156,6 +156,7 @@ export default function UserInfo({ route, navigation }) {
       category,
       credibility: 5,
       type: 0,
+      savedPosts: [],
     };
     try {
       const response = await storeUser(payload);

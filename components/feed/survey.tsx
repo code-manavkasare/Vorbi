@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
-import { firestore } from '../../firebase';
+import React, { useEffect, useState } from 'react';
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { getAllSurveys } from '../../utils/db';
 import LoadingContainer from '../loading/LoadingContainer';
 import Surveyitem from '../survey/surveyitem';

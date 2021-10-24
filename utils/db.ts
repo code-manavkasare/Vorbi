@@ -91,3 +91,21 @@ export const getAllSurveys = async () => {
       return data;
     });
 };
+
+export const savePost = async (post: object, userId: string) => {
+  return await firestore
+    .collection('users')
+    .doc(userId)
+    .update({
+      savedPosts: firebase.firestore.FieldValue.arrayUnion(post),
+    });
+};
+
+export const unsavePost = async (post: object, userId: string) => {
+  return await firestore
+    .collection('users')
+    .doc(userId)
+    .update({
+      savedPosts: firebase.firestore.FieldValue.arrayRemove(post),
+    });
+};

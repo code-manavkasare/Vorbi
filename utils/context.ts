@@ -1,5 +1,14 @@
 import React from 'react';
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
+
+interface Post {
+  id: string;
+  name: string;
+  data: string;
+  type: string;
+  likes: number;
+  likedBy: Array<string>;
+}
 
 interface User {
   uid: string;
@@ -15,6 +24,7 @@ interface User {
   gender?: string;
   credibility?: number;
   type?: number;
+  savedPosts?: Array<Post>;
 }
 
 interface UserContextProps {

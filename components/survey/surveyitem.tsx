@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     width: 23,
+    borderRadius: 10,
   },
   right: {
     flex: 1,
