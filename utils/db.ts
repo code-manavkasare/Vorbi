@@ -18,7 +18,6 @@ export const createPost = async (post: object) => {
   const response = await firestore.collection('posts').add(post);
   return response;
 };
-
 export const getPost = async (postId: string) => {
   return (await firestore.collection('posts').doc(postId).get()).data();
 };

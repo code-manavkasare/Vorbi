@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -14,6 +14,7 @@ import {
   useTimingTransition,
 } from 'react-native-redash';
 import { UserContext } from '../../utils/context';
+import { getNumberOfPosts } from '../../utils/db';
 import ChevronDown from '../icons/ChevronDown';
 import Edit from '../icons/Edit';
 import Settings from '../icons/Settings';
@@ -25,6 +26,7 @@ const { width, height } = Dimensions.get('screen');
 const Profile = ({ navigation }) => {
   const [showMore, setShowMore] = useState(false);
   const { user } = useContext(UserContext);
+  console.log('user', user);
 
   const transition = useSpringTransition(showMore, {
     ...SpringUtils.makeDefaultConfig(),
@@ -36,7 +38,6 @@ const Profile = ({ navigation }) => {
   const rotateZ = mix(transition, 0, Math.PI);
   const opacity1 = mix(opacityTransition, 0, 1);
   const opacity2 = mix(opacityTransition, 1, 0);
-
   return (
     <Animated.View style={[styles.container, { height: containerHeight }]}>
       {showMore ? (
@@ -52,7 +53,7 @@ const Profile = ({ navigation }) => {
           </View>
           <View style={styles.usernameContainer}>
             <Text style={styles.username}>{user && user.name}</Text>
-            {user.credibility >= 500 && <Tick />}
+            {user.verified && <Tick />}
           </View>
           <Text style={styles.rightText1}>{user && user.designation}</Text>
           <Text style={styles.rightText2}>
@@ -69,23 +70,23 @@ const Profile = ({ navigation }) => {
           <View style={styles.tiles}>
             <View style={styles.tile}>
               <Text style={styles.tileLeft}>Posts Made</Text>
-              <Text style={styles.tileRight}>500</Text>
+              <Text style={styles.tileRight}>{user.posts}</Text>
             </View>
             <View style={styles.tile}>
               <Text style={styles.tileLeft}>Surveys Created</Text>
-              <Text style={styles.tileRight}>50</Text>
+              <Text style={styles.tileRight}>{user.surveys}</Text>
             </View>
             <View style={styles.tile}>
               <Text style={styles.tileLeft}>Upvotes</Text>
-              <Text style={styles.tileRight}>2k</Text>
+              <Text style={styles.tileRight}>{user.likes}</Text>
             </View>
             <View style={styles.tile}>
               <Text style={styles.tileLeft}>Feedbacks</Text>
-              <Text style={styles.tileRight}>3k</Text>
+              <Text style={styles.tileRight}>{user.feedbacks}</Text>
             </View>
             <View style={styles.tile}>
               <Text style={styles.tileLeft}>Filled Suveys/Posts</Text>
-              <Text style={styles.tileRight}>250</Text>
+              <Text style={styles.tileRight}>{user.filled}</Text>
             </View>
           </View>
         </Animated.View>
@@ -94,7 +95,7 @@ const Profile = ({ navigation }) => {
           <View style={styles.headingContainer}>
             <View style={styles.usernameContainer}>
               <Text style={styles.username}>{user && user.name}</Text>
-              {user.credibility >= 500 && <Tick />}
+              {user.verified && <Tick />}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Settings />

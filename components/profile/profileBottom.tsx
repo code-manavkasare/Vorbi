@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -12,7 +12,6 @@ import { UserContext } from '../../utils/context';
 import Create from '../icons/Create';
 import Info from './Info';
 import Saved from './profilesaved';
-import MyTabBar from './profiletababar';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -23,7 +22,7 @@ const Profile = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {user.credibility >= 500 && (
+      {user.credibility > 999 && (
         <TouchableWithoutFeedback
           onPress={() => navigation.navigate('CreatePost')}
         >

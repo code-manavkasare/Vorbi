@@ -15,7 +15,7 @@ import ChoosingModal from '../../../../pages/login/ChoosingModal';
 
 import theme from '../../../../theme';
 import { UserContext } from '../../../../utils/context';
-import { createPost } from '../../../../utils/db';
+import { createPost, getUser, updateUser } from '../../../../utils/db';
 import Category from '../../../icons/Category';
 import ChevronDown from '../../../icons/ChevronDown';
 import People from '../../../icons/People';
@@ -35,7 +35,7 @@ const categories = [
 export default function Post({ navigation }) {
   const [voice, setVoice] = useState('');
   const [category, setCategory] = useState(null);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
@@ -60,6 +60,12 @@ export default function Post({ navigation }) {
         likedBy: [],
       };
       await createPost(payload);
+      await updateUser(
+        { noOfPost: firebase.firestore.FieldValue.increment(1) },
+        user.uid
+      );
+      const _user = await getUser(user.uid);
+      setUser(_user);
       Toast.show({
         type: 'success',
         text1: 'Created post successfully!',

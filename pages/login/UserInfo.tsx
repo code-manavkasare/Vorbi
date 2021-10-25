@@ -157,11 +157,14 @@ export default function UserInfo({ route, navigation }) {
       credibility: 10,
       type: 0,
       savedPosts: [],
+      verified: false,
+      posts: 0,
+      surveys: 0,
+      likes: 0,
     };
     try {
       const response = await storeUser(payload);
       navigation.navigate('Main');
-      console.log('storeUser response', response);
     } catch (err) {
       console.log('error storing user', err);
     }

@@ -15,8 +15,6 @@ import { UserContext } from '../../utils/context';
 const { width, height } = Dimensions.get('screen');
 
 export default function ({ navigation }) {
-  const { setUser } = useContext(UserContext);
-
   useEffect(() => {
     navigation.setOptions({
       tabBarVisible: false,
@@ -28,7 +26,6 @@ export default function ({ navigation }) {
   const handleLogout = () => {
     auth.signOut().then(() => {
       navigation.navigate('Landing');
-      setUser({});
     });
   };
 

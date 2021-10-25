@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import React, { useContext, useState } from 'react';
 import {
   Dimensions,
@@ -15,6 +16,7 @@ import {
   savePost,
   unlikePost,
   unsavePost,
+  updateUser,
 } from '../../utils/db';
 import { Bookmark, Heart } from '../svgs';
 import SubmitFeedbackModal from './SubmitFeedbackModal';
@@ -34,10 +36,22 @@ const Post = ({ id, data, name, type, designation, likes, likedBy }) => {
       _setLikes((prev) => prev - 1);
       setIsLiked(false);
       await unlikePost(id, user.uid, __likes - 1);
+      await updateUser(
+        { likes: firebase.firestore.FieldValue.increment(-1) },
+        user.uid
+      );
+      const _user = await getUser(user.uid);
+      setUser(_user);
     } else {
       _setLikes((prev) => prev + 1);
       setIsLiked(true);
       await likePost(id, user.uid, __likes + 1);
+      await updateUser(
+        { likes: firebase.firestore.FieldValue.increment(1) },
+        user.uid
+      );
+      const _user = await getUser(user.uid);
+      setUser(_user);
     }
   };
 
