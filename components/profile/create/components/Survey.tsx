@@ -32,6 +32,8 @@ const categories = [
   'Environment',
 ];
 
+const types = ['Everyone', 'Custom'];
+
 export default function Survey({ navigation }) {
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState([]);
@@ -41,6 +43,8 @@ export default function Survey({ navigation }) {
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [type, setType] = useState('Everyone');
+  const [modalType, setModalType] = useState(null);
 
   const handleAddOption = () => {
     setOptions((prev) => prev.concat({ text: '' }));
@@ -97,7 +101,30 @@ export default function Survey({ navigation }) {
   };
 
   const handleOnSelect = (item: any) => {
-    setCategory(item);
+    if (modalType === 'category') setCategory(item);
+    else setType(item);
+  };
+
+  const handleTypePress = () => {
+    if (user.verified || user.credibility > 999) {
+      setModalType('type');
+      setShowCategoryModal(true);
+    } else return;
+  };
+
+  const handleCategoryPress = () => {
+    setModalType('category');
+    setShowCategoryModal(true);
+  };
+
+  const getSelected = () => {
+    if (modalType === 'category') return category;
+    else return type;
+  };
+
+  const getData = () => {
+    if (modalType === 'category') return categories;
+    else return types;
   };
 
   const renderItem = ({ item, index }) => (
@@ -124,8 +151,8 @@ export default function Survey({ navigation }) {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.screen}>
           <ChoosingModal
-            selected={category}
-            data={categories}
+            selected={getSelected()}
+            data={getData()}
             visible={showCategoryModal}
             onSelect={handleOnSelect}
             setVisible={setShowCategoryModal}
@@ -161,34 +188,40 @@ export default function Survey({ navigation }) {
           <View style={styles.bottomContainer}>
             <Text style={styles.label}>Settings</Text>
             <View style={styles.row}>
-              <View style={[styles.row, styles.tile]}>
-                <People />
-                <Text style={styles.label}>
-                  {verified ? 'Custom' : 'Everyone'}
-                </Text>
-                <ChevronDown color={undefined} />
-              </View>
-              <TouchableWithoutFeedback
-                onPress={() => setShowCategoryModal(true)}
-              >
+              <TouchableWithoutFeedback onPress={handleTypePress}>
+                <View style={[styles.row, styles.tile]}>
+                  <People />
+                  <Text style={styles.label}>
+                    {user.verified || user.credibility > 999
+                      ? type
+                      : 'Everyone'}
+                  </Text>
+                  <ChevronDown color={undefined} />
+                </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={handleCategoryPress}>
                 <View style={[styles.row, styles.tile]}>
                   <Category />
-                  <Text style={styles.label}>Category</Text>
+                  <Text style={styles.label}>
+                    {category ? category : 'Category'}
+                  </Text>
                   <ChevronDown color={undefined} />
                 </View>
               </TouchableWithoutFeedback>
             </View>
 
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('CustomSettings', { type: 'Survery' })
-              }
-              style={{ marginTop: 30 }}
-            >
-              <Text style={[styles.label, styles.changeCustom]}>
-                Change Custom Settings
-              </Text>
-            </TouchableOpacity>
+            {type === 'Custom' && (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('CustomSettings', { type: 'Survey' })
+                }
+                style={{ marginTop: 30 }}
+              >
+                <Text style={[styles.label, styles.changeCustom]}>
+                  Change Custom Settings
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           <View style={styles.bottom}>

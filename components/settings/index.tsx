@@ -1,16 +1,15 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
-  View,
-  Text,
   Dimensions,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { auth } from '../../firebase';
 import theme from '../../theme';
 import CrossCircle from '../icons/CrossCircle';
-import { auth } from '../../firebase';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { UserContext } from '../../utils/context';
 
 const { width, height } = Dimensions.get('screen');
 

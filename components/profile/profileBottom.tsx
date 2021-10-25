@@ -22,15 +22,16 @@ const Profile = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {user.credibility > 999 && (
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('CreatePost')}
-        >
-          <View style={styles.createIcon}>
-            <Create />
-          </View>
-        </TouchableWithoutFeedback>
-      )}
+      {user.credibility > 999 ||
+        (user.verified && (
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('CreatePost')}
+          >
+            <View style={styles.createIcon}>
+              <Create />
+            </View>
+          </TouchableWithoutFeedback>
+        ))}
       <Tab.Navigator
         tabBarOptions={{
           contentContainerStyle: {

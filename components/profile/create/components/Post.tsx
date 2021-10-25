@@ -22,8 +22,6 @@ import People from '../../../icons/People';
 import LoadingModal from '../../../LoadingModal';
 import AvoidKeyboard from './AvoidKeyboard';
 
-const verified = true;
-
 const categories = [
   'Health',
   'Infrastructure',
@@ -32,12 +30,16 @@ const categories = [
   'Environment',
 ];
 
+const types = ['Everyone', 'Custom'];
+
 export default function Post({ navigation }) {
   const [voice, setVoice] = useState('');
   const [category, setCategory] = useState(null);
   const { user, setUser } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [type, setType] = useState('Everyone');
+  const [modalType, setModalType] = useState(null);
 
   const handleCreatePost = async () => {
     if (!voice.length) return;
@@ -84,7 +86,30 @@ export default function Post({ navigation }) {
   };
 
   const handleOnSelect = (item: any) => {
-    setCategory(item);
+    if (modalType === 'category') setCategory(item);
+    else setType(item);
+  };
+
+  const handleTypePress = () => {
+    if (user.verified || user.credibility > 999) {
+      setModalType('type');
+      setShowCategoryModal(true);
+    } else return;
+  };
+
+  const handleCategoryPress = () => {
+    setModalType('category');
+    setShowCategoryModal(true);
+  };
+
+  const getSelected = () => {
+    if (modalType === 'category') return category;
+    else return type;
+  };
+
+  const getData = () => {
+    if (modalType === 'category') return categories;
+    else return types;
   };
 
   return (
@@ -93,8 +118,8 @@ export default function Post({ navigation }) {
         <View style={styles.screen}>
           <LoadingModal visible={loading} text="Creating post..." />
           <ChoosingModal
-            selected={category}
-            data={categories}
+            selected={getSelected()}
+            data={getData()}
             visible={showCategoryModal}
             onSelect={handleOnSelect}
             setVisible={setShowCategoryModal}
@@ -112,16 +137,18 @@ export default function Post({ navigation }) {
           <View style={styles.bottomContainer}>
             <Text style={styles.label}>Settings</Text>
             <View style={styles.row}>
-              <View style={[styles.row, styles.tile]}>
-                <People />
-                <Text style={styles.label}>
-                  {verified ? 'Custom' : 'Everyone'}
-                </Text>
-                <ChevronDown color={undefined} />
-              </View>
-              <TouchableWithoutFeedback
-                onPress={() => setShowCategoryModal(true)}
-              >
+              <TouchableWithoutFeedback onPress={handleTypePress}>
+                <View style={[styles.row, styles.tile]}>
+                  <People />
+                  <Text style={styles.label}>
+                    {user.verified || user.credibility > 999
+                      ? type
+                      : 'Everyone'}
+                  </Text>
+                  <ChevronDown color={undefined} />
+                </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={handleCategoryPress}>
                 <View style={[styles.row, styles.tile]}>
                   <Category />
                   <Text style={styles.label}>
@@ -132,16 +159,18 @@ export default function Post({ navigation }) {
               </TouchableWithoutFeedback>
             </View>
 
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('CustomSettings', { type: 'Post' })
-              }
-              style={{ marginTop: 30 }}
-            >
-              <Text style={[styles.label, styles.changeCustom]}>
-                Change Custom Settings
-              </Text>
-            </TouchableOpacity>
+            {type === 'Custom' && (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('CustomSettings', { type: 'Post' })
+                }
+                style={{ marginTop: 30 }}
+              >
+                <Text style={[styles.label, styles.changeCustom]}>
+                  Change Custom Settings
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           <View style={styles.bottom}>
