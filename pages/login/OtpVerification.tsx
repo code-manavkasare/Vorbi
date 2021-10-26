@@ -17,7 +17,7 @@ export default function OtpVerification({ route, navigation }) {
   const { phone, type } = route.params;
 
   const recaptchaVerifier = React.useRef(null);
-  const attemptInvisibleVerification = true;
+  const attemptInvisibleVerification = false;
 
   let otpInput = useRef(null);
   const [code, setCode] = useState('');
@@ -77,6 +77,7 @@ export default function OtpVerification({ route, navigation }) {
         handleSignup(credential);
       }
     } catch (err) {
+      console.log('handleVerify error', err.message);
       setError(err.message);
     }
   };
@@ -92,12 +93,20 @@ export default function OtpVerification({ route, navigation }) {
     }
   };
 
-  const handleSignup = (credential) => {
-    navigation.navigate('UserInfo', {
-      type: 'phone',
-      credentialParam: credential,
-      phoneParam: phone,
-    });
+  const handleSignup = async (credential) => {
+    try {
+      await auth.signInWithCredential(credential);
+      navigation.navigate('UserInfo', {
+        type: 'phone',
+        credentialParam: credential,
+        verificationId,
+        code,
+        phoneParam: phone,
+      });
+      await auth.signOut();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const handleGoogleSignIn = () => {};

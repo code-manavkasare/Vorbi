@@ -1,28 +1,25 @@
 import firebase from 'firebase';
 import React, { useContext, useState } from 'react';
 import {
-  View,
-  Text,
+  FlatList,
+  Keyboard,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
-  FlatList,
   TouchableWithoutFeedback,
-  Keyboard,
+  View,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import ChoosingModal from '../../../../pages/login/ChoosingModal';
 import theme from '../../../../theme';
 import { UserContext } from '../../../../utils/context';
 import { createSurvey } from '../../../../utils/db';
-import SubmitFeedbackModal from '../../../feed/SubmitFeedbackModal';
 import Category from '../../../icons/Category';
 import ChevronDown from '../../../icons/ChevronDown';
 import People from '../../../icons/People';
 import YellowCross from '../../../icons/YellowCross';
 import AvoidKeyboard from './AvoidKeyboard';
-
-const verified = true;
 
 const categories = [
   'Health',

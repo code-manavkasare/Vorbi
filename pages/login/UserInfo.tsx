@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import firebase from 'firebase';
+import React, { useContext, useRef, useState } from 'react';
 import {
   Keyboard,
   StyleSheet,
@@ -14,6 +15,7 @@ import LoadingModal from '../../components/LoadingModal';
 import AvoidKeyboard from '../../components/profile/create/components/AvoidKeyboard';
 import { auth } from '../../firebase';
 import theme from '../../theme';
+import { UserContext } from '../../utils/context';
 import { storeUser } from '../../utils/db';
 import ChoosingModal from './ChoosingModal';
 
@@ -61,9 +63,17 @@ const genders = ['Male', 'Female', 'Other'];
 const categories = ['General', 'SC', 'ST', 'OBC'];
 
 export default function UserInfo({ route, navigation }) {
-  const { type, emailParam, passwordParam, credentailParam, phoneParam } =
-    route.params;
+  const {
+    type,
+    emailParam,
+    passwordParam,
+    credentailParam,
+    phoneParam,
+    verificationId,
+    code,
+  } = route.params;
   const [name, setName] = useState('');
+  const { setUser } = useContext(UserContext);
   const [designation, setDesignation] = useState('');
   const [pinCode, setPinCode] = useState('');
   const [state, setState] = useState('');
@@ -107,6 +117,7 @@ export default function UserInfo({ route, navigation }) {
   const handleGoogle = async () => {
     try {
       setLoading({ visible: true, text: 'Signing up...' });
+
       await auth.signInWithCredential(credentailParam);
       await handleStoreUser();
       setLoading({ visible: false, text: null });
@@ -130,8 +141,13 @@ export default function UserInfo({ route, navigation }) {
 
   const handlePhone = async () => {
     try {
+      const credential = firebase.auth.PhoneAuthProvider.credential(
+        verificationId,
+        code
+      );
+      console.log('cred', credential);
       setLoading({ visible: true, text: 'Signing up...' });
-      await auth.signInWithCredential(credentailParam);
+      await auth.signInWithCredential(credential);
       await handleStoreUser();
       setLoading({ visible: false, text: null });
     } catch (err) {
@@ -155,15 +171,17 @@ export default function UserInfo({ route, navigation }) {
       gender,
       category,
       credibility: 10,
-      type: 0,
+      type: 1,
       savedPosts: [],
       verified: false,
+      filled: 0,
       posts: 0,
       surveys: 0,
       likes: 0,
     };
     try {
-      const response = await storeUser(payload);
+      setUser(payload);
+      await storeUser(payload);
       navigation.navigate('Main');
     } catch (err) {
       console.log('error storing user', err);

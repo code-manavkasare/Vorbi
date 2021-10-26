@@ -1,18 +1,16 @@
 import firebase from 'firebase';
 import React, { useContext, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableWithoutFeedback,
   Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { firestore } from '../../../../firebase';
 import ChoosingModal from '../../../../pages/login/ChoosingModal';
-
 import theme from '../../../../theme';
 import { UserContext } from '../../../../utils/context';
 import { createPost, getUser, updateUser } from '../../../../utils/db';
