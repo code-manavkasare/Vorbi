@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,8 +8,25 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Svg, { Line, Path, Defs, LinearGradient, Stop } from 'react-native-svg';
+import { UserContext } from '../../utils/context';
+import { getUser, updateUser } from '../../utils/db';
 
 const Question = () => {
+  const { user, setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    handleUpdate();
+  }, []);
+
+  const handleUpdate = async () => {
+    await updateUser(
+      { credibility: user.credibility + 5, weeklyCreds: user.weeklyCreds + 5 },
+      user.uid
+    );
+    const _user = await getUser(user.uid);
+    setUser(_user);
+  };
+
   return (
     <View style={[styles.questionbox]}>
       <Text
@@ -44,7 +61,7 @@ const Question = () => {
           fontFamily: 'Poppins-Regular',
         }}
       >
-        +1 Credibility
+        +5 Credibility
       </Text>
     </View>
   );
