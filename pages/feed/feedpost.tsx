@@ -14,7 +14,7 @@ const FeedPost = () => {
 
   useEffect(() => {
     servercall();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     if (!firstRender && category) handleFilterData();

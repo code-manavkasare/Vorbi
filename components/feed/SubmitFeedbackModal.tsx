@@ -37,14 +37,25 @@ export default function SubmitFeedbackModal({
         feedback,
       };
       await createFeedback(paylod);
-      await updateUser({ credibility: user.credibility + 5 }, user.uid);
-      const _user = await getUser(user.uid);
-      setUser(_user);
+      const response = await updateUser(
+        {
+          credibility: user.credibility + 5,
+          credsFromFeed: user.credsFromFeed + 5,
+        },
+        user.uid
+      );
+      if (response && !response.noCredits) {
+        const _user = await getUser(user.uid);
+        setUser(_user);
+      }
       setVisible(false);
       Toast.show({
         type: 'success',
         text1: 'Thank you for your feedback!',
-        text2: 'You received 5 credits',
+        text2:
+          response && response.noCredits
+            ? response.noCredits
+            : 'You have received 5 credits',
       });
     } catch (err) {
       setLoading(false);

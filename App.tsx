@@ -27,6 +27,7 @@ import theme from './theme';
 import { UserContext } from './utils/context';
 import { getUser } from './utils/db';
 import Toast from 'react-native-toast-message';
+import { registerBackgroundTask } from './utils/background';
 
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
@@ -45,6 +46,7 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    registerBackgroundTask();
     if (currentUser) handleGetFirestoreUser();
   }, [currentUser]);
 

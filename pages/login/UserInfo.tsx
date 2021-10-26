@@ -145,13 +145,11 @@ export default function UserInfo({ route, navigation }) {
         verificationId,
         code
       );
-      console.log('cred', credential);
       setLoading({ visible: true, text: 'Signing up...' });
       await auth.signInWithCredential(credential);
       await handleStoreUser();
       setLoading({ visible: false, text: null });
     } catch (err) {
-      console.log('handlePhone', err);
       setLoading({ visible: false, text: null });
     }
   };
@@ -175,9 +173,11 @@ export default function UserInfo({ route, navigation }) {
       savedPosts: [],
       verified: false,
       filled: 0,
+      feedbacks: 0,
       posts: 0,
       surveys: 0,
       likes: 0,
+      credsFromFeed: 0,
     };
     try {
       setUser(payload);

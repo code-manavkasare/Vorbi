@@ -13,6 +13,14 @@ export const getUser = async (userId: string) => {
 export const updateUser = async (user: any, userId: string) => {
   let _user = user;
   if (user.credibility && user.credibility > 999) _user = { ...user, type: 2 };
+  if (user.credsFromFeed && user.credibility && user.credsFromFeed > 30)
+    return { noCredits: 'You recieved 0 credits' };
+  else
+    _user = {
+      credibility: user.credibility,
+      credsFromFeed: user.credsFromFeed,
+    };
+  console.log('user', _user);
   return await firestore.collection('users').doc(userId).update(_user);
 };
 
@@ -93,6 +101,10 @@ export const getAllSurveys = async () => {
       });
       return data;
     });
+};
+
+export const interactWithSurvey = async (surveyId: string, survey: any) => {
+  return await firestore.collection('surveys').doc(surveyId).update(survey);
 };
 
 export const savePost = async (post: object, userId: string) => {

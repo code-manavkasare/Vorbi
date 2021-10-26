@@ -73,11 +73,13 @@ export default function Survey({ navigation }) {
     setLoading(true);
     try {
       const payload = {
+        username: user.name,
         data: question,
         userId: user.uid,
         options,
         topic: category.toLowerCase(),
         timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+        interactions: {},
       };
       await createSurvey(payload);
       Toast.show({

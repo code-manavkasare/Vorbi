@@ -8,8 +8,13 @@ import {
 } from 'react-native';
 let i = true;
 let count = 0;
-const PollComponent = ({ setbuttoncolor, list }) => {
-  const [selectedValue, setSelectedValue] = useState([0, 0, 0, 0, 0]);
+const PollComponent = ({
+  interacted,
+  setbuttoncolor,
+  list,
+  selectedValue,
+  setSelectedValue,
+}) => {
   if (count != 0 && i) {
     i = false;
     setbuttoncolor('white');
@@ -20,6 +25,7 @@ const PollComponent = ({ setbuttoncolor, list }) => {
         {list.map((item, key) => {
           return (
             <TouchableOpacity
+              disabled={interacted}
               style={
                 selectedValue[key] == 1 ? styles.touched : styles.untouched
               }

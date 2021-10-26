@@ -46,14 +46,7 @@ const Post = ({ category }) => {
   const handleUnfilterData = () => setFilteredItems(items);
 
   const renderItem = ({ item }) => {
-    return (
-      <Surveyitem
-        type={item.type}
-        data={item.data}
-        topic={item.topic}
-        options={item.options}
-      />
-    );
+    return <Surveyitem {...item} />;
   };
 
   const refreshControl = (
