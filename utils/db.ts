@@ -15,11 +15,6 @@ export const updateUser = async (user: any, userId: string) => {
   if (user.credibility && user.credibility > 999) _user = { ...user, type: 2 };
   if (user.credsFromFeed && user.credibility && user.credsFromFeed > 30)
     return { noCredits: 'You recieved 0 credits' };
-  else
-    _user = {
-      credibility: user.credibility,
-      credsFromFeed: user.credsFromFeed,
-    };
   console.log('user', _user);
   return await firestore.collection('users').doc(userId).update(_user);
 };

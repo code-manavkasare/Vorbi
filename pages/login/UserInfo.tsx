@@ -177,6 +177,7 @@ export default function UserInfo({ route, navigation }) {
       surveys: 0,
       likes: 0,
       credsFromFeed: 0,
+      weeklyCreds: 0,
     };
     try {
       setUser(payload);

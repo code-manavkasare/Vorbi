@@ -31,6 +31,7 @@ interface User {
   feedbacks?: number;
   filled?: number;
   credsFromFeed?: number;
+  weeklyCreds?: number;
 }
 
 interface UserContextProps {

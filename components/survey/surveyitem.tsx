@@ -25,7 +25,6 @@ const Surveyitem = ({
     const index = Object.keys(interactions).findIndex(
       (item) => item === user.uid
     );
-    console.log('ineractions', interactions, index);
     setIntearacted(index !== -1);
     if (index !== -1) {
       setSelectedValue((prev) => {
@@ -49,6 +48,7 @@ const Surveyitem = ({
           {
             credibility: user.credibility + 5,
             credsFromFeed: user.credsFromFeed + 5,
+            weeklyCreds: user.weeklyCreds + 5,
           },
           user.uid
         );

@@ -41,6 +41,7 @@ export default function SubmitFeedbackModal({
         {
           credibility: user.credibility + 5,
           credsFromFeed: user.credsFromFeed + 5,
+          weeklyCreds: user.weeklyCreds + 5,
         },
         user.uid
       );
