@@ -89,7 +89,7 @@ export default function Post({ navigation }) {
   };
 
   const handleTypePress = () => {
-    if (user.verified || user.credibility > 999) {
+    if (user.type === 3 || user.credibility > 999) {
       setModalType('type');
       setShowCategoryModal(true);
     } else return;
@@ -139,7 +139,7 @@ export default function Post({ navigation }) {
                 <View style={[styles.row, styles.tile]}>
                   <People />
                   <Text style={styles.label}>
-                    {user.verified || user.credibility > 999
+                    {user.type === 3 || user.credibility > 999
                       ? type
                       : 'Everyone'}
                   </Text>

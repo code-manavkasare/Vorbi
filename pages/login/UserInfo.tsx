@@ -171,7 +171,6 @@ export default function UserInfo({ route, navigation }) {
       credibility: 10,
       type: 1,
       savedPosts: [],
-      verified: false,
       filled: 0,
       feedbacks: 0,
       posts: 0,

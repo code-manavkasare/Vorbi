@@ -53,7 +53,7 @@ const Profile = ({ navigation }) => {
           </View>
           <View style={styles.usernameContainer}>
             <Text style={styles.username}>{user && user.name}</Text>
-            {user.verified && <Tick />}
+            {user.type === 3 && <Tick />}
           </View>
           <Text style={styles.rightText1}>{user && user.designation}</Text>
           <Text style={styles.rightText2}>
@@ -95,7 +95,7 @@ const Profile = ({ navigation }) => {
           <View style={styles.headingContainer}>
             <View style={styles.usernameContainer}>
               <Text style={styles.username}>{user && user.name}</Text>
-              {user.verified && <Tick />}
+              {user.type === 3 && <Tick />}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Settings />

@@ -22,7 +22,7 @@ const Profile = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {(user.credibility > 999 || user.verified) && (
+      {(user.credibility > 999 || user.type === 3) && (
         <TouchableWithoutFeedback
           onPress={() => navigation.navigate('CreatePost')}
         >

@@ -24,7 +24,6 @@ interface User {
   gender?: string;
   credibility?: number;
   type?: number;
-  verified: boolean;
   savedPosts?: Array<Post>;
   posts?: number;
   surveys?: number;
