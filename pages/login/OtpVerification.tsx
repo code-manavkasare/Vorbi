@@ -103,7 +103,7 @@ export default function OtpVerification({ route, navigation }) {
         code,
         phoneParam: phone,
       });
-      await auth.signOut();
+      // await auth.signOut();
     } catch (err) {
       setError(err.message);
     }
