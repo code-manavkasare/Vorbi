@@ -11,6 +11,7 @@ import theme from '../../theme';
 import { colorpicker } from '../../utilities';
 import { UserContext } from '../../utils/context';
 import {
+  getPost,
   getUser,
   likePost,
   savePost,
@@ -21,7 +22,16 @@ import {
 import { Bookmark, Heart } from '../svgs';
 import SubmitFeedbackModal from './SubmitFeedbackModal';
 
-const Post = ({ id, data, name, type, designation, likes, likedBy }) => {
+const Post = ({
+  id,
+  data,
+  name,
+  type,
+  designation,
+  likes,
+  likedBy,
+  screenType,
+}) => {
   const { user, setUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(likedBy.indexOf(user.uid) !== -1);
@@ -29,6 +39,16 @@ const Post = ({ id, data, name, type, designation, likes, likedBy }) => {
   const [isSaved, setIsSaved] = useState(
     user.savedPosts.findIndex((item) => item.id === id) !== -1
   );
+
+  useEffect(() => {
+    if (screenType === 'saved') handleGetLikes();
+  }, []);
+
+  const handleGetLikes = async () => {
+    const response = await getPost(id);
+    _setLikes(response.likes);
+    setIsLiked(response.likedBy.indexOf(user.uid) !== -1);
+  };
 
   const handleLike = async () => {
     let __likes = _likes;

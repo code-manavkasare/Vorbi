@@ -12,7 +12,7 @@ const Saved = () => {
         data={user.savedPosts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
-          return <Post {...item} />;
+          return <Post screenType="saved" {...item} />;
         }}
       />
     </View>

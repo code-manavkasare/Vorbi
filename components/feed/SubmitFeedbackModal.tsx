@@ -45,10 +45,8 @@ export default function SubmitFeedbackModal({
         },
         user.uid
       );
-      if (response && !response.noCredits) {
-        const _user = await getUser(user.uid);
-        setUser(_user);
-      }
+      const _user = await getUser(user.uid);
+      setUser(_user);
       setVisible(false);
       Toast.show({
         type: 'success',
