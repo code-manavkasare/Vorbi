@@ -22,6 +22,18 @@ export const getUserWithPhone = async (phone: string) => {
     });
 };
 
+export const getUserWithEmail = async (email: string) => {
+  let data = [];
+  return await firestore
+    .collection('users')
+    .where('email', '==', email)
+    .get()
+    .then((snap) => {
+      if (snap.size) return true;
+      else return false;
+    });
+};
+
 export const updateUser = async (user: any, userId: string) => {
   let _user = user;
   if (user.credibility && user.credibility > 999) _user = { ...user, type: 2 };

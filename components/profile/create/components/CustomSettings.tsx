@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import theme from '../../../../theme';
 import ChevronDown from '../../../icons/ChevronDown';
 import Info from '../../../icons/Info';
+import Plus from '../../../icons/Plus';
 
 export default function CustomSettings({ navigation, route: { params } }) {
   const { type } = params;
@@ -34,7 +35,7 @@ export default function CustomSettings({ navigation, route: { params } }) {
 
         <View style={styles.tile}>
           <Text style={[styles.label, styles.inactive]}>Pincode(s)</Text>
-          <ChevronDown color="#363C5A" />
+          <Plus color="#363C5A" />
         </View>
 
         <View style={styles.tile}>

@@ -13,7 +13,7 @@ import {
 import { StackParamList } from '../../App';
 import LoadingModal from '../../components/LoadingModal';
 import firebase, { auth } from '../../firebase';
-import { getUserWithPhone } from '../../utils/db';
+import { getUserWithEmail, getUserWithPhone } from '../../utils/db';
 import GoogleSignInContainer from './GoogleSignInContainer';
 import styles from './styles';
 
@@ -91,6 +91,8 @@ const Signup: React.FunctionComponent<
   const handleEmail = async () => {
     try {
       // await auth.createUserWithEmailAndPassword(phoneOrEmail, password);
+      const userExists = await getUserWithEmail(phoneOrEmail);
+      if (userExists) return setError('User with this email already exists');
       navigation.navigate('UserInfo', {
         type: 'email',
         emailParam: phoneOrEmail,
