@@ -1,15 +1,76 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import theme from '../../../../theme';
 import ChevronDown from '../../../icons/ChevronDown';
 import Info from '../../../icons/Info';
 import Plus from '../../../icons/Plus';
+import countries from '../../../../assets/countries.json';
+import states from '../../../../assets/states.json';
+import ChoosingModal from '../../../../pages/login/ChoosingModal';
+
+const genders = ['Male', 'Female', 'Other'];
 
 export default function CustomSettings({ navigation, route: { params } }) {
   const { type } = params;
+
+  const [pinCode, setPinCode] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState(null);
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+
+  const handleCountryModal = () => {
+    setModalType('country');
+    setShowModal(true);
+  };
+
+  const handleStateModal = () => {
+    if (country.length === 0) return;
+    setModalType('state');
+    setShowModal(true);
+  };
+
+  const handleGenderModal = () => {
+    if (country.length === 0 || state.length === 0) return;
+    setModalType('gender');
+    setShowModal(true);
+  };
+
+  const getSelected = () => {
+    if (modalType === 'state') return state;
+    else if (modalType === 'country') return country;
+    else if (modalType === 'gender') return gender;
+  };
+
+  const getData = () => {
+    if (modalType === 'state') return states;
+    else if (modalType === 'country') return countries;
+    else if (modalType === 'gender') return genders;
+  };
+
+  const handleOnSelect = (item: React.SetStateAction<string>) => {
+    if (modalType === 'state') return setState(item);
+    else if (modalType === 'country') return setCountry(item);
+    else if (modalType === 'gender') return setGender(item);
+  };
+
   return (
     <View style={styles.screen}>
-      {/* <View style={styles.descriptionContainer}> */}
+      <ChoosingModal
+        onSelect={handleOnSelect}
+        visible={showModal}
+        setVisible={setShowModal}
+        selected={getSelected()}
+        data={getData()}
+      />
       <Text style={styles.desription}>
         Our users will see your{' '}
         <Text style={{ fontWeight: 'bold' }}>
@@ -23,30 +84,69 @@ export default function CustomSettings({ navigation, route: { params } }) {
       </Text>
 
       <View style={styles.container}>
-        <View style={styles.tile}>
-          <Text style={[styles.label, styles.active]}>Country</Text>
-          <ChevronDown color="#fff" />
-        </View>
+        <TouchableWithoutFeedback onPress={handleCountryModal}>
+          <View style={styles.tile}>
+            <Text style={[styles.label, styles.active]}>
+              Country{' '}
+              {country.length > 0 && (
+                <Text style={[styles.label, styles.inactive]}>
+                  {'  ' + country}
+                </Text>
+              )}
+            </Text>
+            <ChevronDown color="#fff" />
+          </View>
+        </TouchableWithoutFeedback>
 
-        <View style={styles.tile}>
-          <Text style={[styles.label, styles.inactive]}>State</Text>
-          <ChevronDown color="#363C5A" />
-        </View>
+        <TouchableWithoutFeedback onPress={handleStateModal}>
+          <View style={styles.tile}>
+            <Text
+              style={
+                country.length > 0
+                  ? [styles.label, styles.active]
+                  : [styles.label, styles.inactive]
+              }
+            >
+              State
+              {country.length > 0 && (
+                <Text style={[styles.label, styles.inactive]}>
+                  {'  ' + state}
+                </Text>
+              )}
+            </Text>
+            <ChevronDown color={country.length > 0 ? '#fff' : '#363C5A'} />
+          </View>
+        </TouchableWithoutFeedback>
 
-        <View style={styles.tile}>
-          <Text style={[styles.label, styles.inactive]}>Pincode(s)</Text>
-          <Plus color="#363C5A" />
-        </View>
+        <TouchableWithoutFeedback>
+          <View style={styles.tile}>
+            <Text
+              style={
+                country.length > 0 && state.length > 0
+                  ? [styles.label, styles.active]
+                  : [styles.label, styles.inactive]
+              }
+            >
+              Pincode(s)
+            </Text>
+            <Plus
+              color={
+                country.length > 0 && state.length > 0 ? '#fff' : '#363C5A'
+              }
+            />
+          </View>
+        </TouchableWithoutFeedback>
 
         <View style={styles.tile}>
           <Text style={[styles.label, styles.inactive]}>Age</Text>
           <ChevronDown color="#363C5A" />
         </View>
-
-        <View style={styles.tile}>
-          <Text style={[styles.label, styles.inactive]}>Gender</Text>
-          <ChevronDown color="#363C5A" />
-        </View>
+        <TouchableWithoutFeedback onPress={handleGenderModal}>
+          <View style={styles.tile}>
+            <Text style={[styles.label, styles.inactive]}>Gender</Text>
+            <ChevronDown color="#363C5A" />
+          </View>
+        </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.bottom}>
