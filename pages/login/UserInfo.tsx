@@ -103,9 +103,7 @@ export default function UserInfo({ route, navigation }) {
 
   const handlePhone = async () => {
     try {
-      console.log('handlePhone');
       setLoading({ visible: true, text: 'Signing up...' });
-      console.log('signed in');
       await handleStoreUser();
       setLoading({ visible: false, text: null });
     } catch (err) {
@@ -140,7 +138,6 @@ export default function UserInfo({ route, navigation }) {
       weeklyCreds: 0,
     };
     try {
-      console.log('storing user', user);
       setUser(payload);
       await storeUser(payload);
       navigation.navigate('Main');

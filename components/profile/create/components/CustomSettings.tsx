@@ -5,6 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  TextInput,
+  ScrollView,
 } from 'react-native';
 import theme from '../../../../theme';
 import ChevronDown from '../../../icons/ChevronDown';
@@ -13,19 +15,23 @@ import Plus from '../../../icons/Plus';
 import countries from '../../../../assets/countries.json';
 import states from '../../../../assets/states.json';
 import ChoosingModal from '../../../../pages/login/ChoosingModal';
+import { Chip } from 'react-native-paper';
 
 const genders = ['Male', 'Female', 'Other'];
 
 export default function CustomSettings({ navigation, route: { params } }) {
-  const { type } = params;
+  const { type, handleSubmit } = params;
 
   const [pinCode, setPinCode] = useState('');
+  const [pinCodes, setPinCodes] = useState([]);
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(null);
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
+  const [pincodeActive, setPincodeActive] = useState(false);
+  const [ageActive, setAgeActive] = useState(false);
 
   const handleCountryModal = () => {
     setModalType('country');
@@ -39,9 +45,26 @@ export default function CustomSettings({ navigation, route: { params } }) {
   };
 
   const handleGenderModal = () => {
-    if (country.length === 0 || state.length === 0) return;
+    if (
+      country.length === 0 ||
+      state.length === 0 ||
+      pinCodes.length === 0 ||
+      age.length === 0
+    )
+      return;
     setModalType('gender');
     setShowModal(true);
+  };
+
+  const handlePincodePress = () => {
+    if (country.length === 0 || state.length === 0) return;
+    if (!pincodeActive) setPincodeActive(true);
+  };
+
+  const handleAgePress = () => {
+    if (country.length === 0 || state.length === 0 || pinCodes.length === 0)
+      return;
+    setAgeActive(true);
   };
 
   const getSelected = () => {
@@ -60,6 +83,28 @@ export default function CustomSettings({ navigation, route: { params } }) {
     if (modalType === 'state') return setState(item);
     else if (modalType === 'country') return setCountry(item);
     else if (modalType === 'gender') return setGender(item);
+  };
+
+  const handleButtonPress = () => {
+    if (pincodeActive) {
+      setPinCodes((prev) => [...prev, pinCode]);
+      setPincodeActive(false);
+      setPinCode('');
+      return;
+    } else if (ageActive) {
+      return setAgeActive(false);
+    } else {
+      const paylod = {
+        country,
+        state,
+        pinCodes,
+        age,
+        gender,
+      };
+      handleSubmit(paylod);
+      navigation.goBack();
+      return;
+    }
   };
 
   return (
@@ -108,7 +153,7 @@ export default function CustomSettings({ navigation, route: { params } }) {
               }
             >
               State
-              {country.length > 0 && (
+              {state.length > 0 && (
                 <Text style={[styles.label, styles.inactive]}>
                   {'  ' + state}
                 </Text>
@@ -118,7 +163,7 @@ export default function CustomSettings({ navigation, route: { params } }) {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={handlePincodePress}>
           <View style={styles.tile}>
             <Text
               style={
@@ -129,29 +174,122 @@ export default function CustomSettings({ navigation, route: { params } }) {
             >
               Pincode(s)
             </Text>
-            <Plus
-              color={
-                country.length > 0 && state.length > 0 ? '#fff' : '#363C5A'
+            {pincodeActive ? (
+              <TextInput
+                autoFocus
+                keyboardType="number-pad"
+                value={pinCode}
+                onChangeText={(e) => setPinCode(e)}
+                style={styles.input}
+              />
+            ) : (
+              <Plus
+                color={
+                  country.length > 0 && state.length > 0 ? '#fff' : '#363C5A'
+                }
+              />
+            )}
+          </View>
+        </TouchableWithoutFeedback>
+        <View style={{ width: theme.width * 0.8 }}>
+          <ScrollView horizontal>
+            {pinCodes.map((item, index) => (
+              <Chip
+                onClose={() =>
+                  setPinCodes((prev) => {
+                    const clone = [...prev];
+                    clone.splice(index, 1);
+                    return clone;
+                  })
+                }
+                key={index}
+                mode="flat"
+                style={styles.chip}
+                textStyle={styles.chipText}
+              >
+                {item}
+              </Chip>
+            ))}
+          </ScrollView>
+        </View>
+
+        <TouchableWithoutFeedback onPress={handleAgePress}>
+          <View style={styles.tile}>
+            <Text
+              style={
+                country.length > 0 && state.length > 0 && pinCodes.length > 0
+                  ? [styles.label, styles.active]
+                  : [styles.label, styles.inactive]
               }
-            />
+            >
+              Age{' '}
+              {age.length > 0 && (
+                <Text style={[styles.label, styles.inactive]}>
+                  {'  ' + age}
+                </Text>
+              )}
+            </Text>
+            {ageActive ? (
+              <TextInput
+                autoFocus
+                keyboardType="number-pad"
+                value={age}
+                onChangeText={(e) => setAge(e)}
+                style={styles.input}
+              />
+            ) : (
+              <Plus
+                color={
+                  country.length > 0 && state.length > 0 && pinCodes.length > 0
+                    ? '#fff'
+                    : '#363C5A'
+                }
+              />
+            )}
           </View>
         </TouchableWithoutFeedback>
 
-        <View style={styles.tile}>
-          <Text style={[styles.label, styles.inactive]}>Age</Text>
-          <ChevronDown color="#363C5A" />
-        </View>
         <TouchableWithoutFeedback onPress={handleGenderModal}>
           <View style={styles.tile}>
-            <Text style={[styles.label, styles.inactive]}>Gender</Text>
-            <ChevronDown color="#363C5A" />
+            <Text
+              style={
+                country.length > 0 &&
+                state.length > 0 &&
+                pinCodes.length > 0 &&
+                age.length > 0
+                  ? [styles.label, styles.active]
+                  : [styles.label, styles.inactive]
+              }
+            >
+              Gender{' '}
+              {gender.length > 0 && (
+                <Text style={[styles.label, styles.inactive]}>
+                  {'  ' + gender}
+                </Text>
+              )}
+            </Text>
+            <ChevronDown
+              color={
+                country.length > 0 &&
+                state.length > 0 &&
+                pinCodes.length > 0 &&
+                age.length > 0
+                  ? '#fff'
+                  : '#363C5A'
+              }
+            />
           </View>
         </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.bottom}>
-        <TouchableOpacity style={styles.bottomButton}>
-          <Text style={styles.buttonLabel}>Submit</Text>
+        <TouchableOpacity
+          onPress={handleButtonPress}
+          style={styles.bottomButton}
+        >
+          <Text style={styles.buttonLabel}>
+            {pincodeActive || ageActive ? 'Add' : 'Submit'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -210,5 +348,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Poppins-Regular',
     color: theme.background.primary100,
+  },
+  input: {
+    width: theme.width * 0.4,
+    backgroundColor: 'transparent',
+    borderBottomColor: theme.text.primary100,
+    borderBottomWidth: 1,
+    color: theme.text.primary100,
+  },
+  chip: {
+    backgroundColor: theme.background.primary300,
+    maxWidth: theme.width * 0.2,
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  chipText: {
+    color: theme.text.primary100,
   },
 });

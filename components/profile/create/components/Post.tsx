@@ -38,6 +38,7 @@ export default function Post({ navigation }) {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [type, setType] = useState('Everyone');
   const [modalType, setModalType] = useState(null);
+  const [customSettings, setCustomSettings] = useState(null);
 
   const handleCreatePost = async () => {
     if (!voice.length) return;
@@ -58,6 +59,7 @@ export default function Post({ navigation }) {
         timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
         likes: 0,
         likedBy: [],
+        customSettings,
       };
       await createPost(payload);
       await updateUser(
@@ -110,6 +112,10 @@ export default function Post({ navigation }) {
     else return types;
   };
 
+  const handleCustomSubmit = (item: object) => {
+    setCustomSettings(item);
+  };
+
   return (
     <AvoidKeyboard>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -160,7 +166,10 @@ export default function Post({ navigation }) {
             {type === 'Custom' && (
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('CustomSettings', { type: 'Post' })
+                  navigation.navigate('CustomSettings', {
+                    type: 'Post',
+                    handleSubmit: handleCustomSubmit,
+                  })
                 }
                 style={{ marginTop: 30 }}
               >

@@ -42,6 +42,7 @@ export default function Survey({ navigation }) {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [type, setType] = useState('Everyone');
   const [modalType, setModalType] = useState(null);
+  const [customSettings, setCustomSettings] = useState(null);
 
   const handleAddOption = () => {
     setOptions((prev) => prev.concat({ text: '' }));
@@ -80,6 +81,7 @@ export default function Survey({ navigation }) {
         topic: category.toLowerCase(),
         timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
         interactions: {},
+        customSettings,
       };
       await createSurvey(payload);
       Toast.show({
@@ -124,6 +126,10 @@ export default function Survey({ navigation }) {
   const getData = () => {
     if (modalType === 'category') return categories;
     else return types;
+  };
+
+  const handleCustomSubmit = (item: object) => {
+    setCustomSettings(item);
   };
 
   const renderItem = ({ item, index }) => (
@@ -212,7 +218,10 @@ export default function Survey({ navigation }) {
             {type === 'Custom' && (
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('CustomSettings', { type: 'Survey' })
+                  navigation.navigate('CustomSettings', {
+                    type: 'Survey',
+                    handleSubmit: handleCustomSubmit,
+                  })
                 }
                 style={{ marginTop: 30 }}
               >
