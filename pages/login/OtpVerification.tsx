@@ -109,8 +109,6 @@ export default function OtpVerification({ route, navigation }) {
     }
   };
 
-  const handleGoogleSignIn = () => {};
-
   const handleNavigate = () => {
     type === 'login' ? navigation.push('Signup') : navigation.push('Login');
   };
@@ -174,7 +172,6 @@ export default function OtpVerification({ route, navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-          <GoogleSignInContainer onPress={handleGoogleSignIn} />
         </View>
 
         <View style={styles.bottomContainer}>
