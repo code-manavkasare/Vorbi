@@ -81,38 +81,17 @@ export default function App() {
           {!loading ? (
             <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
               <NavigationContainer>
-                <Stacks.Navigator
-                  initialRouteName={currentUser ? 'Main' : 'Landing'}
-                  screenOptions={{
-                    headerShown: false,
-                  }}
-                >
-                  <Stacks.Screen name="Landing" component={Landing} />
-                  <Stacks.Screen name="Signup" component={Signup} />
-                  <Stacks.Screen name="Login" component={Login} />
-                  <Stacks.Screen
-                    name="ForgotPassword"
-                    component={ForgotPassword}
-                    options={{
-                      headerShown: true,
-                      headerTitle: '',
-                      headerTintColor: '#fff',
-
-                      headerStyle: {
-                        backgroundColor: theme.background.primary100,
-                        elevation: 0,
-                        shadowOpacity: 0,
-                      },
+                {user ? (
+                  <Stacks.Navigator
+                    screenOptions={{
+                      headerShown: false,
                     }}
-                  />
-
-                  <Stacks.Screen
-                    name="OtpVerification"
-                    component={OtpVerification}
-                  />
-                  <Stacks.Screen name="UserInfo" component={UserInfo} />
-                  <Stacks.Screen name="Main" component={BottomTabsNav} />
-                </Stacks.Navigator>
+                  >
+                    <Stacks.Screen name="Main" component={BottomTabsNav} />
+                  </Stacks.Navigator>
+                ) : (
+                  <AuthStackNav />
+                )}
               </NavigationContainer>
             </View>
           ) : (
@@ -124,6 +103,40 @@ export default function App() {
     </UserContext.Provider>
   );
 }
+
+const AuthStack = createStackNavigator();
+
+const AuthStackNav = () => {
+  return (
+    <AuthStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <AuthStack.Screen name="Landing" component={Landing} />
+      <AuthStack.Screen name="Signup" component={Signup} />
+      <AuthStack.Screen name="Login" component={Login} />
+      <AuthStack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        options={{
+          headerShown: true,
+          headerTitle: '',
+          headerTintColor: '#fff',
+
+          headerStyle: {
+            backgroundColor: theme.background.primary100,
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        }}
+      />
+
+      <AuthStack.Screen name="OtpVerification" component={OtpVerification} />
+      <AuthStack.Screen name="UserInfo" component={UserInfo} />
+    </AuthStack.Navigator>
+  );
+};
 
 const BottomTabsNav: React.FunctionComponent<
   StackScreenProps<StackParamList, 'Main'>

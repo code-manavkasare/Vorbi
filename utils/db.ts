@@ -10,6 +10,18 @@ export const getUser = async (userId: string) => {
   return (await firestore.collection('users').doc(userId).get()).data();
 };
 
+export const getUserWithPhone = async (phone: string) => {
+  let data = [];
+  return await firestore
+    .collection('users')
+    .where('phone', '==', phone)
+    .get()
+    .then((snap) => {
+      if (snap.size) return true;
+      else return false;
+    });
+};
+
 export const updateUser = async (user: any, userId: string) => {
   let _user = user;
   if (user.credibility && user.credibility > 999) _user = { ...user, type: 2 };

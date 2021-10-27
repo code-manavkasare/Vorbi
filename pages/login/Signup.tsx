@@ -13,6 +13,7 @@ import {
 import { StackParamList } from '../../App';
 import LoadingModal from '../../components/LoadingModal';
 import firebase, { auth } from '../../firebase';
+import { getUserWithPhone } from '../../utils/db';
 import GoogleSignInContainer from './GoogleSignInContainer';
 import styles from './styles';
 
@@ -102,6 +103,9 @@ const Signup: React.FunctionComponent<
   };
 
   const handlePhone = async () => {
+    const userExists = await getUserWithPhone(phoneOrEmail);
+    if (userExists)
+      return setError('User with this phone number already exists');
     navigation.navigate('OtpVerification', {
       phone: phoneOrEmail,
       type: 'signup',
