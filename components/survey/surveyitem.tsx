@@ -52,7 +52,6 @@ const Surveyitem = ({
           },
           user.uid
         );
-        console.log('updateUser response', response);
         setUser({ ...user, ...response });
         setLoading(false);
         Toast.show({

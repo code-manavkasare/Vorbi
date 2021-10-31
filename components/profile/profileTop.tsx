@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,14 +7,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Animated, { SpringUtils, Value } from 'react-native-reanimated';
+import Animated, { SpringUtils } from 'react-native-reanimated';
 import {
   mix,
   useSpringTransition,
   useTimingTransition,
 } from 'react-native-redash';
 import { UserContext } from '../../utils/context';
-import { getNumberOfPosts } from '../../utils/db';
 import ChevronDown from '../icons/ChevronDown';
 import Edit from '../icons/Edit';
 import Settings from '../icons/Settings';
@@ -26,7 +25,6 @@ const { width, height } = Dimensions.get('screen');
 const Profile = ({ navigation }) => {
   const [showMore, setShowMore] = useState(false);
   const { user } = useContext(UserContext);
-  console.log('user', user);
 
   const transition = useSpringTransition(showMore, {
     ...SpringUtils.makeDefaultConfig(),

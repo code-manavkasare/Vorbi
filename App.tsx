@@ -135,9 +135,7 @@ export default function App() {
 
   const handleGetFirestoreUser = async () => {
     const _user = await getUser(auth.currentUser.uid);
-    console.log('_user', _user);
     const __user = await handleCheckCreds(_user);
-    console.log('__user', __user);
     setUser(__user);
   };
 

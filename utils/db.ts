@@ -65,7 +65,6 @@ export const getAllPosts = async () => {
     .get()
     .then((snap) => {
       snap.forEach((x) => {
-        console.log('x', x.data());
         let y = x.data();
         y.id = x.id;
         data.push(y);
@@ -119,7 +118,6 @@ export const getAllSurveys = async () => {
     .get()
     .then((snap) => {
       snap.forEach((x) => {
-        console.log('x', x.data());
         let y = x.data();
         y.id = x.id;
         data.push(y);
@@ -167,7 +165,6 @@ export const getFeedbacksForUser = async (userId: string) => {
     .get()
     .then((snap) => {
       snap.forEach((x) => {
-        console.log('x', x.data());
         let y = x.data();
         y.id = x.id;
         data.push(y);
