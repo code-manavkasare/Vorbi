@@ -34,13 +34,19 @@ export const getUserWithEmail = async (email: string) => {
     });
 };
 
-export const updateUser = async (user: any, userId: string) => {
-  let _user = user;
-  if (user.credibility && user.credibility > 999) _user = { ...user, type: 2 };
-  if (user.credsFromFeed && user.credibility && user.credsFromFeed > 30)
-    return { noCredits: 'You recieved 0 credits' };
-  console.log('user', _user);
-  return await firestore.collection('users').doc(userId).update(_user);
+export const updateUser = async (userPayload: any, userId: string) => {
+  let _user = userPayload;
+  if (userPayload.credibility && userPayload.credibility > 999)
+    _user = { ...userPayload, type: 2 };
+  if (
+    userPayload.credsFromFeed &&
+    userPayload.credibility &&
+    userPayload.credsFromFeed > 30
+  )
+    return { _user, noCredits: 'You have received 0 credits' };
+
+  await firestore.collection('users').doc(userId).update(_user);
+  return _user;
 };
 
 export const createPost = async (post: object) => {

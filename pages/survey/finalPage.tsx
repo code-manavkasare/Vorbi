@@ -19,12 +19,11 @@ const Question = () => {
   }, []);
 
   const handleUpdate = async () => {
-    await updateUser(
+    const response = await updateUser(
       { credibility: user.credibility + 5, weeklyCreds: user.weeklyCreds + 5 },
       user.uid
     );
-    const _user = await getUser(user.uid);
-    setUser(_user);
+    setUser({ ...user, ...response });
   };
 
   return (

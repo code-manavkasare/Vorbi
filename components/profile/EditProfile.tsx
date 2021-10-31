@@ -28,9 +28,8 @@ export default function EditProfile() {
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      await updateUser({ designation }, user.uid);
-      const _user = await getUser(user.uid);
-      setUser(_user);
+      const response = await updateUser({ designation }, user.uid);
+      setUser({ ...user, ...response });
       setLoading(false);
       Toast.show({
         type: 'success',

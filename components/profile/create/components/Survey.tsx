@@ -86,7 +86,7 @@ export default function Survey({ navigation }) {
       await createSurvey(payload);
       Toast.show({
         type: 'success',
-        text1: 'Created post successfully!',
+        text1: 'Created survey successfully!',
       });
       setLoading(false);
       setQuestion('');
@@ -94,7 +94,7 @@ export default function Survey({ navigation }) {
     } catch (err) {
       setLoading(false);
       Toast.show({
-        text1: 'Could not crete post',
+        text1: 'Could not crete survey',
         type: 'error',
         text2: err.message,
       });

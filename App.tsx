@@ -6,31 +6,27 @@ import {
 } from '@react-navigation/stack';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { LogBox, SafeAreaView, StatusBar, View } from 'react-native';
+import { Provider } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 import MyTabBar from './components/tabbars/mytabbar';
 import { auth } from './firebase';
 import Feed from './pages/feed/feed';
 import Landing from './pages/landing/landing';
-import Signup from './pages/login/Signup';
+import ForgotPassword from './pages/login/ForgotPassword';
 import Login from './pages/login/login';
 import OtpVerification from './pages/login/OtpVerification';
+import Signup from './pages/login/Signup';
 import UserInfo from './pages/login/UserInfo';
 import News from './pages/news/news';
 import Notifications from './pages/notification/notification';
 import Profile from './pages/profile/profile';
 import Survey from './pages/survey/index';
-import ForgotPassword from './pages/login/ForgotPassword';
-import { Provider } from 'react-native-paper';
 import theme from './theme';
 import { UserContext } from './utils/context';
-import { getUser } from './utils/db';
-import Toast from 'react-native-toast-message';
-import {
-  registerBackgroundTask1,
-  registerBackgroundTask2,
-} from './utils/background';
+import { getUser, updateUser } from './utils/db';
 
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
@@ -49,14 +45,100 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    registerBackgroundTask1();
-    registerBackgroundTask2();
     if (currentUser) handleGetFirestoreUser();
   }, [currentUser]);
 
+  const handleCheckCreds = async (_user: any) => {
+    const user1 = await handleDaily(_user);
+    const user2 = await handleWeekly(_user);
+    return { ...user1, ...user2 };
+  };
+
+  const handleDaily = async (_user: any) => {
+    if (
+      _user.lastDailyUpdate &&
+      Date.now() - _user.lastDailyUpdate >= 1000 * 60 * 60 * 24
+    ) {
+      await updateUser(
+        {
+          lastDailyUpdate: Date.now(),
+          credsFromFeed: 0,
+        },
+        _user.uid
+      );
+      return {
+        ..._user,
+        lastDailyUpdate: Date.now(),
+        credsFromFeed: 0,
+      };
+    } else if (!_user.lastDailyUpdate) {
+      await updateUser(
+        {
+          lastDailyUpdate: Date.now(),
+        },
+        _user.uid
+      );
+      return {
+        ..._user,
+        lastDailyUpdate: Date.now(),
+      };
+    } else return _user;
+  };
+
+  const handleWeekly = async (_user: any) => {
+    if (
+      _user.lastWeeklyUpdate &&
+      Date.now() - _user.lastWeeklyUpdate >= 1000 * 60 * 60 * 24 * 7
+    ) {
+      if (_user.weeklyCreds === 0) {
+        await updateUser(
+          {
+            lastWeeklyUpdate: Date.now(),
+            credibility: _user.credibility - 10,
+          },
+          _user.uid
+        );
+        return {
+          ..._user,
+          lastWeeklyUpdate: Date.now(),
+          credibility: _user.credibility - 10,
+        };
+      } else {
+        await updateUser(
+          {
+            lastWeeklyUpdate: Date.now(),
+            weeklyCreds: 0,
+          },
+          _user.uid
+        );
+        return {
+          ..._user,
+          lastWeeklyUpdate: Date.now(),
+          weeklyCreds: 0,
+        };
+      }
+    } else if (!_user.lastWeeklyUpdate) {
+      await updateUser(
+        {
+          lastWeeklyUpdate: Date.now(),
+        },
+        _user.uid
+      );
+      return {
+        ..._user,
+        lastWeeklyUpdate: Date.now(),
+      };
+    } else {
+      return _user;
+    }
+  };
+
   const handleGetFirestoreUser = async () => {
     const _user = await getUser(auth.currentUser.uid);
-    setUser(_user);
+    console.log('_user', _user);
+    const __user = await handleCheckCreds(_user);
+    console.log('__user', __user);
+    setUser(__user);
   };
 
   const time = new Date();

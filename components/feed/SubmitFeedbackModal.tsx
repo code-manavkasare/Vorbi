@@ -45,8 +45,7 @@ export default function SubmitFeedbackModal({
         },
         user.uid
       );
-      const _user = await getUser(user.uid);
-      setUser(_user);
+      setUser({ ...user, ...response });
       setVisible(false);
       Toast.show({
         type: 'success',

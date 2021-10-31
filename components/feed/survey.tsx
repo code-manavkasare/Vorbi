@@ -66,7 +66,7 @@ const Post = ({ category }) => {
         <FlatList
           refreshControl={refreshControl}
           data={filteredItems}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.id}
           renderItem={renderItem}
         />
       )}

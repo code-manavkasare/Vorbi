@@ -52,10 +52,8 @@ const Surveyitem = ({
           },
           user.uid
         );
-        if (response && !response.noCredits) {
-          const _user = await getUser(user.uid);
-          setUser(_user);
-        }
+        console.log('updateUser response', response);
+        setUser({ ...user, ...response });
         setLoading(false);
         Toast.show({
           type: 'success',
