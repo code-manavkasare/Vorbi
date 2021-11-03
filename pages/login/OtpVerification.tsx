@@ -10,8 +10,9 @@ import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import firebase from 'firebase';
 import { auth, firebaseConfig } from '../../firebase';
 import LoadingModal from '../../components/LoadingModal';
-import { getUser } from '../../utils/db';
+import { getUser, storeUser } from '../../utils/db';
 import { UserContext } from '../../utils/context';
+import Toast from 'react-native-toast-message';
 
 export default function OtpVerification({ route, navigation }) {
   const { phone, type } = route.params;
@@ -84,12 +85,20 @@ export default function OtpVerification({ route, navigation }) {
 
   const handleLogin = async (credential) => {
     try {
+      setLoading({ visible: true, text: 'Loging in....' });
       await firebase.auth().signInWithCredential(credential);
       const _user = await getUser(auth.currentUser.uid);
       setUser(_user);
-      navigation.navigate('Main');
+      setLoading({ visible: false, text: null });
+      // navigation.navigate('Main');
     } catch (err) {
       setError(err.message);
+      setLoading({ visible: false, text: null });
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: err.message ? err.message : 'Something went wrong!',
+      });
     }
   };
 

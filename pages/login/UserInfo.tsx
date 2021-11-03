@@ -142,7 +142,6 @@ export default function UserInfo({ route, navigation }) {
     try {
       setUser(payload);
       await storeUser(payload);
-      navigation.navigate('Main');
     } catch (err) {
       console.log('error storing user', err);
     }

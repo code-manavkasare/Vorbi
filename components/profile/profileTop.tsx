@@ -42,7 +42,7 @@ const Profile = ({ navigation }) => {
         <Animated.View style={[styles.largeContainer, { opacity: opacity1 }]}>
           <View style={styles.headingContainer}>
             <View />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Settings />
             </TouchableOpacity>
           </View>

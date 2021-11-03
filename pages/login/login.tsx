@@ -91,7 +91,7 @@ const Login: React.FunctionComponent<
       const _user = await getUser(auth.currentUser.uid);
       setUser(_user);
       setLoading({ visible: false, text: null });
-      navigation.navigate('Main');
+      // navigation.navigate('Main');
     } catch (err) {
       setLoading({ visible: false, text: null });
       setError(err.message);
