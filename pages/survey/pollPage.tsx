@@ -9,15 +9,16 @@ import {
 import Svg, { Line, Circle } from 'react-native-svg';
 const ques =
   'Do you feel satisfied with the sanitation and garbage disposal in your area?';
-const PollPageItem = ({ navigation }) => {
+const PollPageItem = ({ navigation, route }) => {
   const [defaultRating, setDefaultRating] = useState(0);
   // To set the max number of Stars
   const [maxRating] = useState([1, 2, 3, 4, 5]);
+  const { title, handleSetDone } = route.params;
 
   const handleOption = () => {
     //frontend
     setTimeout(function () {
-      navigation.navigate('FinalPage');
+      navigation.navigate('FinalPage', { title, handleSetDone });
     }, 2000);
     //backend
   };
@@ -54,7 +55,15 @@ const PollPageItem = ({ navigation }) => {
   const Question = () => {
     return (
       <View style={[styles.questionbox]}>
-        <Text style={{ color: 'white', fontFamily:'Poppins-Regular', fontSize:20 }}>{ques}</Text>
+        <Text
+          style={{
+            color: 'white',
+            fontFamily: 'Poppins-Regular',
+            fontSize: 20,
+          }}
+        >
+          {ques}
+        </Text>
       </View>
     );
   };
@@ -112,9 +121,9 @@ const PollPageItem = ({ navigation }) => {
   return (
     <View style={[styles.outer]}>
       <ProgressBar />
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <Question />
-        <View style={{ padding: 20,flex:2 }}>
+        <View style={{ padding: 20, flex: 2 }}>
           <Options />
         </View>
         <View

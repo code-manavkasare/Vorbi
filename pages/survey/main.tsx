@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,10 +15,12 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { TabsParamList } from '../../App';
 import theme from '../../theme';
 import { Line1, Line2, Line3 } from './Lines';
+import { UserContext } from '../../utils/context';
 const items = [];
 const Main: React.FunctionComponent<
   BottomTabScreenProps<TabsParamList, 'Survey'>
 > = ({ navigation }) => {
+  const { user } = useContext(UserContext);
   const [item, setitem] = useState([]);
   const [refresh, setrefresh] = useState(true);
   useEffect(() => {
@@ -28,7 +30,7 @@ const Main: React.FunctionComponent<
   const servercall = useCallback(async () => {
     await firestore
       .collection('areaCodes')
-      .doc('110022')
+      .doc(user.pinCode)
       .collection('parameters')
       .get()
       .then((snap) => {
@@ -100,7 +102,9 @@ const Main: React.FunctionComponent<
       </View>
       <View style={styles.bottom}>
         <View style={styles.bottomtop}>
-          <Text style={styles.yourareaheading}>New Delhi - 110019</Text>
+          <Text style={styles.yourareaheading}>
+            {user.state} - {user.pinCode}
+          </Text>
         </View>
         <View style={styles.listcont}>
           <FlatList
@@ -120,8 +124,8 @@ const Main: React.FunctionComponent<
             renderItem={({ item }) => {
               return (
                 <Surveypageitem
+                  completedBy={item.completedBy}
                   type={item.type}
-                  done={false}
                   title={item.type}
                   progression={parseFloat(item.progress)}
                   navigation={navigation}

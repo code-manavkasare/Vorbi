@@ -172,3 +172,20 @@ export const getFeedbacksForUser = async (userId: string) => {
       return data;
     });
 };
+
+export const completeMainFeedSurvey = async (
+  pinCode: string,
+  title: string,
+  userId: string
+) => {
+  return await firestore
+    .collection('areaCodes')
+    .doc(pinCode)
+    .collection('parameters')
+    .doc(title)
+    .update({
+      completedBy: firebase.firestore.FieldValue
+        ? firebase.firestore.FieldValue.arrayUnion(userId)
+        : [userId],
+    });
+};

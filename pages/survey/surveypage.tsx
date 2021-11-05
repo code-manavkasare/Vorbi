@@ -18,8 +18,9 @@ const optionlist = [
   { id: 3, option: 'Regularly' },
 ];
 
-const SurveyPageItem = ({ navigation }) => {
+const SurveyPageItem = ({ navigation, route }) => {
   const myRefs = useRef([]);
+  const { title, handleSetDone } = route.params;
 
   const handleOption = (id) => {
     //frontend
@@ -38,7 +39,7 @@ const SurveyPageItem = ({ navigation }) => {
 
     //shift
     setTimeout(function () {
-      navigation.navigate('PollPage');
+      navigation.navigate('PollPage', { title, handleSetDone });
     }, 1000);
     //backend
   };
@@ -108,9 +109,9 @@ const SurveyPageItem = ({ navigation }) => {
   return (
     <View style={[styles.outer]}>
       <ProgressBar />
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <Question />
-        <View style={{ padding: 20,flex:2 }}>
+        <View style={{ padding: 20, flex: 2 }}>
           <FlatList
             data={optionlist}
             renderItem={({ item }) => {
@@ -131,13 +132,17 @@ const SurveyPageItem = ({ navigation }) => {
             style={{ justifyContent: 'center', alignItems: 'center' }}
             onPress={() => navigation.navigate('Home')}
           >
-            <Text style={{ color: '#6D7187', fontFamily:'Poppins-Regular' }}>Back</Text>
+            <Text style={{ color: '#6D7187', fontFamily: 'Poppins-Regular' }}>
+              Back
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ justifyContent: 'center', alignItems: 'center' }}
             onPress={() => navigation.navigate('PollPage')}
           >
-            <Text style={{ color: '#6D7187', fontFamily:'Poppins-Regular' }}>Skip</Text>
+            <Text style={{ color: '#6D7187', fontFamily: 'Poppins-Regular' }}>
+              Skip
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -152,7 +157,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-  
     height: 50,
     width: 50,
     borderRadius: 50,

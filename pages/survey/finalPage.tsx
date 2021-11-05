@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Svg, { Line, Path, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { UserContext } from '../../utils/context';
-import { getUser, updateUser } from '../../utils/db';
+import { completeMainFeedSurvey, getUser, updateUser } from '../../utils/db';
 
 const Question = () => {
   const { user, setUser } = useContext(UserContext);
@@ -125,7 +125,19 @@ const ProgressBar = () => {
   );
 };
 
-const FinalPageItem = ({ navigation }) => {
+const FinalPageItem = ({ navigation, route }) => {
+  const { title, handleSetDone } = route.params;
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    handleComplete();
+  }, []);
+
+  const handleComplete = async () => {
+    handleSetDone(true);
+    await completeMainFeedSurvey(user.pinCode, title, user.uid);
+  };
+
   return (
     <SafeAreaView style={[styles.outer]}>
       <ProgressBar />
