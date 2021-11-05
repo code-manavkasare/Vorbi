@@ -56,12 +56,11 @@ const Post = ({
       _setLikes((prev) => prev - 1);
       setIsLiked(false);
       await unlikePost(id, user.uid, __likes - 1);
-      await updateUser(
+      const _user = await updateUser(
         { likes: firebase.firestore.FieldValue.increment(-1) },
         user.uid
       );
-      const _user = await getUser(user.uid);
-      setUser(_user);
+      setUser({ ...user, ..._user });
     } else {
       _setLikes((prev) => prev + 1);
       setIsLiked(true);
@@ -85,14 +84,19 @@ const Post = ({
     };
     if (isSaved) {
       setIsSaved(false);
-      await unsavePost(payload, user.uid);
-      const _user = await getUser(user.uid);
-      setUser(_user);
+      const removed = user.savedPosts.filter((post) => post.id !== id);
+      await unsavePost(removed, user.uid);
+      setUser({
+        ...user,
+        savedPosts: removed,
+      });
     } else {
       setIsSaved(true);
       await savePost(payload, user.uid);
-      const _user = await getUser(user.uid);
-      setUser(_user);
+      setUser({
+        ...user,
+        savedPosts: user.savedPosts.concat(payload),
+      });
     }
   };
 

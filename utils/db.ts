@@ -139,13 +139,10 @@ export const savePost = async (post: object, userId: string) => {
     });
 };
 
-export const unsavePost = async (post: object, userId: string) => {
-  return await firestore
-    .collection('users')
-    .doc(userId)
-    .update({
-      savedPosts: firebase.firestore.FieldValue.arrayRemove(post),
-    });
+export const unsavePost = async (removed: Array<object>, userId: string) => {
+  return await firestore.collection('users').doc(userId).update({
+    savedPosts: removed,
+  });
 };
 
 export const createFeedback = async (feedback: object) => {
