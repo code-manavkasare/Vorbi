@@ -108,7 +108,7 @@ const Main: React.FunctionComponent<
         </View>
         <View style={styles.listcont}>
           <FlatList
-            data={item}
+            data={user.mainfeed}
             refreshControl={
               <RefreshControl
                 refreshing={refresh}
@@ -118,16 +118,15 @@ const Main: React.FunctionComponent<
                 }}
               />
             }
-            keyExtractor={(item, index) => {
-              return `${item.type}index`;
-            }}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
               return (
                 <Surveypageitem
-                  completedBy={item.completedBy}
-                  type={item.type}
-                  title={item.type}
-                  progression={parseFloat(item.progress)}
+                  id={item}
+                  // completedBy={item.completedBy}
+                  // type={item.type}
+                  // title={item.type}
+                  // progression={parseFloat(item.progress)}
                   navigation={navigation}
                 />
               );

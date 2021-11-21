@@ -170,19 +170,28 @@ export const getFeedbacksForUser = async (userId: string) => {
     });
 };
 
-export const completeMainFeedSurvey = async (
-  pinCode: string,
-  title: string,
-  userId: string
-) => {
+export const getMainFeedSurvey = async (id: string) => {
+  return (await firestore.collection('mainfeedsurveys').doc(id).get()).data();
+};
+
+export const getMainFeedSurveyQuestions = async (id: string) => {
+  let data = [];
   return await firestore
-    .collection('areaCodes')
-    .doc(pinCode)
-    .collection('parameters')
-    .doc(title)
-    .update({
-      completedBy: firebase.firestore.FieldValue
-        ? firebase.firestore.FieldValue.arrayUnion(userId)
-        : [userId],
+    .collection('mainfeedquestion')
+    .where('surveyId', '==', id)
+    .get()
+    .then((snap) => {
+      snap.forEach((x) => {
+        let y = x.data();
+        y.id = x.id;
+        data.push(y);
+      });
+      return data;
     });
+};
+
+export const completeMainFeedSurvey = async (id: string) => {
+  return await firestore.collection('mainfeedsurveys').doc(id).update({
+    status: 'done',
+  });
 };

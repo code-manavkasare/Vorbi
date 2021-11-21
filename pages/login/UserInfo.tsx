@@ -138,6 +138,7 @@ export default function UserInfo({ route, navigation }) {
       weeklyCreds: 0,
       lastWeeklyUpdate: undefined,
       lastDailyUpdate: undefined,
+      mainfeed: [],
     };
     try {
       setUser(payload);

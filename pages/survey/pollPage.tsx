@@ -13,12 +13,12 @@ const PollPageItem = ({ navigation, route }) => {
   const [defaultRating, setDefaultRating] = useState(0);
   // To set the max number of Stars
   const [maxRating] = useState([1, 2, 3, 4, 5]);
-  const { title, handleSetDone } = route.params;
+  const { handleSetDone, surveyId } = route.params;
 
   const handleOption = () => {
     //frontend
     setTimeout(function () {
-      navigation.navigate('FinalPage', { title, handleSetDone });
+      navigation.navigate('FinalPage', { surveyId, handleSetDone });
     }, 2000);
     //backend
   };

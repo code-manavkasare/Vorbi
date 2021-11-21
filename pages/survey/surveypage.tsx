@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   FlatList,
 } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
+import { getMainFeedSurveyQuestions } from '../../utils/db';
 
 const ques =
   'Have you ever heard of instances which made you feel insecure in your society?';
@@ -20,7 +21,17 @@ const optionlist = [
 
 const SurveyPageItem = ({ navigation, route }) => {
   const myRefs = useRef([]);
-  const { title, handleSetDone } = route.params;
+  const { handleSetDone, surveyId } = route.params;
+  const [question, setQuestion] = useState({ question: '', choices: [] });
+
+  useEffect(() => {
+    handleGetQuestions();
+  }, []);
+
+  const handleGetQuestions = async () => {
+    const data = await getMainFeedSurveyQuestions(surveyId);
+    setQuestion(data[0]);
+  };
 
   const handleOption = (id) => {
     //frontend
@@ -39,7 +50,7 @@ const SurveyPageItem = ({ navigation, route }) => {
 
     //shift
     setTimeout(function () {
-      navigation.navigate('PollPage', { title, handleSetDone });
+      navigation.navigate('PollPage', { surveyId, handleSetDone });
     }, 1000);
     //backend
   };
@@ -54,7 +65,7 @@ const SurveyPageItem = ({ navigation, route }) => {
             fontFamily: 'Poppins-Regular',
           }}
         >
-          {ques}
+          {question.question}
         </Text>
       </View>
     );
@@ -113,9 +124,9 @@ const SurveyPageItem = ({ navigation, route }) => {
         <Question />
         <View style={{ padding: 20, flex: 2 }}>
           <FlatList
-            data={optionlist}
-            renderItem={({ item }) => {
-              return <Options option={item.option} id={item.id} />;
+            data={question.choices}
+            renderItem={({ item, index }) => {
+              return <Options option={item.text} id={index} />;
             }}
             keyExtractor={(item) => item.id}
           />

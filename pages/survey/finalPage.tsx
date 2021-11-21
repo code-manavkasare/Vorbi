@@ -126,7 +126,7 @@ const ProgressBar = () => {
 };
 
 const FinalPageItem = ({ navigation, route }) => {
-  const { title, handleSetDone } = route.params;
+  const { surveyId, handleSetDone } = route.params;
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const FinalPageItem = ({ navigation, route }) => {
 
   const handleComplete = async () => {
     handleSetDone(true);
-    await completeMainFeedSurvey(user.pinCode, title, user.uid);
+    await completeMainFeedSurvey(surveyId);
   };
 
   return (

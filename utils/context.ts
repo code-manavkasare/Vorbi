@@ -32,6 +32,7 @@ interface User {
   filled?: number;
   credsFromFeed?: number;
   weeklyCreds?: number;
+  mainfeed?: Array<String>;
 }
 
 interface UserContextProps {

@@ -1,35 +1,54 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Exclamation from '../../components/icons/Exclamation';
 import TickCircle from '../../components/icons/TickCircle';
 import { colorpicker } from '../../utilities';
 import { UserContext } from '../../utils/context';
+import { getMainFeedSurvey } from '../../utils/db';
 
 const Surveypageitem = ({
-  completedBy,
-  type,
-  title,
-  progression,
+  // completedBy,
+  // type,
+  // title,
+  // progression,
+  id,
   navigation,
 }) => {
   const { user } = useContext(UserContext);
-  const [done, setDone] = useState(
-    completedBy ? completedBy.indexOf(user.uid) !== -1 : false
-  );
+  const [survey, setSurvey] = useState({
+    status: '',
+    question: '',
+    category: '',
+  });
+  const [done, setDone] = useState(survey.status === 'done');
+  const progression = 5;
   var progress = parseFloat(progression * 10),
     circumference = 170;
 
   const x = ((100 - progress) / 100) * circumference;
+
+  useEffect(() => {
+    handleGetData();
+  }, []);
+
+  const handleGetData = async () => {
+    const data = await getMainFeedSurvey(id);
+    setSurvey(data);
+  };
 
   const handleSetDone = (e) => setDone(e);
 
   return (
     <TouchableOpacity
       style={styles.itemouter}
-      disabled={done}
+      // disabled={done}
       onPress={() =>
-        navigation.navigate('SurveyPage', { title, handleSetDone })
+        navigation.navigate('SurveyPage', {
+          title: survey.category,
+          surveyId: id,
+          handleSetDone,
+        })
       }
     >
       <View
@@ -45,7 +64,7 @@ const Surveypageitem = ({
           style={styles.progress}
         >
           <Circle
-            stroke={colorpicker(type)}
+            stroke={colorpicker(survey.category)}
             strokeLinecap="round"
             cx="30"
             cy="30"
@@ -57,18 +76,18 @@ const Surveypageitem = ({
         </Svg>
       </View>
       <View style={styles.progresstext}>
-        <Text
+        {/* <Text
           style={[
             styles.progresstextinner,
             { transform: [{ translateX: -40 }] },
           ]}
         >
           {progression.toFixed(1)}
-        </Text>
+        </Text> */}
         <Text
           style={[styles.progresstitle, { transform: [{ translateX: -10 }] }]}
         >
-          {title}
+          {survey.category[0].toUpperCase() + survey.category.slice(1)}
         </Text>
       </View>
       <View style={styles.progressicon}>
