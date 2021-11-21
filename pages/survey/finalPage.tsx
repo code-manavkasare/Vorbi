@@ -127,7 +127,6 @@ const ProgressBar = () => {
 
 const FinalPageItem = ({ navigation, route }) => {
   const { surveyId, handleSetDone } = route.params;
-  const { user } = useContext(UserContext);
 
   useEffect(() => {
     handleComplete();

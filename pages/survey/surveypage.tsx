@@ -10,15 +10,6 @@ import {
 import Svg, { Line } from 'react-native-svg';
 import { getMainFeedSurveyQuestions } from '../../utils/db';
 
-const ques =
-  'Have you ever heard of instances which made you feel insecure in your society?';
-const optionlist = [
-  { id: 0, option: 'Never' },
-  { id: 1, option: 'Rarely' },
-  { id: 2, option: 'Sometimes' },
-  { id: 3, option: 'Regularly' },
-];
-
 const SurveyPageItem = ({ navigation, route }) => {
   const myRefs = useRef([]);
   const { handleSetDone, surveyId } = route.params;

@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Exclamation from '../../components/icons/Exclamation';
 import TickCircle from '../../components/icons/TickCircle';
 import { colorpicker } from '../../utilities';
-import { UserContext } from '../../utils/context';
 import { getMainFeedSurvey } from '../../utils/db';
 
 const Surveypageitem = ({
@@ -15,14 +14,13 @@ const Surveypageitem = ({
   id,
   navigation,
 }) => {
-  const { user } = useContext(UserContext);
   const [survey, setSurvey] = useState({
     status: '',
     question: '',
     category: '',
   });
-  const [done, setDone] = useState(survey.status === 'done');
-  const progression = 5;
+  const [done, setDone] = useState(true);
+  var progression = 5;
   var progress = parseFloat(progression * 10),
     circumference = 170;
 
@@ -34,6 +32,8 @@ const Surveypageitem = ({
 
   const handleGetData = async () => {
     const data = await getMainFeedSurvey(id);
+    console.log('data', data);
+    if (data.status === 'done') setDone(true);
     setSurvey(data);
   };
 
@@ -42,7 +42,7 @@ const Surveypageitem = ({
   return (
     <TouchableOpacity
       style={styles.itemouter}
-      // disabled={done}
+      disabled={done}
       onPress={() =>
         navigation.navigate('SurveyPage', {
           title: survey.category,
@@ -76,18 +76,19 @@ const Surveypageitem = ({
         </Svg>
       </View>
       <View style={styles.progresstext}>
-        {/* <Text
+        <Text
           style={[
             styles.progresstextinner,
             { transform: [{ translateX: -40 }] },
           ]}
         >
           {progression.toFixed(1)}
-        </Text> */}
+        </Text>
         <Text
           style={[styles.progresstitle, { transform: [{ translateX: -10 }] }]}
         >
-          {survey.category[0].toUpperCase() + survey.category.slice(1)}
+          {survey.category.length &&
+            survey.category[0].toUpperCase() + survey.category.slice(1)}
         </Text>
       </View>
       <View style={styles.progressicon}>

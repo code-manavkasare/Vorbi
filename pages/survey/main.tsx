@@ -22,31 +22,31 @@ const Main: React.FunctionComponent<
 > = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const [item, setitem] = useState([]);
-  const [refresh, setrefresh] = useState(true);
-  useEffect(() => {
-    servercall();
-  }, []);
+  const [refresh, setrefresh] = useState(false);
+  // useEffect(() => {
+  //   servercall();
+  // }, []);
 
-  const servercall = useCallback(async () => {
-    await firestore
-      .collection('areaCodes')
-      .doc(user.pinCode)
-      .collection('parameters')
-      .get()
-      .then((snap) => {
-        let items = [];
-        snap.forEach((x) => {
-          let y = x.data();
-          items.push(y);
-        });
-        setitem([]);
-        setitem(items);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setrefresh(false);
-  }, []);
+  // const servercall = useCallback(async () => {
+  //   await firestore
+  //     .collection('areaCodes')
+  //     .doc(user.pinCode)
+  //     .collection('parameters')
+  //     .get()
+  //     .then((snap) => {
+  //       let items = [];
+  //       snap.forEach((x) => {
+  //         let y = x.data();
+  //         items.push(y);
+  //       });
+  //       setitem([]);
+  //       setitem(items);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   setrefresh(false);
+  // }, []);
 
   const Graph = () => {
     return (
@@ -113,8 +113,8 @@ const Main: React.FunctionComponent<
               <RefreshControl
                 refreshing={refresh}
                 onRefresh={() => {
-                  setrefresh(true);
-                  servercall();
+                  // setrefresh(true);
+                  // servercall();
                 }}
               />
             }
