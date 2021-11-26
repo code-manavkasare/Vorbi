@@ -19,7 +19,7 @@ const Surveypageitem = ({
     question: '',
     category: '',
   });
-  const [done, setDone] = useState(true);
+  const [done, setDone] = useState(false);
   var progression = 5;
   var progress = parseFloat(progression * 10),
     circumference = 170;

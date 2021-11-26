@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,18 +7,33 @@ import {
   Dimensions,
 } from 'react-native';
 import Svg, { Line, Circle } from 'react-native-svg';
-const ques =
-  'Do you feel satisfied with the sanitation and garbage disposal in your area?';
+import { getMainFeedSurveyPoll } from '../../utils/db';
+
 const PollPageItem = ({ navigation, route }) => {
   const [defaultRating, setDefaultRating] = useState(0);
   // To set the max number of Stars
   const [maxRating] = useState([1, 2, 3, 4, 5]);
-  const { handleSetDone, surveyId } = route.params;
+  const [poll, setPoll] = useState({ question: '' });
+  const { handleSetDone, surveyId, optionChosen } = route.params;
 
-  const handleOption = () => {
+  useEffect(() => {
+    handleGetQuestions();
+  }, []);
+
+  const handleGetQuestions = async () => {
+    const data = await getMainFeedSurveyPoll(surveyId);
+    setPoll(data[0]);
+  };
+
+  const handleOption = (index) => {
     //frontend
     setTimeout(function () {
-      navigation.navigate('FinalPage', { surveyId, handleSetDone });
+      navigation.navigate('FinalPage', {
+        surveyId,
+        handleSetDone,
+        rating: index + 1,
+        optionChosen,
+      });
     }, 2000);
     //backend
   };
@@ -62,7 +77,7 @@ const PollPageItem = ({ navigation, route }) => {
             fontSize: 20,
           }}
         >
-          {ques}
+          {poll.question}
         </Text>
       </View>
     );
@@ -78,7 +93,7 @@ const PollPageItem = ({ navigation, route }) => {
               key={key}
               onPress={() => {
                 setDefaultRating(item);
-                handleOption();
+                handleOption(key);
               }}
             >
               {item <= defaultRating ? <Filled /> : <Unfilled />}

@@ -190,8 +190,30 @@ export const getMainFeedSurveyQuestions = async (id: string) => {
     });
 };
 
-export const completeMainFeedSurvey = async (id: string) => {
+export const getMainFeedSurveyPoll = async (id: string) => {
+  let data = [];
+  return await firestore
+    .collection('mainfeedpolls')
+    .where('surveyId', '==', id)
+    .get()
+    .then((snap) => {
+      snap.forEach((x) => {
+        let y = x.data();
+        y.id = x.id;
+        data.push(y);
+      });
+      return data;
+    });
+};
+
+export const completeMainFeedSurvey = async (
+  id: string,
+  rating: number,
+  optionChosen: number
+) => {
   return await firestore.collection('mainfeedsurveys').doc(id).update({
     status: 'done',
+    rating,
+    optionChosen,
   });
 };

@@ -41,7 +41,11 @@ const SurveyPageItem = ({ navigation, route }) => {
 
     //shift
     setTimeout(function () {
-      navigation.navigate('PollPage', { surveyId, handleSetDone });
+      navigation.navigate('PollPage', {
+        surveyId,
+        handleSetDone,
+        optionChosen: id,
+      });
     }, 1000);
     //backend
   };
