@@ -12,7 +12,7 @@ import { getMainFeedSurveyQuestions } from '../../utils/db';
 
 const SurveyPageItem = ({ navigation, route }) => {
   const myRefs = useRef([]);
-  const { handleSetDone, surveyId } = route.params;
+  const { handleSetDone, surveyId, category } = route.params;
   const [question, setQuestion] = useState({ question: '', choices: [] });
 
   useEffect(() => {
@@ -42,6 +42,7 @@ const SurveyPageItem = ({ navigation, route }) => {
     //shift
     setTimeout(function () {
       navigation.navigate('PollPage', {
+        category,
         surveyId,
         handleSetDone,
         optionChosen: id,

@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 import Svg, { Line, Path, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { UserContext } from '../../utils/context';
-import { completeMainFeedSurvey, getUser, updateUser } from '../../utils/db';
+import {
+  completeMainFeedSurvey,
+  getGraphData,
+  getUser,
+  updateAggregate,
+  updateUser,
+} from '../../utils/db';
 
 const Question = () => {
   const { user, setUser } = useContext(UserContext);
@@ -126,7 +132,10 @@ const ProgressBar = () => {
 };
 
 const FinalPageItem = ({ navigation, route }) => {
-  const { surveyId, handleSetDone, rating, optionChosen } = route.params;
+  const { surveyId, handleSetDone, rating, optionChosen, category } =
+    route.params;
+
+  console.log('category', category);
 
   useEffect(() => {
     handleComplete();
@@ -135,6 +144,24 @@ const FinalPageItem = ({ navigation, route }) => {
   const handleComplete = async () => {
     handleSetDone(true);
     await completeMainFeedSurvey(surveyId, rating, optionChosen);
+    const date = new Date();
+    const monthIndex = date.getMonth();
+    console.log('getting for', category.toLowerCase().replace(/ /g, ''));
+    const graphData = await getGraphData(
+      category.toLowerCase().replace(/ /g, '')
+    );
+    console.log('graph data', graphData);
+    const data = graphData.data;
+    console.log('before updating', data, monthIndex);
+    for (var i = 0; i < 12; i++) {
+      if (!data[i]) data[i] = 0;
+    }
+    if (data[monthIndex]) data[monthIndex] = data[monthIndex] + rating;
+    else {
+      data[monthIndex] = rating;
+    }
+    console.log('after updating', data);
+    await updateAggregate(data, category.toLowerCase().replace(/ /g, ''));
   };
 
   return (

@@ -14,7 +14,7 @@ const PollPageItem = ({ navigation, route }) => {
   // To set the max number of Stars
   const [maxRating] = useState([1, 2, 3, 4, 5]);
   const [poll, setPoll] = useState({ question: '' });
-  const { handleSetDone, surveyId, optionChosen } = route.params;
+  const { handleSetDone, surveyId, optionChosen, category } = route.params;
 
   useEffect(() => {
     handleGetQuestions();
@@ -29,6 +29,7 @@ const PollPageItem = ({ navigation, route }) => {
     //frontend
     setTimeout(function () {
       navigation.navigate('FinalPage', {
+        category,
         surveyId,
         handleSetDone,
         rating: index + 1,

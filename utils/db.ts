@@ -217,3 +217,14 @@ export const completeMainFeedSurvey = async (
     optionChosen,
   });
 };
+
+export const getGraphData = async (id: string) => {
+  return await (await firestore.collection('graphdata').doc(id).get()).data();
+};
+
+export const updateAggregate = async (
+  data: Array<Number>,
+  category: string
+) => {
+  return await firestore.collection('graphdata').doc(category).update({ data });
+};

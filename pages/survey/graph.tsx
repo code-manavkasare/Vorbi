@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { LineChart } from 'react-native-chart-kit';
- 
+import { getGraphData } from '../../utils/db';
+
 const datas = [
   {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -132,7 +133,7 @@ const Unfilled = () => {
   );
 };
 
-const Options = ({ item, selected, setstate, id, setSelected }) => {
+const Options = ({ item, selected, setstate, id, setSelected, getData }) => {
   return (
     <View
       style={{
@@ -153,8 +154,10 @@ const Options = ({ item, selected, setstate, id, setSelected }) => {
       </Text>
       <TouchableOpacity
         onPress={() => {
-          setstate(datas[id]);
-        setSelected(id)
+          // setstate(datas[id]);
+
+          getData(item.toLowerCase().replace(/ /g, ''));
+          setSelected(id);
         }}
       >
         {selected == id ? <Filled /> : <Unfilled />}
@@ -165,7 +168,40 @@ const Options = ({ item, selected, setstate, id, setSelected }) => {
 
 const Graph = ({ navigation }) => {
   const [selected, setSelected] = useState(0);
-  const [data, setdata] = useState(datas[0]);
+  const [data, setdata] = useState({ labels: [], datasets: [{ data: [] }] });
+
+  useEffect(() => {
+    getData('technology');
+  }, []);
+
+  const getData = async (key: string) => {
+    const _data = await getGraphData(key);
+    setdata({
+      // labels: [
+      //   'January',
+      //   'February',
+      //   'March',
+      //   'April',
+      //   'May',
+      //   'June',
+      //   'July',
+      //   'August',
+      //   'September',
+      //   'October',
+      //   'November',
+      //   'December',
+      // ],
+      datasets: [
+        {
+          data: _data.data,
+          color: (opacity = 1) => `rgba(104, 65, 234, ${opacity})`, // optional
+          strokeWidth: 2, // optional
+        },
+      ],
+      // legend: [categories[]], // optional
+    });
+  };
+
   return (
     <View style={{ backgroundColor: '#1f2232', flex: 1 }}>
       <View>
@@ -211,6 +247,7 @@ const Graph = ({ navigation }) => {
         {categories.map((item, key) => {
           return (
             <Options
+              getData={getData}
               item={item.op}
               key={key}
               id={item.id}

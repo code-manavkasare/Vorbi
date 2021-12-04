@@ -45,7 +45,7 @@ const Surveypageitem = ({
       disabled={done}
       onPress={() =>
         navigation.navigate('SurveyPage', {
-          title: survey.category,
+          category: survey.category,
           surveyId: id,
           handleSetDone,
         })
